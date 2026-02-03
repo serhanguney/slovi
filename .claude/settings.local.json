@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Bash(pnpm dlx shadcn@latest add:*)", "Bash(pnpm build:*)"]
+  }
+}
