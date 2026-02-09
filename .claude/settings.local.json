@@ -1,5 +1,11 @@
 {
   "permissions": {
-    "allow": ["Bash(pnpm dlx shadcn@latest add:*)", "Bash(pnpm build:*)"]
+    "allow": [
+      "Bash(pnpm dlx shadcn@latest add:*)",
+      "Bash(pnpm build:*)",
+      "Bash(for f in /Users/serhanguney/Projects/slovi/.claude/skills/*.skill)",
+      "Bash(unzip:*)",
+      "Bash(done)"
+    ]
   }
 }
