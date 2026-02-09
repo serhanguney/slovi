@@ -167,6 +167,7 @@ export type Database = {
           example_english: string;
           form_type_name: string;
           matched_form: string;
+          note: string | null;
           rank: number;
           root_word_czech: string;
           root_word_english: string;

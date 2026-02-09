@@ -15,6 +15,7 @@ export interface SearchResult {
   similarity: number;
   example_czech: string | null;
   example_english: string | null;
+  root_word_note: string | null;
 }
 
 interface UseDictionarySearchOptions {

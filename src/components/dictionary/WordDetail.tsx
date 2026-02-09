@@ -62,6 +62,9 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
                 </span>
               )}
             </div>
+            {rootWord.note && (
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{rootWord.note}</p>
+            )}
           </div>
         </CardContent>
       </Card>

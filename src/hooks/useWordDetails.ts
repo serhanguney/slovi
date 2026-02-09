@@ -31,13 +31,14 @@ export interface RootWord {
   in_english: string;
   word_type: string;
   word_aspect: string | null;
+  note: string | null;
 }
 
 async function fetchWordDetails(rootWordId: number) {
   const [rootWordResult, formsResult] = await Promise.all([
     supabase
       .from('root_words')
-      .select('id, in_czech, in_english, word_type, word_aspect')
+      .select('id, in_czech, in_english, word_type, word_aspect, note')
       .eq('id', rootWordId)
       .single(),
     supabase

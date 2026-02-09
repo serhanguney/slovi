@@ -89,6 +89,11 @@ export function DictionaryAutocomplete({
                     </div>
                   </div>
                   <div className="text-sm text-muted-foreground">{result.root_word_english}</div>
+                  {result.root_word_note && (
+                    <div className="mt-0.5 text-xs text-muted-foreground/70 line-clamp-1">
+                      {result.root_word_note}
+                    </div>
+                  )}
                   {result.example_czech && (
                     <div className="mt-0.5 overflow-hidden text-xs text-muted-foreground/70 italic whitespace-nowrap text-ellipsis">
                       {result.example_czech}
