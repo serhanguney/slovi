@@ -50,6 +50,7 @@ export type Database = {
           in_czech: string;
           in_english: string;
           is_verified: boolean;
+          note: string | null;
           word_aspect: Database['public']['Enums']['word_aspect'] | null;
           word_type: Database['public']['Enums']['word_type'];
         };
@@ -59,6 +60,7 @@ export type Database = {
           in_czech: string;
           in_english: string;
           is_verified: boolean;
+          note?: string | null;
           word_aspect?: Database['public']['Enums']['word_aspect'] | null;
           word_type: Database['public']['Enums']['word_type'];
         };
@@ -68,6 +70,7 @@ export type Database = {
           in_czech?: string;
           in_english?: string;
           is_verified?: boolean;
+          note?: string | null;
           word_aspect?: Database['public']['Enums']['word_aspect'] | null;
           word_type?: Database['public']['Enums']['word_type'];
         };
@@ -160,6 +163,8 @@ export type Database = {
       search_dictionary: {
         Args: { p_limit?: number; p_query: string };
         Returns: {
+          example_czech: string;
+          example_english: string;
           form_type_name: string;
           matched_form: string;
           rank: number;
@@ -167,6 +172,7 @@ export type Database = {
           root_word_english: string;
           root_word_id: number;
           similarity: number;
+          word_aspect: string;
           word_type: string;
         }[];
       };
