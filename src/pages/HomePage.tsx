@@ -47,24 +47,26 @@ export function HomePage() {
 
       {/* Right side: top bar + content + mobile nav */}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        {/* Desktop top bar — breadcrumb left, search right */}
-        <header className="hidden shrink-0 items-center justify-between border-b border-[#F3F4F6] px-10 py-[18px] md:flex">
-          <div className="flex items-center gap-2 text-[13px]">
-            <span className="text-muted-foreground">Explore</span>
-            {selectedWordName && (
-              <>
-                <ChevronRight className="h-3.5 w-3.5 text-[#D1D5DB]" />
-                <span className="font-semibold text-foreground">{selectedWordName}</span>
-              </>
-            )}
-          </div>
-          <div className="w-[280px]">
-            <DictionaryAutocomplete
-              onSelect={handleWordSelect}
-              placeholder="Search for a word..."
-            />
-          </div>
-        </header>
+        {/* Desktop top bar — only shown when a word is selected */}
+        {selectedWordId && (
+          <header className="hidden shrink-0 items-center justify-between border-b border-[#F3F4F6] px-10 py-[18px] md:flex">
+            <div className="flex items-center gap-2 text-[13px]">
+              <span className="text-muted-foreground">Explore</span>
+              {selectedWordName && (
+                <>
+                  <ChevronRight className="h-3.5 w-3.5 text-[#D1D5DB]" />
+                  <span className="font-semibold text-foreground">{selectedWordName}</span>
+                </>
+              )}
+            </div>
+            <div className="w-[280px]">
+              <DictionaryAutocomplete
+                onSelect={handleWordSelect}
+                placeholder="Search for a word..."
+              />
+            </div>
+          </header>
+        )}
 
         {/* Page content */}
         <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -115,17 +117,22 @@ function ExploreTab({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col items-center px-4 py-8 md:py-16">
-      <div className="w-full max-w-2xl">
-        {/* Mobile: search lives here. Desktop: search is always in the TopBar. */}
-        <div className="md:hidden">
-          <DictionaryAutocomplete onSelect={onWordSelect} />
-        </div>
-        <div className="hidden text-center md:block">
-          <p className="text-lg font-medium">Search for a Czech word to begin</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Use the search bar above to find words, declensions, and conjugations
+    <div className="flex min-h-0 flex-1 flex-col items-center px-4 py-8 md:justify-center md:py-0">
+      {/* Mobile: search */}
+      <div className="w-full max-w-2xl md:hidden">
+        <DictionaryAutocomplete onSelect={onWordSelect} />
+      </div>
+
+      {/* Desktop: centered hero */}
+      <div className="hidden w-full max-w-[480px] flex-col items-center gap-8 text-center md:flex">
+        <div>
+          <h1 className="text-[32px] font-bold text-foreground">Explore Czech Words</h1>
+          <p className="mx-auto mt-3 max-w-[400px] text-[15px] text-muted-foreground">
+            Search for any Czech word to see translations, declensions, and conjugations
           </p>
+        </div>
+        <div className="w-[380px]">
+          <DictionaryAutocomplete onSelect={onWordSelect} variant="lg" />
         </div>
       </div>
     </div>

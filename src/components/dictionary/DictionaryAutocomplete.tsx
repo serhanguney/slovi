@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { Search } from 'lucide-react';
 import {
   Combobox,
   ComboboxInput,
@@ -5,17 +7,23 @@ import {
   ComboboxList,
   ComboboxItem,
 } from '@/components/ui/combobox';
+import { InputGroupAddon } from '@/components/ui/input-group';
 import { useDictionarySearch, type SearchResult } from '@/hooks/useDictionarySearch';
 
 interface DictionaryAutocompleteProps {
   onSelect: (result: SearchResult) => void;
   placeholder?: string;
+  variant?: 'sm' | 'lg';
 }
 
 export function DictionaryAutocomplete({
   onSelect,
-  placeholder = 'Search Czech words...',
+  placeholder,
+  variant = 'sm',
 }: DictionaryAutocompleteProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const defaultPlaceholder =
+    variant === 'lg' ? 'Type a word in Czech or English...' : 'Search Czech words...';
   const { query, setQuery, results, loading } = useDictionarySearch();
 
   const getWordTypeLabel = (wordType: string) => {
@@ -54,8 +62,22 @@ export function DictionaryAutocomplete({
         }
       }}
     >
-      <ComboboxInput placeholder={placeholder} className="w-full" />
-      <ComboboxContent>
+      <div ref={containerRef}>
+        <ComboboxInput
+          placeholder={placeholder ?? defaultPlaceholder}
+          showTrigger={false}
+          className={
+            variant === 'lg'
+              ? 'h-auto w-full rounded-[28px] [&_input]:h-auto [&_input]:py-[14px] [&_input]:text-[15px]'
+              : 'w-full rounded-[20px]'
+          }
+        >
+          <InputGroupAddon align="inline-start" className={variant === 'lg' ? 'pl-5' : undefined}>
+            <Search className={variant === 'lg' ? 'h-5 w-5' : 'h-4 w-4'} />
+          </InputGroupAddon>
+        </ComboboxInput>
+      </div>
+      <ComboboxContent anchor={containerRef}>
         {loading && (
           <div className="py-6 text-center text-sm text-muted-foreground">Searching...</div>
         )}
