@@ -28,9 +28,9 @@ export function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
+    <div className="flex h-screen flex-col overflow-hidden bg-background">
+      <header className="shrink-0 border-b">
+        <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-4">
           <h1 className="text-xl font-bold">Slovi</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
@@ -41,14 +41,15 @@ export function HomePage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold">Welcome to Slovi</h2>
-          <p className="mt-2 text-muted-foreground">Your Czech language learning companion</p>
-        </div>
-
+      <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 flex-col overflow-hidden px-4 py-8">
         {/* Dictionary */}
-        <div className="mb-8 max-w-3xl mx-auto">
+        <div
+          className={
+            selectedWordId
+              ? 'flex min-h-0 flex-1 flex-col overflow-hidden'
+              : 'mx-auto w-full max-w-3xl'
+          }
+        >
           {selectedWordId ? (
             <WordDetail
               rootWordId={selectedWordId}
