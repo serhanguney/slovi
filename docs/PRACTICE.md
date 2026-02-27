@@ -258,3 +258,7 @@ The gap between Case Understanding and Form Recall is the most informative signa
 1. **Verbs** — deferred to Phase 2. Current sentence format uses verbs contextually but only nouns are the target of practice.
 2. **Word pool ordering** — how are the 2 new words per session selected? By frequency ranking in the database? By thematic grouping (animals, places, etc.)? TBD.
 3. **Case selector UX** — does the user pick a case before each session, or does the algorithm surface a mixed session across all active cases?
+
+## Ideas
+
+1. Show the user the gains from last week and month in the form of percentage by case understanding and form recall. In order for the calculations to be simple and clear discuss the database structure. How are these recorded and will be calculated ?
