@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DictionaryAutocomplete } from '@/components/dictionary/DictionaryAutocomplete';
 import { WordDetail } from '@/components/dictionary/WordDetail';
@@ -41,7 +41,7 @@ export function HomePage() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-[100dvh] overflow-hidden bg-background">
       {/* Desktop sidebar — hidden on mobile, flex on md+ */}
       <Sidebar activeTab={activeTab} onTabChange={handleTabChange} onSignOut={signOut} />
 
@@ -77,6 +77,8 @@ export function HomePage() {
               onCloseDetail={handleCloseDetail}
               onAddToVocabulary={handleAddToVocabulary}
             />
+          ) : activeTab === 'my-account' ? (
+            <MyAccountTab user={user} onSignOut={signOut} />
           ) : (
             <PlaceholderTab tab={activeTab} />
           )}
@@ -117,21 +119,17 @@ function ExploreTab({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col items-center px-4 py-8 md:justify-center md:py-0">
-      {/* Mobile: search */}
-      <div className="w-full max-w-2xl md:hidden">
-        <DictionaryAutocomplete onSelect={onWordSelect} />
-      </div>
-
-      {/* Desktop: centered hero */}
-      <div className="hidden w-full max-w-[480px] flex-col items-center gap-8 text-center md:flex">
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4">
+      <div className="flex w-full max-w-[480px] flex-col items-center gap-8 text-center">
         <div>
-          <h1 className="text-[32px] font-bold text-foreground">Explore Czech Words</h1>
-          <p className="mx-auto mt-3 max-w-[400px] text-[15px] text-muted-foreground">
+          <h1 className="text-[26px] font-bold text-foreground md:text-[32px]">
+            Explore Czech Words
+          </h1>
+          <p className="mx-auto mt-3 max-w-[400px] text-[14px] text-muted-foreground md:text-[15px]">
             Search for any Czech word to see translations, declensions, and conjugations
           </p>
         </div>
-        <div className="w-[380px]">
+        <div className="w-full">
           <DictionaryAutocomplete onSelect={onWordSelect} variant="lg" />
         </div>
       </div>
@@ -143,14 +141,44 @@ function PlaceholderTab({ tab }: { tab: NavTab }) {
   const labels: Record<NavTab, string> = {
     explore: 'Explore',
     'my-words': 'My Words',
-    history: 'History',
     settings: 'Settings',
+    'my-account': 'My Account',
   };
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-2">
       <p className="text-base font-semibold">{labels[tab]}</p>
       <p className="text-sm text-muted-foreground">Coming soon</p>
+    </div>
+  );
+}
+
+interface MyAccountTabProps {
+  user: { email?: string } | null;
+  onSignOut: () => void;
+}
+
+function MyAccountTab({ user, onSignOut }: MyAccountTabProps) {
+  return (
+    <div className="flex flex-1 flex-col px-4 py-8 md:px-10">
+      <h2 className="text-[20px] font-bold text-foreground">My Account</h2>
+
+      <div className="mt-6 rounded-2xl border border-[#F3F4F6] bg-white p-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.8px] text-muted-foreground">
+          Email
+        </p>
+        <p className="mt-1 text-[15px] text-foreground">{user?.email ?? '—'}</p>
+      </div>
+
+      <div className="mt-4">
+        <button
+          onClick={onSignOut}
+          className="flex items-center gap-2 rounded-2xl border border-[#F3F4F6] bg-white px-5 py-3.5 text-[15px] font-medium text-[#EF4444] transition-colors hover:bg-[#FEF2F2]"
+        >
+          <LogOut className="h-4 w-4" />
+          Sign out
+        </button>
+      </div>
     </div>
   );
 }

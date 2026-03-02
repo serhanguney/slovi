@@ -1,4 +1,4 @@
-import { Search, Bookmark, History, Settings } from 'lucide-react';
+import { Search, Bookmark, Settings, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { NavTab } from './nav.types';
@@ -6,8 +6,8 @@ import type { NavTab } from './nav.types';
 const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
   { id: 'explore', label: 'Explore', icon: Search },
   { id: 'my-words', label: 'My Words', icon: Bookmark },
-  { id: 'history', label: 'History', icon: History },
   { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'my-account', label: 'Account', icon: User },
 ];
 
 interface BottomNavProps {
@@ -17,7 +17,7 @@ interface BottomNavProps {
 
 export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
   return (
-    <nav className="shrink-0 bg-white px-[21px] py-3 md:hidden">
+    <nav className="shrink-0 bg-white px-[21px] pb-[max(12px,env(safe-area-inset-bottom))] pt-3 md:hidden">
       {/* Pill container matching the design */}
       <div className="flex h-[62px] items-stretch rounded-[36px] border border-[#F3F4F6] bg-white p-1">
         {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
