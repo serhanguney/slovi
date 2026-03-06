@@ -1,1 +1,1 @@
-export type NavTab = 'explore' | 'my-words' | 'settings' | 'my-account';
+export type NavTab = 'explore' | 'practice' | 'my-account';

@@ -1,12 +1,11 @@
-import { Search, Bookmark, Settings, User } from 'lucide-react';
+import { Search, Dumbbell, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { NavTab } from './nav.types';
 
 const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
   { id: 'explore', label: 'Explore', icon: Search },
-  { id: 'my-words', label: 'My Words', icon: Bookmark },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'practice', label: 'Practice', icon: Dumbbell },
   { id: 'my-account', label: 'Account', icon: User },
 ];
 

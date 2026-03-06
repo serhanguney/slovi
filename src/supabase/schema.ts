@@ -312,7 +312,75 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      build_dusty_session: {
+        Args: never;
+        Returns: {
+          base_form: string;
+          correct_case: string;
+          explanation: string;
+          mode: string;
+          sentence_czech: string;
+          sentence_english: string;
+          target_form: string;
+          word_form_id: number;
+        }[];
+      };
+      build_practice_session: {
+        Args: {
+          p_mode: Database['public']['Enums']['practice_mode'];
+          p_scope: string;
+        };
+        Returns: {
+          base_form: string;
+          correct_case: string;
+          explanation: string;
+          sentence_czech: string;
+          sentence_english: string;
+          target_form: string;
+          word_form_id: number;
+        }[];
+      };
+      build_vocabulary_session: {
+        Args: never;
+        Returns: {
+          correct_czech: string;
+          distractors: string[];
+          in_english: string;
+          word_form_id: number;
+        }[];
+      };
+      get_known_words: {
+        Args: never;
+        Returns: {
+          in_czech: string;
+          in_english: string;
+          is_dusty: boolean;
+          known_cases: string[];
+          last_practiced: string;
+          partial_cases: string[];
+          root_word_id: number;
+        }[];
+      };
+      get_practice_box_count: { Args: never; Returns: number };
+      get_practice_progress: {
+        Args: never;
+        Returns: {
+          case_name: string;
+          case_understanding: number;
+          cu_gain_week: number;
+          form_recall: number;
+          fr_gain_week: number;
+        }[];
+      };
       immutable_unaccent: { Args: { '': string }; Returns: string };
+      record_practice_answer: {
+        Args: {
+          p_is_correct: boolean;
+          p_mode: Database['public']['Enums']['practice_mode'];
+          p_word_form_id: number;
+        };
+        Returns: Json;
+      };
       search_dictionary: {
         Args: { p_limit?: number; p_query: string };
         Returns: {

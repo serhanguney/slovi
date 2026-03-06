@@ -1,36 +1,28 @@
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { ChevronRight, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DictionaryAutocomplete } from '@/features/dictionary/DictionaryAutocomplete';
 import { WordDetail } from '@/features/dictionary/WordDetail';
-import { Sidebar } from '@/features/layout/Sidebar';
-import { BottomNav } from '@/features/layout/BottomNav';
+import type { AppShellContext } from '@/features/layout/AppShell';
 import type { NavTab } from '@/features/layout/nav.types';
 import type { SearchResult } from '@/features/dictionary/hooks/useDictionarySearch';
 
 export function HomePage() {
   const { user, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<NavTab>('explore');
+  const { activeTab, onTabChange: handleTabChange } = useOutletContext<AppShellContext>();
   const [selectedWordId, setSelectedWordId] = useState<number | null>(null);
   const [selectedWordName, setSelectedWordName] = useState<string | null>(null);
 
   const handleWordSelect = (result: SearchResult) => {
     setSelectedWordId(result.root_word_id);
     setSelectedWordName(result.root_word_czech);
-    setActiveTab('explore');
+    handleTabChange('explore');
   };
 
   const handleCloseDetail = () => {
     setSelectedWordId(null);
     setSelectedWordName(null);
-  };
-
-  const handleTabChange = (tab: NavTab) => {
-    setActiveTab(tab);
-    if (tab !== 'explore') {
-      setSelectedWordId(null);
-      setSelectedWordName(null);
-    }
   };
 
   const handleAddToVocabulary = async (rootWordId: number) => {
@@ -41,53 +33,43 @@ export function HomePage() {
   };
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-background">
-      {/* Desktop sidebar — hidden on mobile, flex on md+ */}
-      <Sidebar activeTab={activeTab} onTabChange={handleTabChange} onSignOut={signOut} />
-
-      {/* Right side: top bar + content + mobile nav */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        {/* Desktop top bar — only shown when a word is selected */}
-        {selectedWordId && (
-          <header className="hidden shrink-0 items-center justify-between border-b border-[#F3F4F6] px-10 py-[18px] md:flex">
-            <div className="flex items-center gap-2 text-[13px]">
-              <span className="text-muted-foreground">Explore</span>
-              {selectedWordName && (
-                <>
-                  <ChevronRight className="h-3.5 w-3.5 text-[#D1D5DB]" />
-                  <span className="font-semibold text-foreground">{selectedWordName}</span>
-                </>
-              )}
-            </div>
-            <div className="w-[280px]">
-              <DictionaryAutocomplete
-                onSelect={handleWordSelect}
-                placeholder="Search for a word..."
-              />
-            </div>
-          </header>
-        )}
-
-        {/* Page content */}
-        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
-          {activeTab === 'explore' ? (
-            <ExploreTab
-              selectedWordId={selectedWordId}
-              onWordSelect={handleWordSelect}
-              onCloseDetail={handleCloseDetail}
-              onAddToVocabulary={handleAddToVocabulary}
+    <>
+      {/* Desktop top bar — only shown when a word is selected */}
+      {selectedWordId && (
+        <header className="hidden shrink-0 items-center justify-between border-b border-[#F3F4F6] px-10 py-[18px] md:flex">
+          <div className="flex items-center gap-2 text-[13px]">
+            <span className="text-muted-foreground">Explore</span>
+            {selectedWordName && (
+              <>
+                <ChevronRight className="h-3.5 w-3.5 text-[#D1D5DB]" />
+                <span className="font-semibold text-foreground">{selectedWordName}</span>
+              </>
+            )}
+          </div>
+          <div className="w-[280px]">
+            <DictionaryAutocomplete
+              onSelect={handleWordSelect}
+              placeholder="Search for a word..."
             />
-          ) : activeTab === 'my-account' ? (
-            <MyAccountTab user={user} onSignOut={signOut} />
-          ) : (
-            <PlaceholderTab tab={activeTab} />
-          )}
-        </main>
+          </div>
+        </header>
+      )}
 
-        {/* Mobile bottom nav — hidden on desktop */}
-        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
-      </div>
-    </div>
+      <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        {activeTab === 'explore' ? (
+          <ExploreTab
+            selectedWordId={selectedWordId}
+            onWordSelect={handleWordSelect}
+            onCloseDetail={handleCloseDetail}
+            onAddToVocabulary={handleAddToVocabulary}
+          />
+        ) : activeTab === 'my-account' ? (
+          <MyAccountTab user={user} onSignOut={signOut} />
+        ) : (
+          <PlaceholderTab tab={activeTab} />
+        )}
+      </main>
+    </>
   );
 }
 
@@ -140,8 +122,7 @@ function ExploreTab({
 function PlaceholderTab({ tab }: { tab: NavTab }) {
   const labels: Record<NavTab, string> = {
     explore: 'Explore',
-    'my-words': 'My Words',
-    settings: 'Settings',
+    practice: 'Practice',
     'my-account': 'My Account',
   };
 

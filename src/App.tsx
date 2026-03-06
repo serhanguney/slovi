@@ -6,6 +6,8 @@ import { PublicRoute } from '@/features/routes/PublicRoute';
 import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { HomePage } from '@/pages/HomePage';
+import { PracticePage } from '@/pages/PracticePage';
+import { AppShell } from '@/features/layout/AppShell';
 
 const queryClient = new QueryClient();
 
@@ -23,7 +25,10 @@ function App() {
 
             {/* Protected routes - redirect to login if not authenticated */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<HomePage />} />
+              <Route element={<AppShell />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/practice" element={<PracticePage />} />
+              </Route>
             </Route>
 
             {/* Catch all - redirect to home */}
