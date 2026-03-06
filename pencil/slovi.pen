@@ -2808,6 +2808,11 @@
               "ref": "LD53O",
               "name": "Accusative",
               "width": "fill_container",
+              "stroke": {
+                "align": "inside",
+                "thickness": 2,
+                "fill": "#1A1A1A"
+              },
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "crosshair"
@@ -2817,6 +2822,14 @@
                 },
                 "aMIp8": {
                   "content": "Direct object"
+                },
+                "MfJmq": {
+                  "fill": "#FFE59A",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 2,
+                    "fill": "#1A1A1A"
+                  }
                 }
               }
             },

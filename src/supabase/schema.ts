@@ -370,9 +370,11 @@ export type Database = {
           cu_gain_week: number;
           form_recall: number;
           fr_gain_week: number;
+          total_attempts: number;
         }[];
       };
       immutable_unaccent: { Args: { '': string }; Returns: string };
+      known_word_threshold: { Args: never; Returns: number };
       record_practice_answer: {
         Args: {
           p_is_correct: boolean;

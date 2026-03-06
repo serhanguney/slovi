@@ -7,6 +7,7 @@ import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { HomePage } from '@/pages/HomePage';
 import { PracticePage } from '@/pages/PracticePage';
+import { SessionPage } from '@/pages/SessionPage';
 import { AppShell } from '@/features/layout/AppShell';
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/practice" element={<PracticePage />} />
               </Route>
+              <Route path="/practice/session" element={<SessionPage />} />
             </Route>
 
             {/* Catch all - redirect to home */}

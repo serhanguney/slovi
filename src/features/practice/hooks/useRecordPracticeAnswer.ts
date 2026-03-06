@@ -19,7 +19,6 @@ export function useRecordPracticeAnswer() {
       return recordAnswerResultSchema.parse(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['practice-progress'] });
       queryClient.invalidateQueries({ queryKey: ['known-words'] });
       queryClient.invalidateQueries({ queryKey: ['practice-box-count'] });
     },

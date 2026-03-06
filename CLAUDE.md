@@ -45,6 +45,9 @@ Uses PostgreSQL via Supabase with JSON columns for flexible storage:
 - **Pre-commit hooks**: Husky + lint-staged automatically runs ESLint and Prettier on staged files
 - **Formatting**: Single quotes, 2-space indent, 100 char width, trailing commas (ES5)
 
+do not type cast
+do not disable eslint warnings
+
 ## Documentation
 
 Detailed planning docs are in `/docs/`:

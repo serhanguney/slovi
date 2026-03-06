@@ -15,7 +15,7 @@ LANGUAGE plpgsql
 SECURITY INVOKER
 AS $$
 DECLARE
-  v_user_id           text := auth.uid();
+  v_user_id           uuid := auth.uid();
   v_total_correct     int;
   v_word_became_known boolean := false;
   v_level_up          jsonb := null;
@@ -169,42 +169,48 @@ BEGIN
   ),
   -- Words not yet practiced in this mode (new candidates, excluding pinned_new)
   new_candidates AS (
-    SELECT
-      wf.id AS word_form_id,
-      ft.name AS case_name,
-      0.5 AS priority
-    FROM word_forms wf
-    JOIN root_words rw ON wf.root_word_id = rw.id
-    JOIN word_form_types ft ON wf.form_type_id = ft.id
-    WHERE ft.category = 'case'
-      AND (p_scope = 'mixed' OR ft.name = p_scope)
-      AND NOT EXISTS (
-        SELECT 1 FROM user_word_progress uwp
-        WHERE uwp.profile_id = v_user_id
-          AND uwp.word_form_id = wf.id
-          AND uwp.mode = p_mode
-      )
-      AND wf.id NOT IN (SELECT word_form_id FROM pinned_new)
-      AND (p_mode != 'form_recall' OR EXISTS (
-        SELECT 1 FROM user_word_progress e
-        WHERE e.profile_id = v_user_id
-          AND e.word_form_id = wf.id
-          AND e.mode = 'case_understanding' AND e.correct >= 1
-      ))
-    ORDER BY rw.frequency_rank ASC NULLS LAST
-    LIMIT 2
+    -- One random form per root word, then take top 10 by frequency rank
+    SELECT one_per_word.word_form_id, one_per_word.case_name, one_per_word.priority
+    FROM (
+      SELECT DISTINCT ON (rw.id)
+        wf.id        AS word_form_id,
+        ft.name      AS case_name,
+        rw.frequency_rank,
+        0.5          AS priority
+      FROM word_forms wf
+      JOIN root_words rw ON wf.root_word_id = rw.id
+      JOIN word_form_types ft ON wf.form_type_id = ft.id
+      WHERE ft.category = 'case'
+        AND (p_scope = 'mixed' OR ft.name = p_scope)
+        AND NOT EXISTS (
+          SELECT 1 FROM user_word_progress uwp
+          WHERE uwp.profile_id = v_user_id
+            AND uwp.word_form_id = wf.id
+            AND uwp.mode = p_mode
+        )
+        AND wf.id NOT IN (SELECT pn.word_form_id FROM pinned_new pn)
+        AND (p_mode != 'form_recall' OR EXISTS (
+          SELECT 1 FROM user_word_progress e
+          WHERE e.profile_id = v_user_id
+            AND e.word_form_id = wf.id
+            AND e.mode = 'case_understanding' AND e.correct >= 1
+        ))
+      ORDER BY rw.id, random()
+    ) one_per_word
+    ORDER BY one_per_word.frequency_rank ASC NULLS LAST
+    LIMIT 10
   ),
   -- Fill slots: pinned new first, then 4 struggling (>0.6), 4 reinforcing (0.3-0.6), remaining new
   selected AS (
-    SELECT word_form_id FROM (
-      SELECT word_form_id FROM pinned_new
+    SELECT ac.word_form_id FROM (
+      SELECT pn.word_form_id FROM pinned_new pn
       UNION ALL
-      SELECT word_form_id FROM (SELECT word_form_id FROM practiced WHERE priority > 0.6 ORDER BY priority DESC LIMIT 4) struggling
+      SELECT p1.word_form_id FROM (SELECT p.word_form_id FROM practiced p WHERE p.priority > 0.6 ORDER BY p.priority DESC LIMIT 4) p1
       UNION ALL
-      SELECT word_form_id FROM (SELECT word_form_id FROM practiced WHERE priority BETWEEN 0.3 AND 0.6 ORDER BY priority DESC LIMIT 4) reinforcing
+      SELECT p2.word_form_id FROM (SELECT p.word_form_id FROM practiced p WHERE p.priority BETWEEN 0.3 AND 0.6 ORDER BY p.priority DESC LIMIT 4) p2
       UNION ALL
-      SELECT word_form_id FROM new_candidates
-    ) all_candidates
+      SELECT nc.word_form_id FROM new_candidates nc
+    ) ac
     LIMIT 10
   )
   SELECT
@@ -220,10 +226,10 @@ BEGIN
   JOIN root_words rw ON wf.root_word_id = rw.id
   JOIN word_form_types ft ON wf.form_type_id = ft.id
   JOIN LATERAL (
-    SELECT czech_sentence, english_sentence, explanation
-    FROM example_sentences
-    WHERE word_form_id = wf.id
-    ORDER BY id
+    SELECT e.czech_sentence, e.english_sentence, e.explanation
+    FROM example_sentences e
+    WHERE e.word_form_id = wf.id
+    ORDER BY e.id
     LIMIT 1
   ) es ON true
   ORDER BY random();
@@ -348,7 +354,8 @@ RETURNS TABLE (
   case_understanding numeric,   -- all-time accuracy (0–1), null if not started
   form_recall        numeric,   -- all-time accuracy (0–1), null if not started
   cu_gain_week       numeric,   -- case_understanding: this-week minus last-week accuracy
-  fr_gain_week       numeric    -- form_recall: this-week minus last-week accuracy
+  fr_gain_week       numeric,   -- form_recall: this-week minus last-week accuracy
+  total_attempts     int        -- total card attempts across all cases and modes
 )
 LANGUAGE sql
 SECURITY INVOKER
@@ -390,12 +397,19 @@ AS $$
       AND pa.created_at BETWEEN now() - interval '14 days' AND now() - interval '7 days'
     GROUP BY ft.name, pa.mode
   )
+  attempt_count AS (
+    SELECT COUNT(*)::int AS total
+    FROM practice_attempts
+    WHERE profile_id = auth.uid()
+      AND mode IN ('case_understanding', 'form_recall')
+  )
   SELECT
     COALESCE(e.case_name, h.case_name) AS case_name,
     e.accuracy  AS case_understanding,
     h.accuracy  AS form_recall,
     tw_e.accuracy - lw_e.accuracy AS cu_gain_week,
-    tw_h.accuracy - lw_h.accuracy AS fr_gain_week
+    tw_h.accuracy - lw_h.accuracy AS fr_gain_week,
+    (SELECT total FROM attempt_count) AS total_attempts
   FROM all_time e
   FULL OUTER JOIN all_time h   ON e.case_name = h.case_name AND h.mode = 'form_recall'
   LEFT JOIN this_week tw_e     ON tw_e.case_name = e.case_name AND tw_e.mode = 'case_understanding'
@@ -509,8 +523,8 @@ BEGIN
   JOIN root_words rw ON wf.root_word_id = rw.id
   JOIN word_form_types ft ON wf.form_type_id = ft.id
   JOIN LATERAL (
-    SELECT czech_sentence, english_sentence, explanation
-    FROM example_sentences WHERE word_form_id = wf.id ORDER BY id LIMIT 1
+    SELECT e.czech_sentence, e.english_sentence, e.explanation
+    FROM example_sentences e WHERE e.word_form_id = wf.id ORDER BY e.id LIMIT 1
   ) es ON true;
 END;
 $$;
