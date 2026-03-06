@@ -12,9 +12,13 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useWordDetails, type WordForm, type ExampleSentence } from '@/hooks/useWordDetails';
-import { WordFormRow } from '@/components/ui/word-form-row';
-import { ExpandableSection } from '@/components/ui/expandable-section';
+import {
+  useWordDetails,
+  type WordForm,
+  type ExampleSentence,
+} from '@/features/dictionary/hooks/useWordDetails';
+import { WordFormRow } from '@/features/ui/word-form-row';
+import { ExpandableSection } from '@/features/ui/expandable-section';
 
 interface WordDetailProps {
   rootWordId: number;

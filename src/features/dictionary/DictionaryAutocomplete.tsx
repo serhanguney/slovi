@@ -6,9 +6,12 @@ import {
   ComboboxContent,
   ComboboxList,
   ComboboxItem,
-} from '@/components/ui/combobox';
-import { InputGroupAddon } from '@/components/ui/input-group';
-import { useDictionarySearch, type SearchResult } from '@/hooks/useDictionarySearch';
+} from '@/features/ui/combobox';
+import { InputGroupAddon } from '@/features/ui/input-group';
+import {
+  useDictionarySearch,
+  type SearchResult,
+} from '@/features/dictionary/hooks/useDictionarySearch';
 
 interface DictionaryAutocompleteProps {
   onSelect: (result: SearchResult) => void;

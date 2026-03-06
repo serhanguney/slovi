@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { ChevronRight, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { DictionaryAutocomplete } from '@/components/dictionary/DictionaryAutocomplete';
-import { WordDetail } from '@/components/dictionary/WordDetail';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { BottomNav } from '@/components/layout/BottomNav';
-import type { NavTab } from '@/components/layout/nav.types';
-import type { SearchResult } from '@/hooks/useDictionarySearch';
+import { DictionaryAutocomplete } from '@/features/dictionary/DictionaryAutocomplete';
+import { WordDetail } from '@/features/dictionary/WordDetail';
+import { Sidebar } from '@/features/layout/Sidebar';
+import { BottomNav } from '@/features/layout/BottomNav';
+import type { NavTab } from '@/features/layout/nav.types';
+import type { SearchResult } from '@/features/dictionary/hooks/useDictionarySearch';
 
 export function HomePage() {
   const { user, signOut } = useAuth();

@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/routes/ProtectedRoute';
-import { PublicRoute } from '@/components/routes/PublicRoute';
+import { ProtectedRoute } from '@/features/routes/ProtectedRoute';
+import { PublicRoute } from '@/features/routes/PublicRoute';
 import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { HomePage } from '@/pages/HomePage';
