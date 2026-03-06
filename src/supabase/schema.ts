@@ -43,9 +43,112 @@ export type Database = {
           },
         ];
       };
+      practice_attempts: {
+        Row: {
+          created_at: string;
+          id: number;
+          is_correct: boolean;
+          mode: Database['public']['Enums']['practice_mode'];
+          profile_id: string;
+          word_form_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          is_correct: boolean;
+          mode: Database['public']['Enums']['practice_mode'];
+          profile_id: string;
+          word_form_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          is_correct?: boolean;
+          mode?: Database['public']['Enums']['practice_mode'];
+          profile_id?: string;
+          word_form_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'practice_attempts_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+          {
+            foreignKeyName: 'practice_attempts_word_form_id_fkey';
+            columns: ['word_form_id'];
+            isOneToOne: false;
+            referencedRelation: 'word_forms';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      practice_box: {
+        Row: {
+          created_at: string;
+          id: number;
+          profile_id: string;
+          root_word_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          profile_id: string;
+          root_word_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          profile_id?: string;
+          root_word_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'practice_box_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+          {
+            foreignKeyName: 'practice_box_root_word_id_fkey';
+            columns: ['root_word_id'];
+            isOneToOne: false;
+            referencedRelation: 'root_words';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      profiles: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string;
+          profile_id: string;
+          surname: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name: string;
+          profile_id?: string;
+          surname: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          name?: string;
+          profile_id?: string;
+          surname?: string;
+        };
+        Relationships: [];
+      };
       root_words: {
         Row: {
           created_at: string;
+          frequency_rank: number | null;
           id: number;
           in_czech: string;
           in_english: string;
@@ -56,6 +159,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          frequency_rank?: number | null;
           id?: number;
           in_czech: string;
           in_english: string;
@@ -66,6 +170,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          frequency_rank?: number | null;
           id?: number;
           in_czech?: string;
           in_english?: string;
@@ -75,6 +180,54 @@ export type Database = {
           word_type?: Database['public']['Enums']['word_type'];
         };
         Relationships: [];
+      };
+      user_word_progress: {
+        Row: {
+          correct: number;
+          created_at: string;
+          id: number;
+          incorrect: number;
+          last_practiced_at: string;
+          mode: Database['public']['Enums']['practice_mode'];
+          profile_id: string;
+          word_form_id: number;
+        };
+        Insert: {
+          correct: number;
+          created_at?: string;
+          id?: number;
+          incorrect: number;
+          last_practiced_at: string;
+          mode: Database['public']['Enums']['practice_mode'];
+          profile_id: string;
+          word_form_id: number;
+        };
+        Update: {
+          correct?: number;
+          created_at?: string;
+          id?: number;
+          incorrect?: number;
+          last_practiced_at?: string;
+          mode?: Database['public']['Enums']['practice_mode'];
+          profile_id?: string;
+          word_form_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_word_progress_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+          {
+            foreignKeyName: 'user_word_progress_word_form_id_fkey';
+            columns: ['word_form_id'];
+            isOneToOne: false;
+            referencedRelation: 'word_forms';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       word_form_types: {
         Row: {
@@ -167,11 +320,11 @@ export type Database = {
           example_english: string;
           form_type_name: string;
           matched_form: string;
-          note: string | null;
           rank: number;
           root_word_czech: string;
           root_word_english: string;
           root_word_id: number;
+          root_word_note: string;
           similarity: number;
           word_aspect: string;
           word_type: string;
@@ -193,6 +346,7 @@ export type Database = {
       gender: 'masculine_animate' | 'feminine' | 'neuter' | 'masculine_inanimate' | 'masculine';
       person: '1' | '2' | '3';
       plurality: 'singular' | 'plural';
+      practice_mode: 'case_understanding' | 'form_recall' | 'simple_vocabulary';
       tense: 'present' | 'past' | 'future';
       word_aspect: 'perfective' | 'imperfective';
       word_type:
@@ -333,6 +487,7 @@ export const Constants = {
       gender: ['masculine_animate', 'feminine', 'neuter', 'masculine_inanimate', 'masculine'],
       person: ['1', '2', '3'],
       plurality: ['singular', 'plural'],
+      practice_mode: ['case_understanding', 'form_recall', 'simple_vocabulary'],
       tense: ['present', 'past', 'future'],
       word_aspect: ['perfective', 'imperfective'],
       word_type: [

@@ -14,8 +14,11 @@ Fresh setup for the new database structure. No data migration - starting from sc
 6. `word_families` - derived word relationships
 7. `user_vocabulary` - user bookmarks
 8. `practice_attempts` - individual practice records
-9. `user_word_progress` - spaced repetition state
+9. `user_word_progress` - ARS algorithm state
 10. `search_history` - user search tracking
+11. `practice_box` - user-pinned words queued for next session
+
+> **Note:** The schemas for `practice_attempts` and `user_word_progress` in this file reflect an earlier SM-2 design. The authoritative up-to-date schemas (ARS algorithm, `mode` text field) are in `PRACTICE.md` Implementation Plan steps 1b and 1c.
 
 ### Tables to Drop
 
@@ -393,6 +396,17 @@ CREATE TABLE user_vocabulary (
 CREATE INDEX idx_user_vocabulary_profile ON user_vocabulary(profile_id);
 ```
 
+Enable RLS:
+
+```sql
+ALTER TABLE user_vocabulary ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users manage own vocabulary"
+  ON user_vocabulary
+  FOR ALL
+  USING (profile_id = auth.uid());
+```
+
 ---
 
 ## Step 10: Create practice_attempts Table
@@ -452,9 +466,47 @@ CREATE INDEX idx_search_history_profile ON search_history(profile_id);
 CREATE INDEX idx_search_history_created ON search_history(created_at);
 ```
 
+Enable RLS:
+
+```sql
+ALTER TABLE search_history ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users manage own search history"
+  ON search_history
+  FOR ALL
+  USING (profile_id = auth.uid());
+```
+
 ---
 
-## Step 13: Drop Old Tables
+## Step 13: Create practice_box Table
+
+```sql
+CREATE TABLE practice_box (
+  profile_id   uuid        NOT NULL REFERENCES profiles (id) ON DELETE CASCADE,
+  root_word_id uuid        NOT NULL REFERENCES root_words (id) ON DELETE CASCADE,
+  added_at     timestamptz NOT NULL DEFAULT now(),
+
+  PRIMARY KEY (profile_id, root_word_id)
+);
+
+CREATE INDEX idx_practice_box_profile ON practice_box (profile_id, added_at ASC);
+```
+
+Enable RLS:
+
+```sql
+ALTER TABLE practice_box ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users manage own practice box"
+  ON practice_box
+  FOR ALL
+  USING (profile_id = auth.uid());
+```
+
+---
+
+## Step 15: Drop Old Tables
 
 Only do this after confirming the new structure works:
 
@@ -470,7 +522,7 @@ DROP TYPE IF EXISTS declensions; -- Replaced by form_types table
 
 ---
 
-## Step 14: Create Helper Functions
+## Step 16: Create Helper Functions
 
 ### Get words due for review
 
@@ -633,12 +685,14 @@ $$ LANGUAGE plpgsql;
 6. Create example_sentences
 7. Create verb_aspect_pairs
 8. Create word_families
-9. Create user_vocabulary
-10. Create practice_attempts
-11. Create user_word_progress
-12. Create search_history
-13. Drop old tables (pronouns, profile_words, declension_scores)
-14. Create helper functions
+9. Create user_vocabulary + RLS
+10. Create practice_attempts (see PRACTICE.md step 1c for current schema)
+11. Create user_word_progress (see PRACTICE.md step 1b for current schema)
+12. Create search_history + RLS
+13. Create practice_box + RLS
+14. _(reserved)_
+15. Drop old tables (pronouns, profile_words, declension_scores)
+16. Create helper functions
 
 ---
 

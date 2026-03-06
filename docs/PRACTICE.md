@@ -156,6 +156,13 @@ If a bucket doesn't have enough candidates, fill remaining slots from highest pr
 
 **Form Recall eligibility:** a word only appears in Form Recall sessions once it has `case_understanding correct >= 1`. The user should recognise the case before being asked to produce the form. The first Form Recall session for a case therefore draws from the existing Case Understanding pool, ordered by Case Understanding accuracy descending (words you understood best go first).
 
+**Practice box (pinned words):** words the user explicitly queued from the dictionary bypass normal slot ordering. Up to 2 pinned words are guaranteed a slot per session:
+
+- **Pinned + never practiced** in the active mode → take the 2 new slots ahead of frequency-ranked candidates.
+- **Pinned + already practiced** → priority overridden to `1.0`, guaranteed into the struggling bucket.
+
+Pins are consumed on the user's first answer to that word (any mode, any answer). If more than 2 words are pinned they trickle in 2 per session, oldest first.
+
 ### New Word Selection
 
 New words are selected from `root_words` ordered by `frequency_rank` ASC, filtered to words the user has not yet practiced in the active mode. The most common Czech words surface first.
@@ -178,11 +185,19 @@ These align with the schema proposed in PLANNING.md, updated for the ARS algorit
 
 **`user_word_progress`** — one row per `(profile_id, word_form_id, mode)`, read by the ARS algorithm on every session build:
 
+> **⚠️ Migration required**: the live table is missing `word_form_id`. Run before deploying RPC functions:
+>
+> ```sql
+> ALTER TABLE user_word_progress ADD COLUMN word_form_id bigint REFERENCES word_forms (id) ON DELETE CASCADE;
+> ALTER TABLE user_word_progress DROP CONSTRAINT user_word_progress_pkey;
+> ALTER TABLE user_word_progress ADD PRIMARY KEY (profile_id, word_form_id, mode);
+> ```
+
 ```sql
 user_word_progress (
-  profile_id        uuid REFERENCES profiles,
-  word_form_id      uuid REFERENCES word_forms,
-  mode              text,        -- 'case_understanding' | 'form_recall' | 'simple_vocabulary'
+  profile_id        text REFERENCES profiles (profile_id),
+  word_form_id      bigint REFERENCES word_forms (id),
+  mode              practice_mode,  -- 'case_understanding' | 'form_recall' | 'simple_vocabulary'
   correct           int          DEFAULT 0,
   incorrect         int          DEFAULT 0,
   last_practiced_at timestamptz,
@@ -197,11 +212,11 @@ Normalizing mode into the primary key (instead of flat columns per mode) keeps t
 
 ```sql
 practice_attempts (
-  id              uuid PRIMARY KEY,
-  profile_id      uuid REFERENCES profiles,
-  word_form_id    uuid REFERENCES word_forms,
-  mode            text,        -- 'case_understanding' | 'form_recall' | 'simple_vocabulary'
-  was_correct     boolean,
+  id              bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  profile_id      text REFERENCES profiles (profile_id),
+  word_form_id    bigint REFERENCES word_forms (id),
+  mode            practice_mode,  -- 'case_understanding' | 'form_recall' | 'simple_vocabulary'
+  is_correct      boolean,
   created_at      timestamptz DEFAULT now()
 )
 ```
@@ -215,11 +230,11 @@ Weekly and monthly gains are calculated directly from `practice_attempts` — no
 ```sql
 -- Case Understanding gain: this week vs last week (accusative, example)
 SELECT
-  AVG(CASE WHEN was_correct THEN 1.0 ELSE 0.0 END) AS accuracy,
+  AVG(CASE WHEN is_correct THEN 1.0 ELSE 0.0 END) AS accuracy,
   'this_week' AS period
 FROM practice_attempts pa
 JOIN word_forms wf ON pa.word_form_id = wf.id
-JOIN form_types ft ON wf.form_type_id = ft.id
+JOIN word_form_types ft ON wf.form_type_id = ft.id
 WHERE pa.profile_id = $1
   AND pa.mode = 'case_understanding'
   AND ft.name = 'accusative'
@@ -228,11 +243,11 @@ WHERE pa.profile_id = $1
 UNION ALL
 
 SELECT
-  AVG(CASE WHEN was_correct THEN 1.0 ELSE 0.0 END),
+  AVG(CASE WHEN is_correct THEN 1.0 ELSE 0.0 END),
   'last_week'
 FROM practice_attempts pa
 JOIN word_forms wf ON pa.word_form_id = wf.id
-JOIN form_types ft ON wf.form_type_id = ft.id
+JOIN word_form_types ft ON wf.form_type_id = ft.id
 WHERE pa.profile_id = $1
   AND pa.mode = 'case_understanding'
   AND ft.name = 'accusative'
@@ -304,7 +319,7 @@ The algorithm naturally shifts sessions toward the weakest case without the user
 
 **Browser closed mid-session** — No effect. Each answer is written to the database immediately on submit, not at session end. A session is a UI-only concept — no session state is stored server-side. Unanswered cards are simply not recorded.
 
-**`user_word_progress` schema** — Normalized to one row per `(profile_id, word_form_id, mode)`. Mode is a `text` field (`'case_understanding'`, `'form_recall'`, or `'simple_vocabulary'`). New modes are new rows, not schema changes.
+**`user_word_progress` schema** — Normalized to one row per `(profile_id, word_form_id, mode)`. Mode is a `practice_mode` enum (`'case_understanding'`, `'form_recall'`, `'simple_vocabulary'`). New modes require an enum migration but no column additions. The live DB table was created without `word_form_id` — see migration note in Step 1b.
 
 **`practice_attempts` for gains** — Serves a different purpose than `user_word_progress`. The progress table is an all-time running total used by the ARS algorithm. The attempts table is a timestamped raw log used for time-windowed analytics. To get "this week's accuracy" you filter attempts by `created_at >= now() - 7 days`. You cannot derive this from the progress table because it has no time boundaries.
 
@@ -327,57 +342,47 @@ Populate from a Czech word frequency list. Words without a rank are treated as l
 
 #### 1b. Create `user_word_progress`
 
+> **⚠️ Already created in live DB but missing `word_form_id`.** Run this migration:
+
+```sql
+ALTER TABLE user_word_progress ADD COLUMN word_form_id bigint REFERENCES word_forms (id) ON DELETE CASCADE;
+ALTER TABLE user_word_progress DROP CONSTRAINT user_word_progress_pkey;
+ALTER TABLE user_word_progress ADD PRIMARY KEY (profile_id, word_form_id, mode);
+
+CREATE INDEX idx_uwp_profile_mode ON user_word_progress (profile_id, mode);
+```
+
+The full intended schema:
+
 ```sql
 CREATE TABLE user_word_progress (
-  profile_id        uuid        NOT NULL REFERENCES profiles (id) ON DELETE CASCADE,
-  word_form_id      uuid        NOT NULL REFERENCES word_forms (id) ON DELETE CASCADE,
-  mode              text        NOT NULL CHECK (mode IN ('case_understanding', 'form_recall', 'simple_vocabulary')),
+  profile_id        text        NOT NULL REFERENCES profiles (profile_id) ON DELETE CASCADE,
+  word_form_id      bigint      NOT NULL REFERENCES word_forms (id) ON DELETE CASCADE,
+  mode              practice_mode NOT NULL,
   correct           int         NOT NULL DEFAULT 0,
   incorrect         int         NOT NULL DEFAULT 0,
   last_practiced_at timestamptz NOT NULL DEFAULT now(),
 
   PRIMARY KEY (profile_id, word_form_id, mode)
 );
-
-CREATE INDEX idx_uwp_profile_mode ON user_word_progress (profile_id, mode);
 ```
 
-Enable RLS:
+#### 1c. `practice_attempts` — already created, matches live schema ✓
 
 ```sql
-ALTER TABLE user_word_progress ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users manage own progress"
-  ON user_word_progress
-  FOR ALL
-  USING (profile_id = auth.uid());
-```
-
-#### 1c. Create `practice_attempts`
-
-```sql
-CREATE TABLE practice_attempts (
-  id              uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
-  profile_id      uuid        NOT NULL REFERENCES profiles (id) ON DELETE CASCADE,
-  word_form_id    uuid        NOT NULL REFERENCES word_forms (id) ON DELETE CASCADE,
-  mode            text        NOT NULL CHECK (mode IN ('case_understanding', 'form_recall', 'simple_vocabulary')),
-  was_correct     boolean     NOT NULL,
-  created_at      timestamptz NOT NULL DEFAULT now()
-);
+-- Already exists. Verify columns:
+-- id, profile_id, word_form_id, mode (practice_mode enum), is_correct, created_at
 
 CREATE INDEX idx_pa_profile_created ON practice_attempts (profile_id, created_at DESC);
 CREATE INDEX idx_pa_profile_mode_created ON practice_attempts (profile_id, mode, created_at DESC);
 ```
 
-Enable RLS:
+#### 1d. `practice_box` — already created, matches live schema ✓
 
 ```sql
-ALTER TABLE practice_attempts ENABLE ROW LEVEL SECURITY;
+-- Already exists. Columns: id, profile_id, root_word_id, created_at
 
-CREATE POLICY "Users manage own attempts"
-  ON practice_attempts
-  FOR ALL
-  USING (profile_id = auth.uid());
+CREATE INDEX idx_practice_box_profile ON practice_box (profile_id, created_at ASC);
 ```
 
 ---
@@ -390,16 +395,16 @@ Called after every card answer. Writes both tables atomically and returns achiev
 
 ```sql
 CREATE OR REPLACE FUNCTION record_practice_answer(
-  p_word_form_id uuid,
-  p_mode         text,
-  p_was_correct  boolean
+  p_word_form_id bigint,
+  p_mode         practice_mode,
+  p_is_correct   boolean
 )
 RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY INVOKER
 AS $$
 DECLARE
-  v_user_id           uuid := auth.uid();
+  v_user_id           text := auth.uid()::text;
   v_total_correct     int;
   v_word_became_known boolean := false;
   v_level_up          jsonb := null;
@@ -407,24 +412,29 @@ DECLARE
   v_new_known_count   int;
 BEGIN
   -- 1. Insert attempt
-  INSERT INTO practice_attempts (profile_id, word_form_id, mode, was_correct)
-  VALUES (v_user_id, p_word_form_id, p_mode, p_was_correct);
+  INSERT INTO practice_attempts (profile_id, word_form_id, mode, is_correct)
+  VALUES (v_user_id, p_word_form_id, p_mode, p_is_correct);
 
   -- 2. Upsert progress
   INSERT INTO user_word_progress (profile_id, word_form_id, mode, correct, incorrect, last_practiced_at)
   VALUES (
     v_user_id, p_word_form_id, p_mode,
-    CASE WHEN p_was_correct THEN 1 ELSE 0 END,
-    CASE WHEN p_was_correct THEN 0 ELSE 1 END,
+    CASE WHEN p_is_correct THEN 1 ELSE 0 END,
+    CASE WHEN p_is_correct THEN 0 ELSE 1 END,
     now()
   )
   ON CONFLICT (profile_id, word_form_id, mode) DO UPDATE SET
-    correct           = user_word_progress.correct   + CASE WHEN p_was_correct THEN 1 ELSE 0 END,
-    incorrect         = user_word_progress.incorrect + CASE WHEN p_was_correct THEN 0 ELSE 1 END,
+    correct           = user_word_progress.correct   + CASE WHEN p_is_correct THEN 1 ELSE 0 END,
+    incorrect         = user_word_progress.incorrect + CASE WHEN p_is_correct THEN 0 ELSE 1 END,
     last_practiced_at = now();
 
-  -- 3. Check: did this root word just reach SUM(correct) >= 10 across all forms and modes?
-  IF p_was_correct THEN
+  -- 3. Consume practice box pin (remove on first answer, regardless of correctness)
+  DELETE FROM practice_box
+  WHERE profile_id = v_user_id
+    AND root_word_id = (SELECT root_word_id FROM word_forms WHERE id = p_word_form_id);
+
+  -- 5. Check: did this root word just reach SUM(correct) >= 10 across all forms and modes?
+  IF p_is_correct THEN
     SELECT SUM(uwp.correct) INTO v_total_correct
     FROM user_word_progress uwp
     JOIN word_forms wf ON uwp.word_form_id = wf.id
@@ -435,7 +445,7 @@ BEGIN
     v_word_became_known := v_total_correct >= 10 AND (v_total_correct - 1) < 10;
   END IF;
 
-  -- 4. Check: did total known words cross a global level threshold? (5 / 20 / 50)
+  -- 6. Check: did total known words cross a global level threshold? (5 / 20 / 50)
   IF v_word_became_known THEN
     -- Global known count before this answer
     SELECT COUNT(*) - 1 INTO v_old_known_count
@@ -481,11 +491,11 @@ Runs the ARS algorithm server-side and returns exactly 10 card objects. The fron
 
 ```sql
 CREATE OR REPLACE FUNCTION build_practice_session(
-  p_mode  text,   -- 'case_understanding' | 'form_recall'
-  p_scope text    -- 'mixed' | specific case name e.g. 'accusative'
+  p_mode  practice_mode,  -- 'case_understanding' | 'form_recall'
+  p_scope text            -- 'mixed' | specific case name e.g. 'accusative'
 )
 RETURNS TABLE (
-  word_form_id     uuid,
+  word_form_id     bigint,
   sentence_czech   text,
   sentence_english text,
   target_form      text,   -- the inflected form (bold in Case Understanding, answer in Form Recall)
@@ -497,25 +507,47 @@ LANGUAGE plpgsql
 SECURITY INVOKER
 AS $$
 DECLARE
-  v_user_id uuid := auth.uid();
+  v_user_id text := auth.uid()::text;
 BEGIN
   RETURN QUERY
   WITH
+  -- Pinned words not yet practiced: take the new slots ahead of frequency-ranked candidates
+  pinned_new AS (
+    SELECT wf.id AS word_form_id
+    FROM practice_box pb
+    JOIN word_forms wf ON wf.root_word_id = pb.root_word_id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
+    WHERE pb.profile_id = v_user_id
+      AND ft.category = 'case'
+      AND (p_scope = 'mixed' OR ft.name = p_scope)
+      AND NOT EXISTS (
+        SELECT 1 FROM user_word_progress uwp
+        WHERE uwp.profile_id = v_user_id
+          AND uwp.word_form_id = wf.id
+          AND uwp.mode = p_mode
+      )
+    ORDER BY pb.created_at ASC
+    LIMIT 2
+  ),
   -- ARS priority for all words this user has practiced in this mode + scope
+  -- Pinned words that have already been practiced get priority 1.0 (guaranteed struggling slot)
   practiced AS (
     SELECT
       uwp.word_form_id,
       ft.name AS case_name,
-      1 - (
-        (uwp.correct::float / GREATEST(uwp.correct + uwp.incorrect, 1))
-        * exp(
-            -EXTRACT(EPOCH FROM (now() - uwp.last_practiced_at)) / 86400.0
-            / (GREATEST(uwp.correct, 1) * 3.0)
-          )
-      ) AS priority
+      CASE WHEN pb.root_word_id IS NOT NULL THEN 1.0
+           ELSE 1 - (
+             (uwp.correct::float / GREATEST(uwp.correct + uwp.incorrect, 1))
+             * exp(
+                 -EXTRACT(EPOCH FROM (now() - uwp.last_practiced_at)) / 86400.0
+                 / (GREATEST(uwp.correct, 1) * 3.0)
+               )
+           )
+      END AS priority
     FROM user_word_progress uwp
     JOIN word_forms wf ON uwp.word_form_id = wf.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
+    LEFT JOIN practice_box pb ON pb.root_word_id = wf.root_word_id AND pb.profile_id = v_user_id
     WHERE uwp.profile_id = v_user_id
       AND uwp.mode = p_mode
       AND ft.category = 'case'
@@ -528,7 +560,7 @@ BEGIN
           AND e.mode = 'case_understanding' AND e.correct >= 1
       ))
   ),
-  -- Words not yet practiced in this mode (new candidates)
+  -- Words not yet practiced in this mode (new candidates, excluding pinned_new)
   new_candidates AS (
     SELECT
       wf.id AS word_form_id,
@@ -536,7 +568,7 @@ BEGIN
       0.5 AS priority
     FROM word_forms wf
     JOIN root_words rw ON wf.root_word_id = rw.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE ft.category = 'case'
       AND (p_scope = 'mixed' OR ft.name = p_scope)
       AND NOT EXISTS (
@@ -545,6 +577,7 @@ BEGIN
           AND uwp.word_form_id = wf.id
           AND uwp.mode = p_mode
       )
+      AND wf.id NOT IN (SELECT word_form_id FROM pinned_new)
       AND (p_mode != 'form_recall' OR EXISTS (
         SELECT 1 FROM user_word_progress e
         WHERE e.profile_id = v_user_id
@@ -554,8 +587,10 @@ BEGIN
     ORDER BY rw.frequency_rank ASC NULLS LAST
     LIMIT 2
   ),
-  -- Fill slots: 4 struggling, 4 reinforcing, 2 new
+  -- Fill slots: pinned new first, then 4 struggling, 4 reinforcing, remaining new
   selected AS (
+    SELECT word_form_id FROM pinned_new
+    UNION ALL
     SELECT word_form_id FROM practiced WHERE priority > 0.6  ORDER BY priority DESC LIMIT 4
     UNION ALL
     SELECT word_form_id FROM practiced WHERE priority BETWEEN 0.3 AND 0.6 ORDER BY priority DESC LIMIT 4
@@ -568,14 +603,14 @@ BEGIN
     wf.id,
     es.czech_sentence,
     es.english_sentence,
-    wf.form_czech,
+    wf.form_in_czech,
     rw.in_czech,
     ft.name,
     es.explanation
   FROM selected s
   JOIN word_forms wf ON s.word_form_id = wf.id
   JOIN root_words rw ON wf.root_word_id = rw.id
-  JOIN form_types ft ON wf.form_type_id = ft.id
+  JOIN word_form_types ft ON wf.form_type_id = ft.id
   -- Pick one example sentence per word (prefer primary)
   JOIN LATERAL (
     SELECT czech_sentence, english_sentence, explanation
@@ -598,7 +633,7 @@ Vocabulary uses a separate function because its return type is fundamentally dif
 ```sql
 CREATE OR REPLACE FUNCTION build_vocabulary_session()
 RETURNS TABLE (
-  word_form_id    uuid,
+  word_form_id    bigint,
   in_english      text,    -- prompt shown to user
   correct_czech   text,    -- correct nominative form
   distractors     text[]   -- 3 wrong Czech nominative forms from same frequency band
@@ -607,23 +642,42 @@ LANGUAGE plpgsql
 SECURITY INVOKER
 AS $$
 DECLARE
-  v_user_id uuid := auth.uid();
+  v_user_id text := auth.uid()::text;
 BEGIN
   RETURN QUERY
   WITH
+  pinned_new AS (
+    SELECT wf.id AS word_form_id
+    FROM practice_box pb
+    JOIN word_forms wf ON wf.root_word_id = pb.root_word_id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
+    WHERE pb.profile_id = v_user_id
+      AND ft.name = 'nominative'
+      AND NOT EXISTS (
+        SELECT 1 FROM user_word_progress uwp
+        WHERE uwp.profile_id = v_user_id
+          AND uwp.word_form_id = wf.id
+          AND uwp.mode = 'simple_vocabulary'
+      )
+    ORDER BY pb.created_at ASC
+    LIMIT 2
+  ),
   practiced AS (
     SELECT
       uwp.word_form_id,
-      1 - (
-        (uwp.correct::float / GREATEST(uwp.correct + uwp.incorrect, 1))
-        * exp(
-            -EXTRACT(EPOCH FROM (now() - uwp.last_practiced_at)) / 86400.0
-            / (GREATEST(uwp.correct, 1) * 3.0)
-          )
-      ) AS priority
+      CASE WHEN pb.root_word_id IS NOT NULL THEN 1.0
+           ELSE 1 - (
+             (uwp.correct::float / GREATEST(uwp.correct + uwp.incorrect, 1))
+             * exp(
+                 -EXTRACT(EPOCH FROM (now() - uwp.last_practiced_at)) / 86400.0
+                 / (GREATEST(uwp.correct, 1) * 3.0)
+               )
+           )
+      END AS priority
     FROM user_word_progress uwp
     JOIN word_forms wf ON uwp.word_form_id = wf.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
+    LEFT JOIN practice_box pb ON pb.root_word_id = wf.root_word_id AND pb.profile_id = v_user_id
     WHERE uwp.profile_id = v_user_id
       AND uwp.mode = 'simple_vocabulary'
       AND ft.name = 'nominative'
@@ -632,7 +686,7 @@ BEGIN
     SELECT wf.id AS word_form_id, 0.5 AS priority
     FROM word_forms wf
     JOIN root_words rw ON wf.root_word_id = rw.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE ft.name = 'nominative'
       AND NOT EXISTS (
         SELECT 1 FROM user_word_progress uwp
@@ -640,10 +694,13 @@ BEGIN
           AND uwp.word_form_id = wf.id
           AND uwp.mode = 'simple_vocabulary'
       )
+      AND wf.id NOT IN (SELECT word_form_id FROM pinned_new)
     ORDER BY rw.frequency_rank ASC NULLS LAST
     LIMIT 2
   ),
   selected AS (
+    SELECT word_form_id FROM pinned_new
+    UNION ALL
     SELECT word_form_id FROM practiced WHERE priority > 0.6  ORDER BY priority DESC LIMIT 4
     UNION ALL
     SELECT word_form_id FROM practiced WHERE priority BETWEEN 0.3 AND 0.6 ORDER BY priority DESC LIMIT 4
@@ -698,7 +755,7 @@ AS $$
       SUM(uwp.correct)::numeric / NULLIF(SUM(uwp.correct + uwp.incorrect), 0) AS accuracy
     FROM user_word_progress uwp
     JOIN word_forms wf ON uwp.word_form_id = wf.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE uwp.profile_id = auth.uid()
       AND ft.category = 'case'
       AND uwp.mode IN ('case_understanding', 'form_recall')
@@ -706,10 +763,10 @@ AS $$
   ),
   this_week AS (
     SELECT ft.name AS case_name, pa.mode,
-      AVG(pa.was_correct::int) AS accuracy
+      AVG(pa.is_correct::int) AS accuracy
     FROM practice_attempts pa
     JOIN word_forms wf ON pa.word_form_id = wf.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE pa.profile_id = auth.uid()
       AND ft.category = 'case'
       AND pa.mode IN ('case_understanding', 'form_recall')
@@ -718,10 +775,10 @@ AS $$
   ),
   last_week AS (
     SELECT ft.name AS case_name, pa.mode,
-      AVG(pa.was_correct::int) AS accuracy
+      AVG(pa.is_correct::int) AS accuracy
     FROM practice_attempts pa
     JOIN word_forms wf ON pa.word_form_id = wf.id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE pa.profile_id = auth.uid()
       AND ft.category = 'case'
       AND pa.mode IN ('case_understanding', 'form_recall')
@@ -753,7 +810,7 @@ Returns one row per root word. Each row includes which cases are known and which
 ```sql
 CREATE OR REPLACE FUNCTION get_known_words()
 RETURNS TABLE (
-  root_word_id    uuid,
+  root_word_id    bigint,
   in_czech        text,
   in_english      text,
   known_cases     text[],   -- cases with >= 5 total correct answers for this word's forms
@@ -773,7 +830,7 @@ AS $$
       MAX(uwp.last_practiced_at)    AS last_practiced
     FROM root_words rw
     JOIN word_forms wf  ON wf.root_word_id = rw.id
-    JOIN form_types ft  ON wf.form_type_id = ft.id
+    JOIN word_form_types ft  ON wf.form_type_id = ft.id
     LEFT JOIN user_word_progress uwp
       ON uwp.word_form_id = wf.id AND uwp.profile_id = auth.uid()
     WHERE ft.category = 'case'
@@ -804,7 +861,7 @@ Same structure as `build_practice_session` but filtered to known + not practiced
 ```sql
 CREATE OR REPLACE FUNCTION build_dusty_session()
 RETURNS TABLE (
-  word_form_id     uuid,
+  word_form_id     bigint,
   mode             text,
   sentence_czech   text,
   sentence_english text,
@@ -833,7 +890,7 @@ BEGIN
     SELECT DISTINCT ON (wf.root_word_id) wf.id AS word_form_id
     FROM known_roots kr
     JOIN word_forms wf ON wf.root_word_id = kr.root_word_id
-    JOIN form_types ft ON wf.form_type_id = ft.id
+    JOIN word_form_types ft ON wf.form_type_id = ft.id
     WHERE ft.category = 'case'
     ORDER BY wf.root_word_id, kr.last_practiced ASC
     LIMIT 5  -- 5 words × 2 modes = 10 cards
@@ -841,11 +898,11 @@ BEGIN
   SELECT
     wf.id, 'm' AS mode,  -- placeholder; app alternates case_understanding/form_recall per word
     es.czech_sentence, es.english_sentence,
-    wf.form_czech, rw.in_czech, ft.name, es.explanation
+    wf.form_in_czech, rw.in_czech, ft.name, es.explanation
   FROM dusty d
   JOIN word_forms wf ON d.word_form_id = wf.id
   JOIN root_words rw ON wf.root_word_id = rw.id
-  JOIN form_types ft ON wf.form_type_id = ft.id
+  JOIN word_form_types ft ON wf.form_type_id = ft.id
   JOIN LATERAL (
     SELECT czech_sentence, english_sentence, explanation
     FROM example_sentences WHERE word_form_id = wf.id ORDER BY id LIMIT 1
@@ -867,6 +924,7 @@ $$;
 - Case Understanding / Form Recall: calls `supabase.rpc('build_practice_session', { p_mode, p_scope })`
 - Simple Vocabulary: calls `supabase.rpc('build_vocabulary_session')`
 - Navigates to the session screen with the 10 cards in state
+- If pinned words exist, a small badge shows "X pinned" next to the Start button
 
 **Session screen**
 
@@ -876,7 +934,7 @@ $$;
   - **Form Recall card** — sentence with blank; base form shown as hint below; text input with submit button. Accept answer if it matches `target_form` (case-insensitive, trimmed). Consider accepting diacritic-stripped versions as "close but wrong" with a gentle correction rather than a hard fail — decision TBD.
   - **Simple Vocabulary card** — English word shown in large text; 4 Czech word buttons arranged in a 2×2 grid. Tapping a button submits immediately. No sentence, no text input, no diacritic toolbar.
 - After each answer: inline feedback panel slides up showing correct/incorrect + `explanation` text from the DB. "Next" button advances.
-- On submit, call `supabase.rpc('record_practice_answer', { p_word_form_id, p_mode, p_was_correct })`. Response may contain achievement flags — queue any toasts.
+- On submit, call `supabase.rpc('record_practice_answer', { p_word_form_id, p_mode, p_is_correct })`. Response may contain achievement flags — queue any toasts.
 
 **Session complete screen**
 
@@ -1014,6 +1072,7 @@ Words tab flow:
 | Mode description   | Small body text below the selector. Case Understanding: "Identify the grammatical case." Form Recall: "Type the correct word form." Simple Vocabulary: "Pick the Czech word for the English prompt."                    |
 | Scope selector     | Label "Focus on". Options: `Mixed` pill + one pill per case the user has practiced. Hidden entirely when Simple Vocabulary is selected. Cases never practiced are hidden. If user has no history, only `Mixed` appears. |
 | Dusty words banner | Shown only when dusty words exist. Text: "You have {N} dusty words. Refresh them?" with a secondary CTA button.                                                                                                         |
+| Pinned words badge | Small chip near the Start button. "{N} pinned" when practice box is non-empty. Hidden when empty.                                                                                                                       |
 | Start button       | Full-width primary button. Label: "Start Session". Disabled when scope is empty (no words available for selection).                                                                                                     |
 
 **States:**
@@ -1207,6 +1266,12 @@ dům  house   [Acc ✓]  [Gen ✓]  [Loc ✓]  [Dat ···]  dusty
 
 **Tapping a word:** navigates to the word's dictionary entry (existing screen).
 
+**Dictionary entry screen** (existing, out of scope for full design here) includes an **"Add to Practice Box"** button. States:
+
+- Default: "Add to Practice Box" — tapping adds the root word and shows a brief toast.
+- Already pinned: "In Practice Box ✓" — tapping removes it (toggle).
+  The button is always visible on a word's entry, regardless of whether the word has been practiced.
+
 **Empty state:** "No known words yet. Complete a few sessions to see your words here."
 
 ---
@@ -1235,6 +1300,7 @@ Reuses the Session Screen component exactly. The only differences:
 | Level badge                            | Beginner / Familiar / Proficient / Fluent (4 colours)             |
 | Case badge                             | Known (filled) / Partial (outlined)                               |
 | Dusty badge                            | Visible / Hidden                                                  |
+| Practice box button (dictionary entry) | Default ("Add to Practice Box") / Pinned ("In Practice Box ✓")    |
 | Achievement toast                      | Word known / Level up / Hidden                                    |
 
 ---
