@@ -30,7 +30,7 @@ export function BottomSheet({ open, onClose, children }: BottomSheetProps) {
       <div
         className={cn(
           'fixed inset-0 z-40 bg-white transition-opacity duration-300',
-          open && visible ? 'opacity-70' : 'opacity-0'
+          open && visible ? 'opacity-70' : 'opacity-0 pointer-events-none'
         )}
         onClick={onClose}
       />

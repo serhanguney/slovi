@@ -23,6 +23,7 @@ import { useRecordPracticeAnswer } from '../hooks/useRecordPracticeAnswer';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePracticeProgress } from '../hooks/usePracticeProgress';
 import { BlockWordSheet } from './BlockWordSheet';
+import { useBlockWord } from '../hooks/useBlockWord';
 import type { PracticeCard, PracticeMode } from '../types';
 
 // ── Czech cases ────────────────────────────────────────────────────────────────
@@ -320,6 +321,7 @@ function QuestionScreen({
 interface CompleteScreenProps {
   correctCount: number;
   incorrectCount: number;
+  skippedCount: number;
   mode: PracticeMode;
   onDone: () => void;
 }
@@ -332,7 +334,13 @@ function skillProgressLabel(accuracy: number, attempts: number): string {
   return 'Strong';
 }
 
-function CompleteScreen({ correctCount, incorrectCount, mode, onDone }: CompleteScreenProps) {
+function CompleteScreen({
+  correctCount,
+  incorrectCount,
+  skippedCount,
+  mode,
+  onDone,
+}: CompleteScreenProps) {
   const { data: progress } = usePracticeProgress();
   const total = correctCount + incorrectCount;
   const sessionPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
@@ -380,6 +388,12 @@ function CompleteScreen({ correctCount, incorrectCount, mode, onDone }: Complete
           </div>
         </div>
 
+        {skippedCount > 0 && (
+          <p className="mt-3 text-center text-[12px] text-[#9CA3AF]">
+            {skippedCount} {skippedCount === 1 ? 'word' : 'words'} skipped
+          </p>
+        )}
+
         {/* Divider */}
         <div className="my-6 h-px w-full bg-[#F3F4F6]" />
 
@@ -419,17 +433,20 @@ interface SessionScreenProps {
 export function SessionScreen({ cards, mode }: SessionScreenProps) {
   const navigate = useNavigate();
   const recordAnswer = useRecordPracticeAnswer();
+  const blockWord = useBlockWord();
 
+  const [activeCards, setActiveCards] = useState(cards);
   const [cardIndex, setCardIndex] = useState(0);
   const [phase, setPhase] = useState<'question' | 'complete'>('question');
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
+  const [skippedCount, setSkippedCount] = useState(0);
   const [questionKey, setQuestionKey] = useState(0);
   const [blockSheetOpen, setBlockSheetOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const currentCard = cards[cardIndex];
+  const currentCard = activeCards[cardIndex];
 
   const handleAnswer = (_selectedCase: string, isCorrect: boolean) => {
     if (isCorrect) setCorrectCount((n) => n + 1);
@@ -444,11 +461,29 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
 
   const handleNext = () => {
     const nextIndex = cardIndex + 1;
-    if (nextIndex >= cards.length) {
+    if (nextIndex >= activeCards.length) {
       queryClient.invalidateQueries({ queryKey: ['practice-progress'] });
       setPhase('complete');
     } else {
       setCardIndex(nextIndex);
+      setQuestionKey((k) => k + 1);
+    }
+  };
+
+  const handleBlockConfirm = () => {
+    const blockedId = currentCard.root_word_id;
+    const skipped = activeCards.filter(
+      (c, i) => i >= cardIndex && c.root_word_id === blockedId
+    ).length;
+    const newCards = activeCards.filter((c, i) => i < cardIndex || c.root_word_id !== blockedId);
+    blockWord.mutate(blockedId);
+    setSkippedCount((n) => n + skipped);
+    setActiveCards(newCards);
+    setBlockSheetOpen(false);
+    if (cardIndex >= newCards.length) {
+      queryClient.invalidateQueries({ queryKey: ['practice-progress'] });
+      setPhase('complete');
+    } else {
       setQuestionKey((k) => k + 1);
     }
   };
@@ -462,6 +497,7 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
         <CompleteScreen
           correctCount={correctCount}
           incorrectCount={incorrectCount}
+          skippedCount={skippedCount}
           mode={mode}
           onDone={handleDone}
         />
@@ -475,8 +511,8 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
         key={questionKey}
         card={currentCard}
         cardIndex={cardIndex}
-        total={cards.length}
-        isLastCard={cardIndex + 1 >= cards.length}
+        total={activeCards.length}
+        isLastCard={cardIndex + 1 >= activeCards.length}
         isRecording={recordAnswer.isPending}
         onAnswer={handleAnswer}
         onNext={handleNext}
@@ -487,7 +523,8 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
         open={blockSheetOpen}
         word={currentCard.base_form}
         onClose={() => setBlockSheetOpen(false)}
-        onConfirm={() => setBlockSheetOpen(false)}
+        onConfirm={handleBlockConfirm}
+        isPending={blockWord.isPending}
       />
     </div>
   );
