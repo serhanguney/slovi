@@ -18,7 +18,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           id?: number;
-          profile_id: string;
+          profile_id?: string;
           root_word_id: number;
         };
         Update: {
