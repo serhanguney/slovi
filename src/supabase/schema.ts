@@ -8,6 +8,42 @@ export type Database = {
   };
   public: {
     Tables: {
+      blocked_words: {
+        Row: {
+          created_at: string;
+          id: number;
+          profile_id: string;
+          root_word_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          profile_id: string;
+          root_word_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          profile_id?: string;
+          root_word_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'blocked_words_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+          {
+            foreignKeyName: 'blocked_words_root_word_id_fkey';
+            columns: ['root_word_id'];
+            isOneToOne: false;
+            referencedRelation: 'root_words';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       example_sentences: {
         Row: {
           created_at: string;
@@ -334,6 +370,7 @@ export type Database = {
           base_form: string;
           correct_case: string;
           explanation: string;
+          root_word_id: number;
           sentence_czech: string;
           sentence_english: string;
           target_form: string;

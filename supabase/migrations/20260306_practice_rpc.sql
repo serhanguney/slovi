@@ -103,6 +103,7 @@ CREATE OR REPLACE FUNCTION build_practice_session(
 )
 RETURNS TABLE (
   word_form_id     bigint,
+  root_word_id     bigint,
   sentence_czech   text,
   sentence_english text,
   target_form      text,   -- the inflected form (bold in Case Understanding, answer in Form Recall)
@@ -127,6 +128,7 @@ BEGIN
     WHERE pb.profile_id = v_user_id
       AND ft.category = 'case'
       AND (p_scope = 'mixed' OR ft.name = p_scope)
+      AND wf.root_word_id NOT IN (SELECT bw.root_word_id FROM blocked_words bw WHERE bw.profile_id = v_user_id)
       AND NOT EXISTS (
         SELECT 1 FROM user_word_progress uwp
         WHERE uwp.profile_id = v_user_id
@@ -159,6 +161,7 @@ BEGIN
       AND uwp.mode = p_mode
       AND ft.category = 'case'
       AND (p_scope = 'mixed' OR ft.name = p_scope)
+      AND wf.root_word_id NOT IN (SELECT bw.root_word_id FROM blocked_words bw WHERE bw.profile_id = v_user_id)
       -- Form Recall only surfaces words seen at least once in Case Understanding
       AND (p_mode = 'case_understanding' OR EXISTS (
         SELECT 1 FROM user_word_progress e
@@ -182,6 +185,7 @@ BEGIN
       JOIN word_form_types ft ON wf.form_type_id = ft.id
       WHERE ft.category = 'case'
         AND (p_scope = 'mixed' OR ft.name = p_scope)
+        AND wf.root_word_id NOT IN (SELECT bw.root_word_id FROM blocked_words bw WHERE bw.profile_id = v_user_id)
         AND NOT EXISTS (
           SELECT 1 FROM user_word_progress uwp
           WHERE uwp.profile_id = v_user_id
@@ -215,6 +219,7 @@ BEGIN
   )
   SELECT
     wf.id,
+    rw.id,
     es.czech_sentence,
     es.english_sentence,
     wf.form_in_czech,
@@ -396,7 +401,7 @@ AS $$
       AND pa.mode IN ('case_understanding', 'form_recall')
       AND pa.created_at BETWEEN now() - interval '14 days' AND now() - interval '7 days'
     GROUP BY ft.name, pa.mode
-  )
+  ),
   attempt_count AS (
     SELECT COUNT(*)::int AS total
     FROM practice_attempts

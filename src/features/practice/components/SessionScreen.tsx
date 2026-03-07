@@ -13,12 +13,16 @@ import {
   Wrench,
   GitBranch,
   Loader2,
+  Info,
+  GraduationCap,
+  Ban,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRecordPracticeAnswer } from '../hooks/useRecordPracticeAnswer';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePracticeProgress } from '../hooks/usePracticeProgress';
+import { BlockWordSheet } from './BlockWordSheet';
 import type { PracticeCard, PracticeMode } from '../types';
 
 // ── Czech cases ────────────────────────────────────────────────────────────────
@@ -153,6 +157,7 @@ interface QuestionScreenProps {
   onAnswer: (selectedCase: string, isCorrect: boolean) => void;
   onNext: () => void;
   onExit: () => void;
+  onBlockWord: () => void;
 }
 
 function QuestionScreen({
@@ -164,6 +169,7 @@ function QuestionScreen({
   onAnswer,
   onNext,
   onExit,
+  onBlockWord,
 }: QuestionScreenProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -228,7 +234,7 @@ function QuestionScreen({
       </div>
 
       {/* Question area — fixed height to prevent layout shift */}
-      <div className="shrink-0 px-4 py-4">
+      <div className="shrink-0 px-4 pt-4">
         <p className="line-clamp-2 h-[50px] text-[18px] leading-snug text-[#1A1A1A]">
           {before}
           <span className="font-bold">{match}</span>
@@ -237,6 +243,28 @@ function QuestionScreen({
         <p className="mt-1.5 line-clamp-2 h-[39px] text-[13px] leading-normal text-[#9CA3AF]">
           {card.sentence_english}
         </p>
+      </div>
+
+      {/* Action row */}
+      <div className="shrink-0 px-6 py-1">
+        <div className="flex gap-2">
+          {(
+            [
+              { icon: Info, label: 'Info', onClick: () => {} },
+              { icon: GraduationCap, label: 'Study', onClick: () => {} },
+              { icon: Ban, label: 'Block', onClick: onBlockWord },
+            ] as { icon: LucideIcon; label: string; onClick: () => void }[]
+          ).map(({ icon: Icon, label, onClick }) => (
+            <button
+              key={label}
+              onClick={onClick}
+              aria-label={label}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-[#666666] transition-colors hover:bg-[#F3F4F6]"
+            >
+              <Icon className="h-[18px] w-[18px]" />
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Spacer — pushes options to bottom */}
@@ -397,6 +425,7 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [questionKey, setQuestionKey] = useState(0);
+  const [blockSheetOpen, setBlockSheetOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -452,6 +481,13 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
         onAnswer={handleAnswer}
         onNext={handleNext}
         onExit={handleExit}
+        onBlockWord={() => setBlockSheetOpen(true)}
+      />
+      <BlockWordSheet
+        open={blockSheetOpen}
+        word={currentCard.base_form}
+        onClose={() => setBlockSheetOpen(false)}
+        onConfirm={() => setBlockSheetOpen(false)}
       />
     </div>
   );
