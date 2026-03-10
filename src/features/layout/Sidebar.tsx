@@ -5,7 +5,7 @@ import type { NavTab } from './nav.types';
 import logoColored from '@/assets/logo_colored.svg';
 
 const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
-  { id: 'explore', label: 'Explore', icon: Search },
+  { id: 'dictionary', label: 'Dictionary', icon: Search },
   { id: 'practice', label: 'Practice', icon: Dumbbell },
   { id: 'my-account', label: 'My Account', icon: User },
 ];

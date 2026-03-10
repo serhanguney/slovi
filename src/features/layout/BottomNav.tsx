@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import type { NavTab } from './nav.types';
 
 const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
-  { id: 'explore', label: 'Explore', icon: Search },
+  { id: 'dictionary', label: 'Dictionary', icon: Search },
   { id: 'practice', label: 'Practice', icon: Dumbbell },
   { id: 'my-account', label: 'Account', icon: User },
 ];

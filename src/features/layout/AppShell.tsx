@@ -16,7 +16,7 @@ export function AppShell() {
   const { signOut } = useAuth();
 
   const [activeTab, setActiveTab] = useState<NavTab>(() =>
-    pathname.startsWith('/practice') ? 'practice' : 'explore'
+    pathname.startsWith('/practice') ? 'practice' : 'dictionary'
   );
 
   const handleTabChange = (tab: NavTab) => {

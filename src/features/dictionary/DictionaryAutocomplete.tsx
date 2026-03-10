@@ -71,7 +71,7 @@ export function DictionaryAutocomplete({
           showTrigger={false}
           className={
             variant === 'lg'
-              ? 'h-auto w-full rounded-[28px] [&_input]:h-auto [&_input]:py-[14px] [&_input]:text-[15px]'
+              ? 'h-auto w-full rounded-[28px] [&_input]:h-auto [&_input]:py-[14px] [&_input]:md:text-[15px]'
               : 'w-full rounded-[20px]'
           }
         >
