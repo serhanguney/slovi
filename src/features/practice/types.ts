@@ -3,6 +3,7 @@ import type { Database } from '@/supabase/schema';
 
 export type PracticeMode = Database['public']['Enums']['practice_mode'];
 export type PracticeScope = 'mixed' | string;
+export type WordType = Database['public']['Enums']['word_type'];
 
 export type PracticeCard =
   Database['public']['Functions']['build_practice_session']['Returns'][number];

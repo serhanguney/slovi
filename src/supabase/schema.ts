@@ -365,6 +365,7 @@ export type Database = {
         Args: {
           p_mode: Database['public']['Enums']['practice_mode'];
           p_scope: string;
+          p_word_type?: Database['public']['Enums']['word_type'];
         };
         Returns: {
           base_form: string;

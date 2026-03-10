@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { usePracticeBoxCount } from '../hooks/usePracticeBoxCount';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
-import type { PracticeMode } from '../types';
+import type { PracticeMode, WordType } from '../types';
 
 interface ModeCardProps {
   title: string;
@@ -86,9 +86,18 @@ const MODES: {
   },
 ];
 
+const WORD_TYPES: { id: WordType | undefined; label: string; examples: string }[] = [
+  { id: undefined, label: 'All', examples: 'All word types' },
+  { id: 'noun', label: 'Nouns', examples: 'pes, město, žena' },
+  { id: 'pronoun', label: 'Pronouns', examples: 'já, ten, kdо' },
+  { id: 'adjective', label: 'Adjectives', examples: 'malý, nový, dobrý' },
+  { id: 'adverb', label: 'Adverbs', examples: 'rychle, dobře, vždy' },
+];
+
 export function PracticeSetup() {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<PracticeMode>('case_understanding');
+  const [selectedWordType, setSelectedWordType] = useState<WordType | undefined>(undefined);
 
   const { data: pinnedCount = 0 } = usePracticeBoxCount();
   const buildPractice = useBuildPracticeSession();
@@ -101,7 +110,11 @@ export function PracticeSetup() {
       const cards = await buildVocabulary.mutateAsync();
       navigate('/practice/session', { state: { mode: selectedMode, cards } });
     } else {
-      const cards = await buildPractice.mutateAsync({ mode: selectedMode, scope: 'mixed' });
+      const cards = await buildPractice.mutateAsync({
+        mode: selectedMode,
+        scope: 'mixed',
+        wordType: selectedWordType,
+      });
       navigate('/practice/session', { state: { mode: selectedMode, scope: 'mixed', cards } });
     }
   };
@@ -126,6 +139,28 @@ export function PracticeSetup() {
               disabled={mode.disabled}
               onClick={() => setSelectedMode(mode.id)}
             />
+          ))}
+        </div>
+      </div>
+
+      {/* Word type section */}
+      <div className="flex flex-col gap-[10px]">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+          Word Type
+        </span>
+        <div className="grid grid-cols-2 gap-2">
+          {WORD_TYPES.map((wt) => (
+            <button
+              key={wt.id ?? 'all'}
+              onClick={() => setSelectedWordType(wt.id)}
+              className={cn(
+                'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all',
+                selectedWordType === wt.id ? 'border-2 border-[#1A1A1A]' : 'border border-[#E5E7EB]'
+              )}
+            >
+              <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
+              <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
+            </button>
           ))}
         </div>
       </div>
