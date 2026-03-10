@@ -493,7 +493,7 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
 
   if (phase === 'complete') {
     return (
-      <div className="flex h-[100dvh] flex-col bg-[#FEF7EE]">
+      <div className="flex h-[100dvh] flex-col items-center bg-[#FEF7EE] md:justify-center">
         <CompleteScreen
           correctCount={correctCount}
           incorrectCount={incorrectCount}
@@ -506,26 +506,28 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
   }
 
   return (
-    <div className="flex h-[100dvh] flex-col bg-[#FEF7EE]">
-      <QuestionScreen
-        key={questionKey}
-        card={currentCard}
-        cardIndex={cardIndex}
-        total={activeCards.length}
-        isLastCard={cardIndex + 1 >= activeCards.length}
-        isRecording={recordAnswer.isPending}
-        onAnswer={handleAnswer}
-        onNext={handleNext}
-        onExit={handleExit}
-        onBlockWord={() => setBlockSheetOpen(true)}
-      />
-      <BlockWordSheet
-        open={blockSheetOpen}
-        word={currentCard.base_form}
-        onClose={() => setBlockSheetOpen(false)}
-        onConfirm={handleBlockConfirm}
-        isPending={blockWord.isPending}
-      />
+    <div className="flex h-[100dvh] flex-col bg-[#FEF7EE] md:items-center md:justify-center">
+      <div className="flex w-full min-h-0 flex-col md:w-[560px] md:max-h-[860px] md:flex-1">
+        <QuestionScreen
+          key={questionKey}
+          card={currentCard}
+          cardIndex={cardIndex}
+          total={activeCards.length}
+          isLastCard={cardIndex + 1 >= activeCards.length}
+          isRecording={recordAnswer.isPending}
+          onAnswer={handleAnswer}
+          onNext={handleNext}
+          onExit={handleExit}
+          onBlockWord={() => setBlockSheetOpen(true)}
+        />
+        <BlockWordSheet
+          open={blockSheetOpen}
+          word={currentCard.base_form}
+          onClose={() => setBlockSheetOpen(false)}
+          onConfirm={handleBlockConfirm}
+          isPending={blockWord.isPending}
+        />
+      </div>
     </div>
   );
 }

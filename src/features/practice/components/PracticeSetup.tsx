@@ -120,7 +120,7 @@ export function PracticeSetup() {
   };
 
   return (
-    <div className="flex h-full flex-col gap-8 p-6">
+    <div className="mx-auto flex h-full w-full max-w-2xl flex-col gap-8 p-6">
       {/* Mode section */}
       <div className="flex flex-col gap-[10px]">
         <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
@@ -148,13 +148,13 @@ export function PracticeSetup() {
         <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
           Word Type
         </span>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
           {WORD_TYPES.map((wt) => (
             <button
               key={wt.id ?? 'all'}
               onClick={() => setSelectedWordType(wt.id)}
               className={cn(
-                'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all',
+                'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
                 selectedWordType === wt.id ? 'border-2 border-[#1A1A1A]' : 'border border-[#E5E7EB]'
               )}
             >
