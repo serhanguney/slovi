@@ -361,23 +361,40 @@ export type Database = {
           word_form_id: number;
         }[];
       };
-      build_practice_session: {
-        Args: {
-          p_mode: Database['public']['Enums']['practice_mode'];
-          p_scope: string;
-          p_word_type?: Database['public']['Enums']['word_type'];
-        };
-        Returns: {
-          base_form: string;
-          correct_case: string;
-          explanation: string;
-          root_word_id: number;
-          sentence_czech: string;
-          sentence_english: string;
-          target_form: string;
-          word_form_id: number;
-        }[];
-      };
+      build_practice_session:
+        | {
+            Args: {
+              p_mode: Database['public']['Enums']['practice_mode'];
+              p_scope: string;
+            };
+            Returns: {
+              base_form: string;
+              correct_case: string;
+              explanation: string;
+              root_word_id: number;
+              sentence_czech: string;
+              sentence_english: string;
+              target_form: string;
+              word_form_id: number;
+            }[];
+          }
+        | {
+            Args: {
+              p_mode: Database['public']['Enums']['practice_mode'];
+              p_scope: string;
+              p_word_type?: Database['public']['Enums']['word_type'];
+            };
+            Returns: {
+              base_form: string;
+              correct_case: string;
+              explanation: string;
+              root_word_id: number;
+              sentence_czech: string;
+              sentence_english: string;
+              target_form: string;
+              word_form_id: number;
+            }[];
+          };
       build_vocabulary_session: {
         Args: never;
         Returns: {
@@ -409,6 +426,24 @@ export type Database = {
           form_recall: number;
           fr_gain_week: number;
           total_attempts: number;
+        }[];
+      };
+      get_practiced_words: {
+        Args: { p_search?: string };
+        Returns: {
+          cu_accuracy: number;
+          cu_status: string;
+          fr_accuracy: number;
+          fr_status: string;
+          in_czech: string;
+          in_english: string;
+          is_known: boolean;
+          last_practiced: string;
+          practiced_cases: string[];
+          root_word_id: number;
+          sv_accuracy: number;
+          sv_status: string;
+          word_type: string;
         }[];
       };
       immutable_unaccent: { Args: { '': string }; Returns: string };

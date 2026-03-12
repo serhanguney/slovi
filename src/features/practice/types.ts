@@ -30,3 +30,6 @@ export const recordAnswerResultSchema = z.object({
 });
 
 export type RecordAnswerResult = z.infer<typeof recordAnswerResultSchema>;
+
+export type PracticedWord =
+  Database['public']['Functions']['get_practiced_words']['Returns'][number];

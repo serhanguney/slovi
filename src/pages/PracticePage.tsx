@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SecondaryNav } from '@/features/ui/secondary-nav';
 import type { SecondaryNavTab } from '@/features/ui/secondary-nav';
 import { PracticeSetup } from '@/features/practice/components/PracticeSetup';
+import { WordsTab } from '@/features/practice/components/WordsTab';
 
 type PracticeTab = 'setup' | 'progress' | 'words';
 
@@ -32,7 +33,7 @@ export function PracticePage() {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {activeTab === 'setup' && <PracticeSetup />}
         {activeTab === 'progress' && <PlaceholderTab label="Progress" />}
-        {activeTab === 'words' && <PlaceholderTab label="Words" />}
+        {activeTab === 'words' && <WordsTab />}
       </div>
     </div>
   );

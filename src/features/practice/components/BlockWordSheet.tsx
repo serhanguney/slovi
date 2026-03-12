@@ -1,5 +1,7 @@
 import { X, Ban, Info, Loader2 } from 'lucide-react';
-import { BottomSheet } from './BottomSheet';
+import { BottomSheet } from '@/features/ui/bottom-sheet';
+import { CenteredDialog } from '@/features/ui/centered-dialog';
+import { useMediaQuery } from '@/features/ui/use-media-query';
 
 interface BlockWordSheetProps {
   open: boolean;
@@ -15,15 +17,14 @@ const WHAT_HAPPENS = [
   'The word will still appear in the dictionary',
 ];
 
-export function BlockWordSheet({
-  open,
+function BlockWordContent({
   word,
   onClose,
   onConfirm,
-  isPending = false,
-}: BlockWordSheetProps) {
+  isPending,
+}: Omit<BlockWordSheetProps, 'open'>) {
   return (
-    <BottomSheet open={open} onClose={onClose}>
+    <>
       {/* Header */}
       <div className="flex shrink-0 items-center px-6 py-4">
         <button
@@ -35,7 +36,6 @@ export function BlockWordSheet({
         <div className="flex-1" />
         <span className="text-[18px] font-bold text-[#1A1A1A]">Block Word</span>
         <div className="flex-1" />
-        {/* Ghost spacer to center the title */}
         <div className="h-5 w-5" />
       </div>
 
@@ -97,6 +97,35 @@ export function BlockWordSheet({
           {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Block Word'}
         </button>
       </div>
+    </>
+  );
+}
+
+export function BlockWordSheet({
+  open,
+  word,
+  onClose,
+  onConfirm,
+  isPending = false,
+}: BlockWordSheetProps) {
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  if (isDesktop) {
+    return (
+      <CenteredDialog open={open} onClose={onClose}>
+        <BlockWordContent
+          word={word}
+          onClose={onClose}
+          onConfirm={onConfirm}
+          isPending={isPending}
+        />
+      </CenteredDialog>
+    );
+  }
+
+  return (
+    <BottomSheet open={open} onClose={onClose}>
+      <BlockWordContent word={word} onClose={onClose} onConfirm={onConfirm} isPending={isPending} />
     </BottomSheet>
   );
 }
