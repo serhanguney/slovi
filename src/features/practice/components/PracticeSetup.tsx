@@ -120,55 +120,60 @@ export function PracticeSetup() {
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-2xl flex-col gap-8 p-6">
-      {/* Mode section */}
-      <div className="flex flex-col gap-[10px]">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
-          Mode
-        </span>
-        <div className="grid grid-cols-2 gap-3">
-          {MODES.map((mode) => (
-            <ModeCard
-              key={mode.id}
-              title={mode.title}
-              description={mode.description}
-              badge={mode.badge}
-              badgeColor={mode.badgeColor}
-              badgeBg={mode.badgeBg}
-              selected={selectedMode === mode.id}
-              disabled={mode.disabled}
-              onClick={() => setSelectedMode(mode.id)}
-            />
-          ))}
+    <div className="mx-auto flex min-h-0 w-full max-w-2xl flex-1 flex-col">
+      {/* Scrollable content */}
+      <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto p-6 pb-2">
+        {/* Mode section */}
+        <div className="flex flex-col gap-[10px]">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+            Mode
+          </span>
+          <div className="grid grid-cols-2 gap-3">
+            {MODES.map((mode) => (
+              <ModeCard
+                key={mode.id}
+                title={mode.title}
+                description={mode.description}
+                badge={mode.badge}
+                badgeColor={mode.badgeColor}
+                badgeBg={mode.badgeBg}
+                selected={selectedMode === mode.id}
+                disabled={mode.disabled}
+                onClick={() => setSelectedMode(mode.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Word type section */}
+        <div className="flex flex-col gap-[10px]">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+            Word Type
+          </span>
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+            {WORD_TYPES.map((wt) => (
+              <button
+                key={wt.id ?? 'all'}
+                onClick={() => setSelectedWordType(wt.id)}
+                className={cn(
+                  'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
+                  selectedWordType === wt.id
+                    ? 'border-2 border-[#1A1A1A]'
+                    : 'border border-[#E5E7EB]'
+                )}
+              >
+                <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
+                <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Word type section */}
-      <div className="flex flex-col gap-[10px]">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
-          Word Type
-        </span>
-        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
-          {WORD_TYPES.map((wt) => (
-            <button
-              key={wt.id ?? 'all'}
-              onClick={() => setSelectedWordType(wt.id)}
-              className={cn(
-                'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
-                selectedWordType === wt.id ? 'border-2 border-[#1A1A1A]' : 'border border-[#E5E7EB]'
-              )}
-            >
-              <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
-              <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Start button pushed to bottom */}
-      <div className="mt-auto flex flex-col gap-3">
+      {/* Sticky footer — always visible at the bottom */}
+      <div className="shrink-0 p-6 pt-4">
         {pinnedCount > 0 && (
-          <p className="text-center text-[12px] text-[#9CA3AF]">
+          <p className="mb-3 text-center text-[12px] text-[#9CA3AF]">
             {pinnedCount} pinned {pinnedCount === 1 ? 'word' : 'words'} queued
           </p>
         )}

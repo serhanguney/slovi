@@ -34,7 +34,9 @@ export function AppShell() {
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <Outlet context={{ activeTab, onTabChange: handleTabChange } satisfies AppShellContext} />
-        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+        {activeTab !== 'practice' && (
+          <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+        )}
       </div>
     </div>
   );
