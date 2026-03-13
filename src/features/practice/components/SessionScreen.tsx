@@ -25,6 +25,9 @@ import { usePracticeProgress } from '../hooks/usePracticeProgress';
 import { BlockWordSheet } from './BlockWordSheet';
 import { useBlockWord } from '../hooks/useBlockWord';
 import type { PracticeCard, PracticeMode } from '../types';
+import { SessionWrapper } from './SessionWrapper';
+import { ActionRowsContainer } from './ActionRowsContainer';
+import { SessionQuestion } from './SessionQuestion';
 
 // ── Czech cases ────────────────────────────────────────────────────────────────
 
@@ -49,20 +52,6 @@ const CASES: { id: string; title: string; description: string; Icon: LucideIcon 
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-
-function splitSentence(
-  sentence: string,
-  targetForm: string
-): { before: string; match: string; after: string } {
-  const lower = sentence.toLowerCase();
-  const idx = lower.indexOf(targetForm.toLowerCase());
-  if (idx === -1) return { before: sentence, match: '', after: '' };
-  return {
-    before: sentence.slice(0, idx),
-    match: sentence.slice(idx, idx + targetForm.length),
-    after: sentence.slice(idx + targetForm.length),
-  };
-}
 
 function normalizeCase(value: string) {
   return value.trim().toLowerCase();
@@ -185,8 +174,6 @@ function QuestionScreen({
     return six.sort((a, b) => CASES.indexOf(a) - CASES.indexOf(b));
   });
 
-  const { before, match, after } = splitSentence(card.sentence_czech, card.target_form);
-
   const getState = (caseId: string): OptionCardProps['state'] => {
     if (!submitted) {
       return normalizeCase(caseId) === normalizeCase(selectedOption ?? '') ? 'selected' : 'idle';
@@ -235,54 +222,47 @@ function QuestionScreen({
       </div>
 
       {/* Question area — fixed height to prevent layout shift */}
-      <div className="shrink-0 px-4 pt-4">
-        <p className="line-clamp-2 h-[50px] text-[18px] leading-snug text-[#1A1A1A]">
-          {before}
-          <span className="font-bold">{match}</span>
-          {after}
-        </p>
-        <p className="mt-1.5 line-clamp-2 h-[39px] text-[13px] leading-normal text-[#9CA3AF]">
-          {card.sentence_english}
-        </p>
-      </div>
+      <SessionQuestion
+        sentence={card.sentence_czech}
+        target={card.target_form}
+        description={card.sentence_english}
+      />
 
       {/* Action row */}
-      <div className="shrink-0 px-6 py-1">
-        <div className="flex gap-2">
-          {(
-            [
-              { icon: Info, label: 'Info', onClick: () => {} },
-              { icon: GraduationCap, label: 'Study', onClick: () => {} },
-              { icon: Ban, label: 'Block', onClick: onBlockWord },
-            ] as { icon: LucideIcon; label: string; onClick: () => void }[]
-          ).map(({ icon: Icon, label, onClick }) => (
-            <button
-              key={label}
-              onClick={onClick}
-              aria-label={label}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-[#666666] transition-colors hover:bg-[#F3F4F6]"
-            >
-              <Icon className="h-[18px] w-[18px]" />
-            </button>
-          ))}
-        </div>
-      </div>
+      <ActionRowsContainer>
+        {(
+          [
+            { icon: Info, label: 'Info', onClick: () => {} },
+            { icon: GraduationCap, label: 'Study', onClick: () => {} },
+            { icon: Ban, label: 'Block', onClick: onBlockWord },
+          ] as { icon: LucideIcon; label: string; onClick: () => void }[]
+        ).map(({ icon: Icon, label, onClick }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            aria-label={label}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-[#666666] transition-colors hover:bg-[#F3F4F6]"
+          >
+            <Icon className="h-[18px] w-[18px]" />
+          </button>
+        ))}
+      </ActionRowsContainer>
 
       {/* Spacer — pushes options to bottom */}
-      <div className="flex-1" />
-
-      {/* Answer options */}
-      <div className="shrink-0 px-4 pb-3">
-        <div className="flex flex-col gap-2">
-          {options.map((c) => (
-            <OptionCard
-              key={c.id}
-              caseItem={c}
-              state={getState(c.id)}
-              disabled={submitted}
-              onClick={() => !submitted && setSelectedOption(c.id)}
-            />
-          ))}
+      <div className="flex flex-1 items-center">
+        {/* Answer options */}
+        <div className="shrink-0 flex-1 px-4 pb-3">
+          <div className="flex flex-col gap-2">
+            {options.map((c) => (
+              <OptionCard
+                key={c.id}
+                caseItem={c}
+                state={getState(c.id)}
+                disabled={submitted}
+                onClick={() => !submitted && setSelectedOption(c.id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -334,7 +314,7 @@ function skillProgressLabel(accuracy: number, attempts: number): string {
   return 'Strong';
 }
 
-function CompleteScreen({
+export function CompleteScreen({
   correctCount,
   incorrectCount,
   skippedCount,
@@ -350,7 +330,12 @@ function CompleteScreen({
     progress && progress.length > 0
       ? progress.reduce((sum, p) => sum + (p.case_understanding ?? 0), 0) / progress.length
       : 0;
-  const modeLabel = mode === 'case_understanding' ? 'Case Logic' : 'Case Memory';
+  const modeLabel =
+    mode === 'case_understanding'
+      ? 'Case Logic'
+      : mode === 'simple_vocabulary'
+        ? 'Vocabulary'
+        : 'Case Memory';
 
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 py-8">
@@ -506,28 +491,26 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
   }
 
   return (
-    <div className="flex h-[100dvh] flex-col bg-[#FEF7EE] md:items-center md:justify-center">
-      <div className="flex w-full min-h-0 flex-col md:w-[560px] md:max-h-[860px] md:flex-1">
-        <QuestionScreen
-          key={questionKey}
-          card={currentCard}
-          cardIndex={cardIndex}
-          total={activeCards.length}
-          isLastCard={cardIndex + 1 >= activeCards.length}
-          isRecording={recordAnswer.isPending}
-          onAnswer={handleAnswer}
-          onNext={handleNext}
-          onExit={handleExit}
-          onBlockWord={() => setBlockSheetOpen(true)}
-        />
-        <BlockWordSheet
-          open={blockSheetOpen}
-          word={currentCard.base_form}
-          onClose={() => setBlockSheetOpen(false)}
-          onConfirm={handleBlockConfirm}
-          isPending={blockWord.isPending}
-        />
-      </div>
-    </div>
+    <SessionWrapper>
+      <QuestionScreen
+        key={questionKey}
+        card={currentCard}
+        cardIndex={cardIndex}
+        total={activeCards.length}
+        isLastCard={cardIndex + 1 >= activeCards.length}
+        isRecording={recordAnswer.isPending}
+        onAnswer={handleAnswer}
+        onNext={handleNext}
+        onExit={handleExit}
+        onBlockWord={() => setBlockSheetOpen(true)}
+      />
+      <BlockWordSheet
+        open={blockSheetOpen}
+        word={currentCard.base_form}
+        onClose={() => setBlockSheetOpen(false)}
+        onConfirm={handleBlockConfirm}
+        isPending={blockWord.isPending}
+      />
+    </SessionWrapper>
   );
 }

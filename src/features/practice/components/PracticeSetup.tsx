@@ -82,7 +82,6 @@ const MODES: {
     badge: 'Vocabulary',
     badgeColor: '#7C3AED',
     badgeBg: '#F5F3FF',
-    disabled: true,
   },
 ];
 

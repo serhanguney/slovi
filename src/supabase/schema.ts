@@ -361,46 +361,34 @@ export type Database = {
           word_form_id: number;
         }[];
       };
-      build_practice_session:
-        | {
-            Args: {
-              p_mode: Database['public']['Enums']['practice_mode'];
-              p_scope: string;
-            };
-            Returns: {
-              base_form: string;
-              correct_case: string;
-              explanation: string;
-              root_word_id: number;
-              sentence_czech: string;
-              sentence_english: string;
-              target_form: string;
-              word_form_id: number;
-            }[];
-          }
-        | {
-            Args: {
-              p_mode: Database['public']['Enums']['practice_mode'];
-              p_scope: string;
-              p_word_type?: Database['public']['Enums']['word_type'];
-            };
-            Returns: {
-              base_form: string;
-              correct_case: string;
-              explanation: string;
-              root_word_id: number;
-              sentence_czech: string;
-              sentence_english: string;
-              target_form: string;
-              word_form_id: number;
-            }[];
-          };
+      build_practice_session: {
+        Args: {
+          p_mode: Database['public']['Enums']['practice_mode'];
+          p_scope: string;
+          p_word_type?: Database['public']['Enums']['word_type'];
+        };
+        Returns: {
+          base_form: string;
+          correct_case: string;
+          explanation: string;
+          root_word_id: number;
+          sentence_czech: string;
+          sentence_english: string;
+          target_form: string;
+          word_form_id: number;
+        }[];
+      };
       build_vocabulary_session: {
         Args: never;
         Returns: {
+          base_form: string;
           correct_czech: string;
           distractors: string[];
           in_english: string;
+          root_word_id: number;
+          sentence_czech: string;
+          sentence_english: string;
+          target_form: string;
           word_form_id: number;
         }[];
       };
