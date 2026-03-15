@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { SecondaryNav } from '@/features/ui/secondary-nav';
 import type { SecondaryNavTab } from '@/features/ui/secondary-nav';
 import { PracticeSetup } from '@/features/practice/components/PracticeSetup';
+import { ProgressTab } from '@/features/practice/components/ProgressTab';
 import { WordsTab } from '@/features/practice/components/WordsTab';
 import type { AppShellContext } from '@/features/layout/AppShell';
 
@@ -14,15 +15,6 @@ const TABS: SecondaryNavTab<PracticeTab>[] = [
   { id: 'progress', label: 'Progress' },
   { id: 'words', label: 'Words' },
 ];
-
-function PlaceholderTab({ label }: { label: string }) {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2">
-      <p className="text-base font-semibold">{label}</p>
-      <p className="text-sm text-muted-foreground">Coming soon</p>
-    </div>
-  );
-}
 
 export function PracticePage() {
   const { onTabChange } = useOutletContext<AppShellContext>();
@@ -50,7 +42,7 @@ export function PracticePage() {
 
       <div className="flex min-h-0 flex-1 flex-col">
         {activeTab === 'setup' && <PracticeSetup />}
-        {activeTab === 'progress' && <PlaceholderTab label="Progress" />}
+        {activeTab === 'progress' && <ProgressTab />}
         {activeTab === 'words' && <WordsTab />}
       </div>
     </div>
