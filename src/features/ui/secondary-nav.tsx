@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface SecondaryNavTab<T extends string = string> {
@@ -9,16 +10,19 @@ interface SecondaryNavProps<T extends string = string> {
   tabs: SecondaryNavTab<T>[];
   activeTab: T;
   onTabChange: (tab: T) => void;
+  leftSlot?: ReactNode;
 }
 
 export function SecondaryNav<T extends string>({
   tabs,
   activeTab,
   onTabChange,
+  leftSlot,
 }: SecondaryNavProps<T>) {
   return (
     <div className="w-full">
-      <div className="flex px-6">
+      <div className="flex items-center px-6">
+        {leftSlot}
         {tabs.map(({ id, label }) => {
           const isActive = activeTab === id;
           return (

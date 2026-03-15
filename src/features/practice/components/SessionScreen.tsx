@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   X,
@@ -225,6 +225,7 @@ function QuestionScreen({
       <SessionQuestion
         sentence={card.sentence_czech}
         target={card.target_form}
+        label={card.in_english}
         description={card.sentence_english}
       />
 
@@ -272,6 +273,178 @@ function QuestionScreen({
           <button
             onClick={handleContinue}
             disabled={!selectedOption}
+            className="flex h-[52px] w-full items-center justify-center rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-30"
+          >
+            Continue →
+          </button>
+        ) : (
+          <button
+            onClick={onNext}
+            disabled={isRecording}
+            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-60"
+          >
+            {isRecording ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isLastCard ? (
+              'Finish →'
+            ) : (
+              'Next →'
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Form Recall question screen ────────────────────────────────────────────────
+
+function normalizeAnswer(s: string): string {
+  return s
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+}
+
+function FormRecallQuestionScreen({
+  card,
+  cardIndex,
+  total,
+  isLastCard,
+  isRecording,
+  onAnswer,
+  onNext,
+  onExit,
+  onBlockWord,
+}: QuestionScreenProps) {
+  const [value, setValue] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleSubmit = () => {
+    if (!value.trim() || submitted) return;
+    const correct = normalizeAnswer(value) === normalizeAnswer(card.target_form);
+    setIsCorrect(correct);
+    setSubmitted(true);
+    onAnswer(value, correct);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSubmit();
+  };
+
+  const progress = ((cardIndex + 1) / total) * 100;
+
+  return (
+    <div className="flex flex-1 flex-col">
+      {/* TopBar */}
+      <div className="flex shrink-0 items-center justify-between px-4 py-3">
+        <button
+          onClick={onExit}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-[#6B7280] transition-colors hover:bg-[#F3F4F6]"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <span className="text-[13px] font-medium text-[#6B7280]">
+          {cardIndex + 1}/{total}
+        </span>
+        <div className="h-8 w-8" />
+      </div>
+
+      {/* Progress bar */}
+      <div className="shrink-0 px-4 pb-2">
+        <div className="h-[3px] w-full overflow-hidden rounded-full bg-[#E5E7EB]">
+          <div
+            className="h-full rounded-full bg-[#1A1A1A] transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Question */}
+      <SessionQuestion
+        sentence={card.sentence_czech}
+        target={card.target_form}
+        label={card.in_english}
+        description={card.sentence_english}
+        hidden={!submitted}
+      />
+
+      {/* Action row */}
+      <ActionRowsContainer>
+        {(
+          [
+            { icon: Info, label: 'Info', onClick: () => {} },
+            { icon: GraduationCap, label: 'Study', onClick: () => {} },
+            { icon: Ban, label: 'Block', onClick: onBlockWord },
+          ] as { icon: LucideIcon; label: string; onClick: () => void }[]
+        ).map(({ icon: Icon, label, onClick }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            aria-label={label}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-[#666666] transition-colors hover:bg-[#F3F4F6]"
+          >
+            <Icon className="h-[18px] w-[18px]" />
+          </button>
+        ))}
+      </ActionRowsContainer>
+
+      {/* Input area */}
+      <div className="shrink-0 px-5 pt-4">
+        <div
+          className={cn(
+            'flex h-[52px] w-full items-center justify-between rounded-[12px] border-2 px-4',
+            !submitted && 'border-[#E5E7EB] bg-white',
+            submitted && isCorrect && 'border-green-600 bg-green-50',
+            submitted && !isCorrect && 'border-red-500 bg-red-50'
+          )}
+        >
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={submitted}
+            placeholder="Type the answer here"
+            className={cn(
+              'flex-1 bg-transparent text-[15px] outline-none placeholder:text-[#9CA3AF]',
+              submitted && isCorrect && 'font-semibold text-green-700',
+              submitted && !isCorrect && 'font-semibold text-red-600'
+            )}
+          />
+          {submitted && isCorrect && (
+            <CircleCheck className="h-[22px] w-[22px] shrink-0 text-green-600" />
+          )}
+          {submitted && !isCorrect && (
+            <CircleX className="h-[22px] w-[22px] shrink-0 text-red-500" />
+          )}
+        </div>
+        {!submitted && (
+          <p className="mt-2 text-[12px] text-[#9CA3AF]">
+            You can use all English characters and skip š, á, í, ř, etc.
+          </p>
+        )}
+        {submitted && !isCorrect && (
+          <p className="mt-2 text-[13px] font-medium text-green-700">Correct: {card.target_form}</p>
+        )}
+      </div>
+
+      <div className="flex-1" />
+
+      {/* Button */}
+      <div className="shrink-0 px-4 pb-6">
+        {!submitted ? (
+          <button
+            onClick={handleSubmit}
+            disabled={!value.trim()}
             className="flex h-[52px] w-full items-center justify-center rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-30"
           >
             Continue →
@@ -490,9 +663,11 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
     );
   }
 
+  const QuestionComponent = mode === 'form_recall' ? FormRecallQuestionScreen : QuestionScreen;
+
   return (
     <SessionWrapper>
-      <QuestionScreen
+      <QuestionComponent
         key={questionKey}
         card={currentCard}
         cardIndex={cardIndex}

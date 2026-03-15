@@ -4,7 +4,24 @@ import { cn } from '@/lib/utils';
 import { usePracticeBoxCount } from '../hooks/usePracticeBoxCount';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
-import type { PracticeMode, WordType } from '../types';
+import { useFormRecallEligibleCount } from '../hooks/useFormRecallEligibleCount';
+import type { PracticeMode, PracticeScope, WordType } from '../types';
+import { WarningTooltip } from '@/components/WarningTooltip';
+
+const formRecallConditionMessage =
+  'Case Memory mode will ask about what you practiced in Case Logic mode. In order for all options to be available, keep practicing Case Logic.';
+const FORM_RECALL_MIN = 10;
+
+const CASE_TYPES: { id: PracticeScope; label: string; prepositions: string }[] = [
+  { id: 'mixed', label: 'Mixed', prepositions: 'all' },
+  { id: 'nominative', label: 'Nominative', prepositions: '-' },
+  { id: 'accusative', label: 'Accusative', prepositions: 'na, pro, etc.' },
+  { id: 'genitive', label: 'Genitive', prepositions: 'od, do, etc.' },
+  { id: 'dative', label: 'Dative', prepositions: 'k, kvůli, etc.' },
+  { id: 'locative', label: 'Locative', prepositions: 'v, na, etc.' },
+  { id: 'instrumental', label: 'Instrumental', prepositions: 's, za, etc.' },
+  { id: 'vocative', label: 'Vocative', prepositions: '-' },
+];
 
 interface ModeCardProps {
   title: string;
@@ -14,6 +31,7 @@ interface ModeCardProps {
   badgeBg: string;
   selected: boolean;
   disabled?: boolean;
+  lockedMessage?: string;
   onClick: () => void;
 }
 
@@ -25,6 +43,7 @@ function ModeCard({
   badgeBg,
   selected,
   disabled,
+  lockedMessage,
   onClick,
 }: ModeCardProps) {
   return (
@@ -32,13 +51,17 @@ function ModeCard({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex h-[140px] w-full flex-col justify-between rounded-[14px] bg-white p-4 text-left transition-all',
+        'flex w-full flex-col justify-between rounded-[14px] bg-white p-4 text-left transition-all',
+        lockedMessage ? 'h-[160px]' : 'h-[140px]',
         selected ? 'border-2 border-[#1A1A1A]' : 'border border-[#E5E7EB]',
-        disabled && 'cursor-not-allowed opacity-40'
+        disabled && 'cursor-not-allowed opacity-50'
       )}
     >
       <span className="text-[14px] font-bold text-[#1A1A1A]">{title}</span>
       <span className="text-[12px] leading-[1.4] text-[#9CA3AF]">{description}</span>
+      {lockedMessage && (
+        <span className="text-[11px] leading-[1.4] text-[#F59E0B]">{lockedMessage}</span>
+      )}
       <span
         className="self-start rounded-[10px] px-2 py-[3px] text-[11px] font-semibold"
         style={{ color: badgeColor, backgroundColor: badgeBg }}
@@ -59,12 +82,20 @@ const MODES: {
   disabled?: boolean;
 }[] = [
   {
-    id: 'case_understanding',
-    title: 'Case logic',
-    description: 'Familiarize yourself with new words and conjugations',
+    id: 'simple_vocabulary',
+    title: 'Simple vocabulary',
+    description: 'Recognise Czech words from their English translation',
     badge: 'Easy',
     badgeColor: '#16A34A',
     badgeBg: '#F0FDF4',
+  },
+  {
+    id: 'case_understanding',
+    title: 'Case logic',
+    description: 'Familiarize yourself with new words and conjugations',
+    badge: 'Medium',
+    badgeColor: '#7C3AED',
+    badgeBg: '#F5F3FF',
   },
   {
     id: 'form_recall',
@@ -73,15 +104,6 @@ const MODES: {
     badge: 'Hard',
     badgeColor: '#EA580C',
     badgeBg: '#FFF7ED',
-    disabled: true,
-  },
-  {
-    id: 'simple_vocabulary',
-    title: 'Simple vocabulary',
-    description: 'Recognise Czech words from their English translation',
-    badge: 'Vocabulary',
-    badgeColor: '#7C3AED',
-    badgeBg: '#F5F3FF',
   },
 ];
 
@@ -97,10 +119,19 @@ export function PracticeSetup() {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<PracticeMode>('case_understanding');
   const [selectedWordType, setSelectedWordType] = useState<WordType | undefined>(undefined);
+  const [selectedScope, setSelectedScope] = useState<PracticeScope>('mixed');
 
   const { data: pinnedCount = 0 } = usePracticeBoxCount();
+  const { data: eligibility = [] } = useFormRecallEligibleCount();
   const buildPractice = useBuildPracticeSession();
   const buildVocabulary = useBuildVocabularySession();
+
+  const getEligibleCount = (scope: string, wordType: WordType | undefined) => {
+    const wt = wordType ?? 'all';
+    return eligibility.find((e) => e.scope === scope && e.word_type === wt)?.eligible_count ?? 0;
+  };
+
+  const formRecallLocked = getEligibleCount('mixed', undefined) < FORM_RECALL_MIN;
 
   const isPending = buildPractice.isPending || buildVocabulary.isPending;
 
@@ -111,7 +142,7 @@ export function PracticeSetup() {
     } else {
       const cards = await buildPractice.mutateAsync({
         mode: selectedMode,
-        scope: 'mixed',
+        scope: selectedScope,
         wordType: selectedWordType,
       });
       navigate('/practice/session', { state: { mode: selectedMode, scope: 'mixed', cards } });
@@ -128,43 +159,113 @@ export function PracticeSetup() {
             Mode
           </span>
           <div className="grid grid-cols-2 gap-3">
-            {MODES.map((mode) => (
-              <ModeCard
-                key={mode.id}
-                title={mode.title}
-                description={mode.description}
-                badge={mode.badge}
-                badgeColor={mode.badgeColor}
-                badgeBg={mode.badgeBg}
-                selected={selectedMode === mode.id}
-                disabled={mode.disabled}
-                onClick={() => setSelectedMode(mode.id)}
-              />
-            ))}
+            {MODES.map((mode) => {
+              const isLocked = mode.id === 'form_recall' && formRecallLocked;
+              return (
+                <ModeCard
+                  key={mode.id}
+                  title={mode.title}
+                  description={mode.description}
+                  badge={mode.badge}
+                  badgeColor={mode.badgeColor}
+                  badgeBg={mode.badgeBg}
+                  selected={selectedMode === mode.id}
+                  disabled={isLocked}
+                  lockedMessage={
+                    isLocked
+                      ? `${getEligibleCount('mixed', undefined)}/${FORM_RECALL_MIN} words ready in Case Logic`
+                      : undefined
+                  }
+                  onClick={() => !isLocked && setSelectedMode(mode.id)}
+                />
+              );
+            })}
           </div>
         </div>
 
         {/* Word type section */}
         <div className="flex flex-col gap-[10px]">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
-            Word Type
-          </span>
+          <div className="flex items-center justify-between md:justify-start gap-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+              Word Type
+            </span>
+            {selectedMode === 'form_recall' &&
+              WORD_TYPES.some((wt) => getEligibleCount(selectedScope, wt.id) < FORM_RECALL_MIN) && (
+                <WarningTooltip message={formRecallConditionMessage} />
+              )}
+          </div>
           <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
-            {WORD_TYPES.map((wt) => (
-              <button
-                key={wt.id ?? 'all'}
-                onClick={() => setSelectedWordType(wt.id)}
-                className={cn(
-                  'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
-                  selectedWordType === wt.id
-                    ? 'border-2 border-[#1A1A1A]'
-                    : 'border border-[#E5E7EB]'
-                )}
-              >
-                <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
-                <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
-              </button>
-            ))}
+            {WORD_TYPES.map((wt) => {
+              const unavailable =
+                selectedMode === 'form_recall' &&
+                getEligibleCount(selectedScope, wt.id) < FORM_RECALL_MIN;
+              return (
+                <button
+                  key={wt.id ?? 'all'}
+                  onClick={() => !unavailable && setSelectedWordType(wt.id)}
+                  disabled={unavailable}
+                  className={cn(
+                    'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
+                    selectedWordType === wt.id
+                      ? 'border-2 border-[#1A1A1A]'
+                      : 'border border-[#E5E7EB]',
+                    unavailable && 'cursor-not-allowed opacity-35'
+                  )}
+                >
+                  <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
+                  <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Case type section */}
+        <div
+          className={cn(
+            'flex flex-col gap-[10px]',
+            selectedMode !== 'form_recall' && 'opacity-40 pointer-events-none'
+          )}
+        >
+          <div className="flex items-center justify-between gap-1.5 md:justify-start">
+            <div className="flex gap-2">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+                Case
+              </span>
+              {selectedMode !== 'form_recall' && (
+                <span className="text-[11px] text-[#9CA3AF]">
+                  available only for Case Memory mode
+                </span>
+              )}
+            </div>
+            {selectedMode === 'form_recall' &&
+              CASE_TYPES.some(
+                (ct) => getEligibleCount(ct.id, selectedWordType) < FORM_RECALL_MIN
+              ) && <WarningTooltip message={formRecallConditionMessage} />}
+          </div>
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+            {CASE_TYPES.map((ct) => {
+              const unavailable =
+                selectedMode === 'form_recall' &&
+                getEligibleCount(ct.id, selectedWordType) < FORM_RECALL_MIN;
+              return (
+                <button
+                  key={ct.id}
+                  onClick={() => !unavailable && setSelectedScope(ct.id)}
+                  disabled={unavailable || selectedMode !== 'form_recall'}
+                  className={cn(
+                    'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
+                    selectedScope === ct.id
+                      ? 'border-2 border-[#1A1A1A]'
+                      : 'border border-[#E5E7EB]',
+                    unavailable && 'cursor-not-allowed opacity-35'
+                  )}
+                >
+                  <span className="text-[13px] font-semibold text-[#1A1A1A]">{ct.label}</span>
+                  <span className="text-[11px] text-[#9CA3AF]">{ct.prepositions}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

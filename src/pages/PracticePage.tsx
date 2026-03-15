@@ -30,20 +30,22 @@ export function PracticePage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      {/* Mobile top bar with back button */}
-      <div className="flex shrink-0 items-center px-2 pt-4 md:hidden">
-        <button
-          onClick={() => onTabChange('dictionary')}
-          className="flex h-10 w-10 items-center justify-center rounded-full text-[#1A1A1A] transition-colors hover:bg-black/[0.05]"
-          aria-label="Back"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* Secondary nav */}
-      <div className="shrink-0 pt-2 md:pt-8">
-        <SecondaryNav tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="shrink-0 pt-4 md:pt-8">
+        <SecondaryNav
+          tabs={TABS}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          leftSlot={
+            <button
+              onClick={() => onTabChange('dictionary')}
+              className="md:hidden flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#1A1A1A] transition-colors hover:bg-black/[0.05] mr-1"
+              aria-label="Back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          }
+        />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col">

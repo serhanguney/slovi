@@ -322,42 +322,106 @@
               "ref": "PPei6",
               "width": "fill_container",
               "name": "moodsSection",
+              "height": "fit_content",
+              "x": 24,
+              "y": 48,
               "descendants": {
+                "EtbK7": {
+                  "width": "fill_container",
+                  "height": "fit_content"
+                },
                 "OqoNa": {
-                  "iconFontName": "book-open"
+                  "iconFontName": "book-open",
+                  "x": 16,
+                  "y": 14
                 },
                 "6wEuJ": {
-                  "content": "Moods"
+                  "content": "Moods",
+                  "x": 42,
+                  "y": 12
+                },
+                "E7wYh": {
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 105,
+                  "y": 14
                 },
                 "9ht3d": {
-                  "content": "6 forms"
+                  "content": "6 forms",
+                  "x": 10,
+                  "y": 2
+                },
+                "7OsiQ": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "y": 46
+                },
+                "fQLRd": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 0
                 },
                 "fQLRd/oF4RB": {
-                  "content": "IMPERATIVE"
+                  "content": "IMPERATIVE",
+                  "y": 12
                 },
                 "fQLRd/unSm1": {
-                  "content": "dokončme"
+                  "content": "dokončme",
+                  "y": 28
                 },
                 "fQLRd/Dt3kb": {
-                  "content": "1ST PERSON PLURAL"
+                  "content": "1ST PERSON PLURAL",
+                  "y": 51
+                },
+                "07G05": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 77
                 },
                 "07G05/oF4RB": {
-                  "content": "CONDITIONAL"
+                  "content": "CONDITIONAL",
+                  "y": 12
                 },
                 "07G05/unSm1": {
-                  "content": "dokončil by"
+                  "content": "dokončil by",
+                  "y": 28
                 },
                 "07G05/Dt3kb": {
-                  "content": "MASCULINE SINGULAR"
+                  "content": "MASCULINE SINGULAR",
+                  "y": 51
+                },
+                "37aVn": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 154
                 },
                 "37aVn/oF4RB": {
-                  "content": "CONDITIONAL"
+                  "content": "CONDITIONAL",
+                  "y": 12
                 },
                 "37aVn/unSm1": {
-                  "content": "dokončila by"
+                  "content": "dokončila by",
+                  "y": 28
                 },
                 "37aVn/Dt3kb": {
-                  "content": "FEMININE SINGULAR"
+                  "content": "FEMININE SINGULAR",
+                  "y": 51
+                },
+                "zlK38": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "y": 277
+                },
+                "NUHiZ": {
+                  "x": 125.5,
+                  "y": 12
+                },
+                "p2ONd": {
+                  "x": 212.5,
+                  "y": 12.5
                 }
               }
             },
@@ -367,42 +431,106 @@
               "ref": "PPei6",
               "width": "fill_container",
               "name": "tensesSection",
+              "height": "fit_content",
+              "x": 24,
+              "y": 382,
               "descendants": {
+                "EtbK7": {
+                  "width": "fill_container",
+                  "height": "fit_content"
+                },
                 "OqoNa": {
-                  "iconFontName": "timer"
+                  "iconFontName": "timer",
+                  "x": 16,
+                  "y": 14
                 },
                 "6wEuJ": {
-                  "content": "Tenses"
+                  "content": "Tenses",
+                  "x": 42,
+                  "y": 12
+                },
+                "E7wYh": {
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 106,
+                  "y": 14
                 },
                 "9ht3d": {
-                  "content": "9 forms"
+                  "content": "9 forms",
+                  "x": 10,
+                  "y": 2
+                },
+                "7OsiQ": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "y": 46
+                },
+                "fQLRd": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 0
                 },
                 "fQLRd/oF4RB": {
-                  "content": "PRESENT"
+                  "content": "PRESENT",
+                  "y": 12
                 },
                 "fQLRd/unSm1": {
-                  "content": "dokončím"
+                  "content": "dokončím",
+                  "y": 28
                 },
                 "fQLRd/Dt3kb": {
-                  "content": "1ST PERSON SINGULAR"
+                  "content": "1ST PERSON SINGULAR",
+                  "y": 51
+                },
+                "07G05": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 77
                 },
                 "07G05/oF4RB": {
-                  "content": "PRESENT"
+                  "content": "PRESENT",
+                  "y": 12
                 },
                 "07G05/unSm1": {
-                  "content": "dokončíš"
+                  "content": "dokončíš",
+                  "y": 28
                 },
                 "07G05/Dt3kb": {
-                  "content": "2ND PERSON SINGULAR"
+                  "content": "2ND PERSON SINGULAR",
+                  "y": 51
+                },
+                "37aVn": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 154
                 },
                 "37aVn/oF4RB": {
-                  "content": "PRESENT"
+                  "content": "PRESENT",
+                  "y": 12
                 },
                 "37aVn/unSm1": {
-                  "content": "dokončí"
+                  "content": "dokončí",
+                  "y": 28
                 },
                 "37aVn/Dt3kb": {
-                  "content": "3RD PERSON SINGULAR"
+                  "content": "3RD PERSON SINGULAR",
+                  "y": 51
+                },
+                "zlK38": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "y": 277
+                },
+                "NUHiZ": {
+                  "x": 125.5,
+                  "y": 12
+                },
+                "p2ONd": {
+                  "x": 212.5,
+                  "y": 12.5
                 }
               }
             }
@@ -738,7 +866,21 @@
               "type": "ref",
               "ref": "Gswkb",
               "width": "fill_container",
-              "name": "row1"
+              "name": "row1",
+              "height": "fit_content",
+              "x": 16,
+              "y": 0,
+              "descendants": {
+                "oF4RB": {
+                  "y": 12
+                },
+                "unSm1": {
+                  "y": 28
+                },
+                "Dt3kb": {
+                  "y": 51
+                }
+              }
             },
             {
               "id": "07G05",
@@ -746,15 +888,21 @@
               "ref": "Gswkb",
               "width": "fill_container",
               "name": "row2",
+              "height": "fit_content",
+              "x": 16,
+              "y": 77,
               "descendants": {
                 "oF4RB": {
-                  "content": "IMPERATIVE"
+                  "content": "IMPERATIVE",
+                  "y": 12
                 },
                 "unSm1": {
-                  "content": "dokončete"
+                  "content": "dokončete",
+                  "y": 28
                 },
                 "Dt3kb": {
-                  "content": "2ND PERSON PLURAL"
+                  "content": "2ND PERSON PLURAL",
+                  "y": 51
                 }
               }
             },
@@ -764,15 +912,21 @@
               "ref": "Gswkb",
               "width": "fill_container",
               "name": "row3",
+              "height": "fit_content",
+              "x": 16,
+              "y": 154,
               "descendants": {
                 "oF4RB": {
-                  "content": "IMPERATIVE"
+                  "content": "IMPERATIVE",
+                  "y": 12
                 },
                 "unSm1": {
-                  "content": "dokonč"
+                  "content": "dokonč",
+                  "y": 28
                 },
                 "Dt3kb": {
-                  "content": "SINGULAR"
+                  "content": "SINGULAR",
+                  "y": 51
                 }
               }
             }
@@ -1582,42 +1736,106 @@
                       "ref": "PPei6",
                       "width": "fill_container",
                       "name": "moodsSectionD",
+                      "height": "fit_content",
+                      "x": 40,
+                      "y": 49,
                       "descendants": {
+                        "EtbK7": {
+                          "width": "fill_container",
+                          "height": "fit_content"
+                        },
                         "OqoNa": {
-                          "iconFontName": "book-open"
+                          "iconFontName": "book-open",
+                          "x": 16,
+                          "y": 14
                         },
                         "6wEuJ": {
-                          "content": "Moods"
+                          "content": "Moods",
+                          "x": 42,
+                          "y": 12
+                        },
+                        "E7wYh": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 105,
+                          "y": 14
                         },
                         "9ht3d": {
-                          "content": "6 forms"
+                          "content": "6 forms",
+                          "x": 10,
+                          "y": 2
+                        },
+                        "7OsiQ": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 46
+                        },
+                        "fQLRd": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 0
                         },
                         "fQLRd/oF4RB": {
-                          "content": "IMPERATIVE"
+                          "content": "IMPERATIVE",
+                          "y": 12
                         },
                         "fQLRd/unSm1": {
-                          "content": "dokončme"
+                          "content": "dokončme",
+                          "y": 28
                         },
                         "fQLRd/Dt3kb": {
-                          "content": "1ST PERSON PLURAL"
+                          "content": "1ST PERSON PLURAL",
+                          "y": 51
+                        },
+                        "07G05": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 77
                         },
                         "07G05/oF4RB": {
-                          "content": "CONDITIONAL"
+                          "content": "CONDITIONAL",
+                          "y": 12
                         },
                         "07G05/unSm1": {
-                          "content": "dokončil by"
+                          "content": "dokončil by",
+                          "y": 28
                         },
                         "07G05/Dt3kb": {
-                          "content": "MASCULINE SINGULAR"
+                          "content": "MASCULINE SINGULAR",
+                          "y": 51
+                        },
+                        "37aVn": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 154
                         },
                         "37aVn/oF4RB": {
-                          "content": "CONDITIONAL"
+                          "content": "CONDITIONAL",
+                          "y": 12
                         },
                         "37aVn/unSm1": {
-                          "content": "dokončila by"
+                          "content": "dokončila by",
+                          "y": 28
                         },
                         "37aVn/Dt3kb": {
-                          "content": "FEMININE SINGULAR"
+                          "content": "FEMININE SINGULAR",
+                          "y": 51
+                        },
+                        "zlK38": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 277
+                        },
+                        "NUHiZ": {
+                          "x": 288,
+                          "y": 12
+                        },
+                        "p2ONd": {
+                          "x": 375,
+                          "y": 12.5
                         }
                       }
                     },
@@ -1627,42 +1845,106 @@
                       "ref": "PPei6",
                       "width": "fill_container",
                       "name": "tensesSectionD",
+                      "height": "fit_content",
+                      "x": 40,
+                      "y": 387,
                       "descendants": {
+                        "EtbK7": {
+                          "width": "fill_container",
+                          "height": "fit_content"
+                        },
                         "OqoNa": {
-                          "iconFontName": "timer"
+                          "iconFontName": "timer",
+                          "x": 16,
+                          "y": 14
                         },
                         "6wEuJ": {
-                          "content": "Tenses"
+                          "content": "Tenses",
+                          "x": 42,
+                          "y": 12
+                        },
+                        "E7wYh": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 106,
+                          "y": 14
                         },
                         "9ht3d": {
-                          "content": "9 forms"
+                          "content": "9 forms",
+                          "x": 10,
+                          "y": 2
+                        },
+                        "7OsiQ": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 46
+                        },
+                        "fQLRd": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 0
                         },
                         "fQLRd/oF4RB": {
-                          "content": "PRESENT"
+                          "content": "PRESENT",
+                          "y": 12
                         },
                         "fQLRd/unSm1": {
-                          "content": "dokončím"
+                          "content": "dokončím",
+                          "y": 28
                         },
                         "fQLRd/Dt3kb": {
-                          "content": "1ST PERSON SINGULAR"
+                          "content": "1ST PERSON SINGULAR",
+                          "y": 51
+                        },
+                        "07G05": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 77
                         },
                         "07G05/oF4RB": {
-                          "content": "PRESENT"
+                          "content": "PRESENT",
+                          "y": 12
                         },
                         "07G05/unSm1": {
-                          "content": "dokončíš"
+                          "content": "dokončíš",
+                          "y": 28
                         },
                         "07G05/Dt3kb": {
-                          "content": "2ND PERSON SINGULAR"
+                          "content": "2ND PERSON SINGULAR",
+                          "y": 51
+                        },
+                        "37aVn": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 16,
+                          "y": 154
                         },
                         "37aVn/oF4RB": {
-                          "content": "PRESENT"
+                          "content": "PRESENT",
+                          "y": 12
                         },
                         "37aVn/unSm1": {
-                          "content": "dokončí"
+                          "content": "dokončí",
+                          "y": 28
                         },
                         "37aVn/Dt3kb": {
-                          "content": "3RD PERSON SINGULAR"
+                          "content": "3RD PERSON SINGULAR",
+                          "y": 51
+                        },
+                        "zlK38": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 277
+                        },
+                        "NUHiZ": {
+                          "x": 288,
+                          "y": 12
+                        },
+                        "p2ONd": {
+                          "x": 375,
+                          "y": 12.5
                         }
                       }
                     }
@@ -3044,6 +3326,8 @@
               "ref": "LD53O",
               "name": "Nominative",
               "width": "fill_container",
+              "x": 0,
+              "y": 0,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "user"
@@ -3067,6 +3351,8 @@
                 "thickness": 2,
                 "fill": "#1A1A1A"
               },
+              "x": 0,
+              "y": 70,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "crosshair"
@@ -3093,6 +3379,8 @@
               "ref": "LD53O",
               "name": "Genitive",
               "width": "fill_container",
+              "x": 0,
+              "y": 140,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "link"
@@ -3111,6 +3399,8 @@
               "ref": "LD53O",
               "name": "Dative",
               "width": "fill_container",
+              "x": 0,
+              "y": 210,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "hand"
@@ -3129,6 +3419,8 @@
               "ref": "LD53O",
               "name": "Vocative",
               "width": "fill_container",
+              "x": 0,
+              "y": 280,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "megaphone"
@@ -3147,6 +3439,8 @@
               "ref": "LD53O",
               "name": "Locative",
               "width": "fill_container",
+              "x": 0,
+              "y": 350,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "map-pin"
@@ -3625,6 +3919,8 @@
               "ref": "LD53O",
               "name": "Nominative",
               "width": "fill_container",
+              "x": 0,
+              "y": 0,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "user"
@@ -3649,6 +3945,8 @@
                 "thickness": 2,
                 "fill": "$--color-success-foreground"
               },
+              "x": 0,
+              "y": 70,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "crosshair",
@@ -3682,6 +3980,8 @@
               "ref": "LD53O",
               "name": "Genitive",
               "width": "fill_container",
+              "x": 0,
+              "y": 140,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "link"
@@ -3700,6 +4000,8 @@
               "ref": "LD53O",
               "name": "Dative",
               "width": "fill_container",
+              "x": 0,
+              "y": 210,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "hand"
@@ -3718,6 +4020,8 @@
               "ref": "LD53O",
               "name": "Vocative",
               "width": "fill_container",
+              "x": 0,
+              "y": 280,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "megaphone"
@@ -3736,6 +4040,8 @@
               "ref": "LD53O",
               "name": "Locative",
               "width": "fill_container",
+              "x": 0,
+              "y": 350,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "map-pin"
@@ -4017,6 +4323,8 @@
               "ref": "LD53O",
               "name": "Nominative",
               "width": "fill_container",
+              "x": 0,
+              "y": 0,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "user"
@@ -4041,6 +4349,8 @@
                 "thickness": 2,
                 "fill": "$--color-success-foreground"
               },
+              "x": 0,
+              "y": 70,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "crosshair",
@@ -4080,6 +4390,8 @@
                 "thickness": 2,
                 "fill": "$--color-error-foreground"
               },
+              "x": 0,
+              "y": 140,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "link",
@@ -4113,6 +4425,8 @@
               "ref": "LD53O",
               "name": "Dative",
               "width": "fill_container",
+              "x": 0,
+              "y": 210,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "hand"
@@ -4131,6 +4445,8 @@
               "ref": "LD53O",
               "name": "Vocative",
               "width": "fill_container",
+              "x": 0,
+              "y": 280,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "megaphone"
@@ -4149,6 +4465,8 @@
               "ref": "LD53O",
               "name": "Locative",
               "width": "fill_container",
+              "x": 0,
+              "y": 350,
               "descendants": {
                 "V8jQ8": {
                   "iconFontName": "map-pin"
@@ -6312,6 +6630,8 @@
                       "ref": "LD53O",
                       "width": "fill_container",
                       "name": "nom",
+                      "x": 0,
+                      "y": 0,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "user"
@@ -6338,6 +6658,8 @@
                         "fill": "$--foreground"
                       },
                       "name": "acc",
+                      "x": 0,
+                      "y": 70,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "crosshair"
@@ -6365,6 +6687,8 @@
                       "ref": "LD53O",
                       "width": "fill_container",
                       "name": "gen",
+                      "x": 0,
+                      "y": 140,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "link"
@@ -6386,6 +6710,8 @@
                       "ref": "LD53O",
                       "width": "fill_container",
                       "name": "dat",
+                      "x": 0,
+                      "y": 210,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "hand"
@@ -6407,6 +6733,8 @@
                       "ref": "LD53O",
                       "width": "fill_container",
                       "name": "voc",
+                      "x": 0,
+                      "y": 280,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "megaphone"
@@ -6428,6 +6756,8 @@
                       "ref": "LD53O",
                       "width": "fill_container",
                       "name": "loc",
+                      "x": 0,
+                      "y": 350,
                       "descendants": {
                         "V8jQ8": {
                           "iconFontName": "map-pin"
@@ -7369,7 +7699,202 @@
                   "type": "ref",
                   "ref": "ThTnK",
                   "width": "fill_container",
-                  "name": "card1"
+                  "name": "card1",
+                  "height": "fit_content",
+                  "x": 0,
+                  "y": 0,
+                  "descendants": {
+                    "73sBD": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 20
+                    },
+                    "Du08Y": {
+                      "width": "fit_content",
+                      "height": "fit_content"
+                    },
+                    "cm6QH": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "y": 32
+                    },
+                    "YiSag": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 243
+                    },
+                    "cpaFD": {
+                      "x": 10,
+                      "y": 5
+                    },
+                    "dxyo0": {
+                      "x": 26,
+                      "y": 4
+                    },
+                    "ZHPZR": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 84
+                    },
+                    "opqsX": {
+                      "width": "fill_container",
+                      "x": 20,
+                      "y": 118
+                    },
+                    "fdMlP": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 135
+                    },
+                    "Fi5Dl": {
+                      "width": "fill_container",
+                      "height": "fit_content"
+                    },
+                    "TgStG": {
+                      "y": 2.5
+                    },
+                    "hVx8z": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
+                    },
+                    "moYu8": {
+                      "x": 233,
+                      "y": 2.5
+                    },
+                    "H0334": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 271
+                    },
+                    "fXR2n": {
+                      "x": 8,
+                      "y": 3
+                    },
+                    "GrseG": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 29
+                    },
+                    "rOHHG": {
+                      "y": 2.5
+                    },
+                    "PeO5S": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
+                    },
+                    "HQFh5": {
+                      "x": 229,
+                      "y": 2.5
+                    },
+                    "4xaj6": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 267
+                    },
+                    "w1jUG": {
+                      "x": 8,
+                      "y": 3
+                    },
+                    "gIJhq": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 58
+                    },
+                    "cytFI": {
+                      "y": 2.5
+                    },
+                    "9z7HB": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
+                    },
+                    "HM4xY": {
+                      "x": 228,
+                      "y": 2.5
+                    },
+                    "QeTg0": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 266
+                    },
+                    "zyHH1": {
+                      "x": 8,
+                      "y": 3
+                    },
+                    "cgCDA": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 228
+                    },
+                    "fO7Yn": {
+                      "width": "fit_content",
+                      "height": "fit_content"
+                    },
+                    "tO00M": {
+                      "y": 2
+                    },
+                    "KPivX": {
+                      "x": 18
+                    },
+                    "RpEde": {
+                      "width": "fill_container",
+                      "x": 20,
+                      "y": 260
+                    },
+                    "PJnoJ": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 277
+                    },
+                    "lw4Gd": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 23
+                    },
+                    "MxBcR": {
+                      "x": 300,
+                      "y": 1.5
+                    },
+                    "xxVuF": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 50
+                    },
+                    "8XVTs": {
+                      "x": 300,
+                      "y": 1.5
+                    },
+                    "lgL2R": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 77
+                    },
+                    "NFCYo": {
+                      "x": 300,
+                      "y": 1.5
+                    },
+                    "2uBme": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 387
+                    },
+                    "qAjnd": {
+                      "x": 123.5,
+                      "y": 13
+                    },
+                    "WmMFu": {
+                      "x": 143.5,
+                      "y": 12
+                    }
+                  }
                 },
                 {
                   "id": "mtnSB",
@@ -7377,46 +7902,173 @@
                   "ref": "ThTnK",
                   "width": "fill_container",
                   "name": "card2",
+                  "height": "fit_content",
+                  "x": 0,
+                  "y": 463,
                   "descendants": {
+                    "73sBD": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 20
+                    },
+                    "Du08Y": {
+                      "width": "fit_content",
+                      "height": "fit_content"
+                    },
                     "LBaLx": {
                       "content": "mluvit"
+                    },
+                    "cm6QH": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "y": 32
                     },
                     "7t6vL": {
                       "content": "verb"
                     },
+                    "YiSag": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 243
+                    },
+                    "cpaFD": {
+                      "x": 10,
+                      "y": 5
+                    },
+                    "dxyo0": {
+                      "x": 26,
+                      "y": 4
+                    },
+                    "ZHPZR": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 84
+                    },
                     "qUBPN": {
                       "content": "to speak"
+                    },
+                    "opqsX": {
+                      "width": "fill_container",
+                      "x": 20,
+                      "y": 118
+                    },
+                    "fdMlP": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 135
+                    },
+                    "Fi5Dl": {
+                      "width": "fill_container",
+                      "height": "fit_content"
+                    },
+                    "TgStG": {
+                      "y": 2.5
+                    },
+                    "hVx8z": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
                     },
                     "9zlRr": {
                       "width": 122
                     },
                     "moYu8": {
-                      "content": "91%"
+                      "content": "91%",
+                      "x": 233,
+                      "y": 2.5
+                    },
+                    "H0334": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 271
                     },
                     "fXR2n": {
-                      "content": "Fresh"
+                      "content": "Fresh",
+                      "x": 8,
+                      "y": 3
+                    },
+                    "GrseG": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 29
+                    },
+                    "rOHHG": {
+                      "y": 2.5
+                    },
+                    "PeO5S": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
                     },
                     "rg5Vz": {
                       "width": 105
                     },
                     "HQFh5": {
-                      "content": "78%"
+                      "content": "78%",
+                      "x": 229,
+                      "y": 2.5
+                    },
+                    "4xaj6": {
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 267
                     },
                     "w1jUG": {
-                      "content": "Stable"
+                      "content": "Stable",
+                      "x": 8,
+                      "y": 3
+                    },
+                    "gIJhq": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "y": 58
+                    },
+                    "cytFI": {
+                      "y": 2.5
+                    },
+                    "9z7HB": {
+                      "width": "fill_container",
+                      "x": 96,
+                      "y": 7.5
                     },
                     "J98W9": {
                       "width": 74
                     },
                     "HM4xY": {
-                      "content": "55%"
+                      "content": "55%",
+                      "x": 229,
+                      "y": 2.5
                     },
                     "QeTg0": {
-                      "fill": "$--color-info"
+                      "fill": "$--color-info",
+                      "width": "fit_content",
+                      "height": "fit_content",
+                      "x": 267
                     },
                     "zyHH1": {
                       "content": "Stable",
-                      "fill": "$--color-info-foreground"
+                      "fill": "$--color-info-foreground",
+                      "x": 8,
+                      "y": 3
+                    },
+                    "cgCDA": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 228
+                    },
+                    "fO7Yn": {
+                      "width": "fit_content",
+                      "height": "fit_content"
+                    },
+                    "tO00M": {
+                      "y": 2
+                    },
+                    "KPivX": {
+                      "x": 18
                     },
                     "RpEde": {
                       "enabled": false
@@ -7424,11 +8076,21 @@
                     "PJnoJ": {
                       "enabled": false
                     },
+                    "2uBme": {
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "x": 20,
+                      "y": 260
+                    },
                     "qAjnd": {
-                      "iconFontName": "chevron-down"
+                      "iconFontName": "chevron-down",
+                      "x": 120.5,
+                      "y": 13
                     },
                     "WmMFu": {
-                      "content": "See more"
+                      "content": "See more",
+                      "x": 140.5,
+                      "y": 12
                     }
                   }
                 }
@@ -8086,7 +8748,202 @@
                       "type": "ref",
                       "ref": "ThTnK",
                       "width": "fill_container",
-                      "name": "dcard1"
+                      "name": "dcard1",
+                      "height": "fit_content",
+                      "x": 0,
+                      "y": 0,
+                      "descendants": {
+                        "73sBD": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 20
+                        },
+                        "Du08Y": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
+                        "cm6QH": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "y": 32
+                        },
+                        "YiSag": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 254.33333333333331
+                        },
+                        "cpaFD": {
+                          "x": 10,
+                          "y": 5
+                        },
+                        "dxyo0": {
+                          "x": 26,
+                          "y": 4
+                        },
+                        "ZHPZR": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 84
+                        },
+                        "opqsX": {
+                          "width": "fill_container",
+                          "x": 20,
+                          "y": 118
+                        },
+                        "fdMlP": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 135
+                        },
+                        "Fi5Dl": {
+                          "width": "fill_container",
+                          "height": "fit_content"
+                        },
+                        "TgStG": {
+                          "y": 2.5
+                        },
+                        "hVx8z": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
+                        },
+                        "moYu8": {
+                          "x": 244.33333333333331,
+                          "y": 2.5
+                        },
+                        "H0334": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 282.3333333333333
+                        },
+                        "fXR2n": {
+                          "x": 8,
+                          "y": 3
+                        },
+                        "GrseG": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 29
+                        },
+                        "rOHHG": {
+                          "y": 2.5
+                        },
+                        "PeO5S": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
+                        },
+                        "HQFh5": {
+                          "x": 240.33333333333331,
+                          "y": 2.5
+                        },
+                        "4xaj6": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 278.3333333333333
+                        },
+                        "w1jUG": {
+                          "x": 8,
+                          "y": 3
+                        },
+                        "gIJhq": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 58
+                        },
+                        "cytFI": {
+                          "y": 2.5
+                        },
+                        "9z7HB": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
+                        },
+                        "HM4xY": {
+                          "x": 239.33333333333331,
+                          "y": 2.5
+                        },
+                        "QeTg0": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 277.3333333333333
+                        },
+                        "zyHH1": {
+                          "x": 8,
+                          "y": 3
+                        },
+                        "cgCDA": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 228
+                        },
+                        "fO7Yn": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
+                        "tO00M": {
+                          "y": 2
+                        },
+                        "KPivX": {
+                          "x": 18
+                        },
+                        "RpEde": {
+                          "width": "fill_container",
+                          "x": 20,
+                          "y": 260
+                        },
+                        "PJnoJ": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 277
+                        },
+                        "lw4Gd": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 23
+                        },
+                        "MxBcR": {
+                          "x": 311.3333333333333,
+                          "y": 1.5
+                        },
+                        "xxVuF": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 50
+                        },
+                        "8XVTs": {
+                          "x": 311.3333333333333,
+                          "y": 1.5
+                        },
+                        "lgL2R": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 77
+                        },
+                        "NFCYo": {
+                          "x": 311.3333333333333,
+                          "y": 1.5
+                        },
+                        "2uBme": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 387
+                        },
+                        "qAjnd": {
+                          "x": 129.16666666666666,
+                          "y": 13
+                        },
+                        "WmMFu": {
+                          "x": 149.16666666666666,
+                          "y": 12
+                        }
+                      }
                     },
                     {
                       "id": "y5GRh",
@@ -8094,46 +8951,173 @@
                       "ref": "ThTnK",
                       "width": "fill_container",
                       "name": "dcard2",
+                      "height": "fit_content",
+                      "x": 385.3333333333333,
+                      "y": 0,
                       "descendants": {
+                        "73sBD": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 20
+                        },
+                        "Du08Y": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
                         "LBaLx": {
                           "content": "mluvit"
+                        },
+                        "cm6QH": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "y": 32
                         },
                         "7t6vL": {
                           "content": "verb"
                         },
+                        "YiSag": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 254.33333333333331
+                        },
+                        "cpaFD": {
+                          "x": 10,
+                          "y": 5
+                        },
+                        "dxyo0": {
+                          "x": 26,
+                          "y": 4
+                        },
+                        "ZHPZR": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 84
+                        },
                         "qUBPN": {
                           "content": "to speak"
+                        },
+                        "opqsX": {
+                          "width": "fill_container",
+                          "x": 20,
+                          "y": 118
+                        },
+                        "fdMlP": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 135
+                        },
+                        "Fi5Dl": {
+                          "width": "fill_container",
+                          "height": "fit_content"
+                        },
+                        "TgStG": {
+                          "y": 2.5
+                        },
+                        "hVx8z": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "9zlRr": {
                           "width": 122
                         },
                         "moYu8": {
-                          "content": "91%"
+                          "content": "91%",
+                          "x": 244.33333333333331,
+                          "y": 2.5
+                        },
+                        "H0334": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 282.3333333333333
                         },
                         "fXR2n": {
-                          "content": "Fresh"
+                          "content": "Fresh",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "GrseG": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 29
+                        },
+                        "rOHHG": {
+                          "y": 2.5
+                        },
+                        "PeO5S": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "rg5Vz": {
                           "width": 105
                         },
                         "HQFh5": {
-                          "content": "78%"
+                          "content": "78%",
+                          "x": 240.33333333333331,
+                          "y": 2.5
+                        },
+                        "4xaj6": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 278.3333333333333
                         },
                         "w1jUG": {
-                          "content": "Stable"
+                          "content": "Stable",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "gIJhq": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 58
+                        },
+                        "cytFI": {
+                          "y": 2.5
+                        },
+                        "9z7HB": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "J98W9": {
                           "width": 74
                         },
                         "HM4xY": {
-                          "content": "55%"
+                          "content": "55%",
+                          "x": 240.33333333333331,
+                          "y": 2.5
                         },
                         "QeTg0": {
-                          "fill": "$--color-info"
+                          "fill": "$--color-info",
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 278.3333333333333
                         },
                         "zyHH1": {
                           "content": "Stable",
-                          "fill": "$--color-info-foreground"
+                          "fill": "$--color-info-foreground",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "cgCDA": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 228
+                        },
+                        "fO7Yn": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
+                        "tO00M": {
+                          "y": 2
+                        },
+                        "KPivX": {
+                          "x": 18
                         },
                         "RpEde": {
                           "enabled": false
@@ -8141,11 +9125,21 @@
                         "PJnoJ": {
                           "enabled": false
                         },
+                        "2uBme": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 260
+                        },
                         "qAjnd": {
-                          "iconFontName": "chevron-down"
+                          "iconFontName": "chevron-down",
+                          "x": 126.16666666666666,
+                          "y": 13
                         },
                         "WmMFu": {
-                          "content": "See more"
+                          "content": "See more",
+                          "x": 146.16666666666666,
+                          "y": 12
                         }
                       }
                     },
@@ -8155,64 +9149,179 @@
                       "ref": "ThTnK",
                       "width": "fill_container",
                       "name": "dcard3",
+                      "height": "fit_content",
+                      "x": 770.6666666666666,
+                      "y": 0,
                       "descendants": {
+                        "73sBD": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 20
+                        },
+                        "Du08Y": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
                         "LBaLx": {
                           "content": "velký"
+                        },
+                        "cm6QH": {
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "y": 32
                         },
                         "7t6vL": {
                           "content": "adjective"
                         },
                         "YiSag": {
-                          "fill": "$--secondary"
+                          "fill": "$--secondary",
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 275.3333333333333
                         },
                         "cpaFD": {
                           "enabled": false
                         },
                         "dxyo0": {
                           "content": "6 / 10",
-                          "fill": "$--foreground"
+                          "fill": "$--foreground",
+                          "x": 10,
+                          "y": 4
+                        },
+                        "ZHPZR": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 84
                         },
                         "qUBPN": {
                           "content": "big"
+                        },
+                        "opqsX": {
+                          "width": "fill_container",
+                          "x": 20,
+                          "y": 118
+                        },
+                        "fdMlP": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 135
+                        },
+                        "Fi5Dl": {
+                          "width": "fill_container",
+                          "height": "fit_content"
+                        },
+                        "TgStG": {
+                          "y": 2.5
+                        },
+                        "hVx8z": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "9zlRr": {
                           "width": 83
                         },
                         "moYu8": {
-                          "content": "62%"
+                          "content": "62%",
+                          "x": 240.33333333333331,
+                          "y": 2.5
                         },
                         "H0334": {
-                          "fill": "$--color-info"
+                          "fill": "$--color-info",
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 278.3333333333333
                         },
                         "fXR2n": {
                           "content": "Stable",
-                          "fill": "$--color-info-foreground"
+                          "fill": "$--color-info-foreground",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "GrseG": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 29
+                        },
+                        "rOHHG": {
+                          "y": 2.5
+                        },
+                        "PeO5S": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "rg5Vz": {
                           "width": 54
                         },
                         "HQFh5": {
-                          "content": "40%"
+                          "content": "40%",
+                          "x": 239.33333333333331,
+                          "y": 2.5
                         },
                         "4xaj6": {
-                          "fill": "$--color-warning"
+                          "fill": "$--color-warning",
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 277.3333333333333
                         },
                         "w1jUG": {
                           "content": "Fading",
-                          "fill": "$--color-warning-foreground"
+                          "fill": "$--color-warning-foreground",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "gIJhq": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "y": 58
+                        },
+                        "cytFI": {
+                          "y": 2.5
+                        },
+                        "9z7HB": {
+                          "width": "fill_container",
+                          "x": 96,
+                          "y": 7.5
                         },
                         "J98W9": {
                           "width": 0
                         },
                         "HM4xY": {
-                          "content": "—"
+                          "content": "—",
+                          "x": 261.3333333333333,
+                          "y": 2.5
                         },
                         "QeTg0": {
-                          "fill": "$--muted"
+                          "fill": "$--muted",
+                          "width": "fit_content",
+                          "height": "fit_content",
+                          "x": 299.3333333333333
                         },
                         "zyHH1": {
                           "content": "—",
-                          "fill": "$--muted-foreground"
+                          "fill": "$--muted-foreground",
+                          "x": 8,
+                          "y": 3
+                        },
+                        "cgCDA": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 228
+                        },
+                        "fO7Yn": {
+                          "width": "fit_content",
+                          "height": "fit_content"
+                        },
+                        "tO00M": {
+                          "y": 2
+                        },
+                        "KPivX": {
+                          "x": 18
                         },
                         "RpEde": {
                           "enabled": false
@@ -8220,15 +9329,1290 @@
                         "PJnoJ": {
                           "enabled": false
                         },
+                        "2uBme": {
+                          "width": "fill_container",
+                          "height": "fit_content",
+                          "x": 20,
+                          "y": 260
+                        },
                         "qAjnd": {
-                          "iconFontName": "chevron-down"
+                          "iconFontName": "chevron-down",
+                          "x": 126.16666666666666,
+                          "y": 13
                         },
                         "WmMFu": {
-                          "content": "See more"
+                          "content": "See more",
+                          "x": 146.16666666666666,
+                          "y": 12
                         }
                       }
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "FgJPD",
+      "x": 8202,
+      "y": -332,
+      "name": "Session - Form Recall",
+      "clip": true,
+      "width": 402,
+      "height": 874,
+      "fill": "#FEF7EE",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "SdsOF",
+          "x": 0,
+          "y": 0,
+          "name": "StatusBar",
+          "width": 402,
+          "height": 54,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "sg5DL",
+              "x": 24,
+              "y": 16,
+              "name": "time",
+              "fill": "#1A1A1A",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "3GArH",
+              "x": 330,
+              "y": 18,
+              "name": "statusIcons",
+              "width": 54,
+              "height": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "V06Uz",
+                  "x": 0,
+                  "y": 1,
+                  "name": "s1",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "signal",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "VlknL",
+                  "x": 20,
+                  "y": 1,
+                  "name": "s2",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "wifi",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "lHTT6",
+                  "x": 40,
+                  "y": 1,
+                  "name": "s3",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "battery-full",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vEcHS",
+          "x": 0,
+          "y": 54,
+          "name": "TopBar",
+          "width": 402,
+          "height": 48,
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "EvjxC",
+              "x": 20,
+              "y": 8,
+              "name": "exitButton",
+              "width": 32,
+              "height": 32,
+              "cornerRadius": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "K3bnK",
+                  "x": 7,
+                  "y": 7,
+                  "name": "exitIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#9CA3AF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "QwWbm",
+              "x": 176,
+              "y": 14,
+              "name": "progress",
+              "fill": "#1A1A1A",
+              "content": "3 / 10",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "XDgfC",
+          "x": 24,
+          "y": 104,
+          "name": "ProgressBarBg",
+          "width": 354,
+          "height": 4,
+          "fill": "#E8DFD4",
+          "cornerRadius": 2,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "2TeBQ",
+              "x": 0,
+              "y": 0,
+              "name": "ProgressFill",
+              "fill": "#1A1A1A",
+              "width": 106,
+              "height": 4
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TZmis",
+          "x": 0,
+          "y": 130,
+          "name": "QuestionArea",
+          "width": 402,
+          "height": 140,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "BSGgW",
+              "x": 24,
+              "y": 24,
+              "name": "sentencePre",
+              "fill": "#1A1A1A",
+              "content": "Viděl jsem velkého",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "lrs5u",
+              "x": 239,
+              "y": 24,
+              "name": "sentenceBold",
+              "fill": "#1A1A1A",
+              "content": "_____",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "TOvp2",
+              "x": 24,
+              "y": 68,
+              "name": "translationPre",
+              "fill": "#9CA3AF",
+              "content": "I saw a big dog.",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "HsR2M",
+              "x": 24,
+              "y": 98,
+              "name": "WordChip",
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "padding": [
+                6,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vNky9",
+                  "name": "chipText",
+                  "fill": "#1A1A1A",
+                  "content": "dog",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "T7Ne0",
+          "x": 20,
+          "y": 346,
+          "name": "InputArea",
+          "width": 362,
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "AcJzL",
+              "name": "TextField",
+              "width": "fill_container",
+              "height": 52,
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "padding": [
+                0,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "gATsT",
+                  "name": "placeholder",
+                  "fill": "#9CA3AF",
+                  "content": "Type the answer here",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "JPrEf",
+              "name": "HelperText",
+              "fill": "#9CA3AF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "You can use all English characters and skip š, á, í, ř, etc.",
+              "fontFamily": "DM Sans",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Rq1ok",
+          "x": 20,
+          "y": 778,
+          "name": "ContinueButton",
+          "width": 362,
+          "height": 56,
+          "fill": "#1A1A1A",
+          "cornerRadius": 16,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "A2Ezu",
+              "x": 0,
+              "y": 0,
+              "name": "btnLabel",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width-height",
+              "width": 362,
+              "height": 56,
+              "content": "Continue  →",
+              "textAlign": "center",
+              "textAlignVertical": "middle",
+              "fontFamily": "DM Sans",
+              "fontSize": 16,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vAy2G",
+          "x": 24,
+          "y": 290,
+          "name": "ActionRow",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "UTWXe",
+              "name": "InfoButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "u2CSX",
+                  "x": 11,
+                  "y": 11,
+                  "name": "infoIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "info",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "j4Xss",
+              "name": "StudyButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "l53gu",
+                  "x": 11,
+                  "y": 11,
+                  "name": "studyIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "graduation-cap",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "iuIPo",
+              "name": "BlockButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "4FjRG",
+                  "x": 11,
+                  "y": 11,
+                  "name": "blockIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "ban",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "E4ruM",
+      "x": 8704,
+      "y": -332,
+      "name": "Form Recall - Correct",
+      "clip": true,
+      "width": 402,
+      "height": 874,
+      "fill": "#FEF7EE",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "R5W1W",
+          "x": 0,
+          "y": 0,
+          "name": "StatusBar",
+          "width": 402,
+          "height": 54,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "R5dos",
+              "x": 24,
+              "y": 16,
+              "name": "time",
+              "fill": "#1A1A1A",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "dsWnS",
+              "x": 330,
+              "y": 18,
+              "name": "statusIcons",
+              "width": 54,
+              "height": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "GTS3Q",
+                  "x": 0,
+                  "y": 1,
+                  "name": "s1",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "signal",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "szYmv",
+                  "x": 20,
+                  "y": 1,
+                  "name": "s2",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "wifi",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "COAP2",
+                  "x": 40,
+                  "y": 1,
+                  "name": "s3",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "battery-full",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c0cwf",
+          "x": 0,
+          "y": 54,
+          "name": "TopBar",
+          "width": 402,
+          "height": 48,
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "SDUbX",
+              "x": 20,
+              "y": 8,
+              "name": "exitButton",
+              "width": 32,
+              "height": 32,
+              "cornerRadius": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "m6XCg",
+                  "x": 7,
+                  "y": 7,
+                  "name": "exitIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#9CA3AF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "CXmo3",
+              "x": 176,
+              "y": 14,
+              "name": "progress",
+              "fill": "#1A1A1A",
+              "content": "3 / 10",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "wv97E",
+          "x": 24,
+          "y": 104,
+          "name": "ProgressBarBg",
+          "width": 354,
+          "height": 4,
+          "fill": "#E8DFD4",
+          "cornerRadius": 2,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "1uRu3",
+              "x": 0,
+              "y": 0,
+              "name": "ProgressFill",
+              "fill": "#1A1A1A",
+              "width": 106,
+              "height": 4
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gnvNH",
+          "x": 0,
+          "y": 130,
+          "name": "QuestionArea",
+          "width": 402,
+          "height": 140,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "32HZy",
+              "x": 24,
+              "y": 24,
+              "name": "sentencePre",
+              "fill": "#1A1A1A",
+              "content": "Viděl jsem velkého",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "dNcbs",
+              "x": 239,
+              "y": 24,
+              "name": "sentenceBold",
+              "fill": "#1A1A1A",
+              "content": "psa.",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "8OzKw",
+              "x": 24,
+              "y": 68,
+              "name": "translationPre",
+              "fill": "#9CA3AF",
+              "content": "I saw a big dog.",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "A1vvS",
+              "x": 24,
+              "y": 98,
+              "name": "WordChip",
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "padding": [
+                6,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "efss6",
+                  "name": "chipText",
+                  "fill": "#1A1A1A",
+                  "content": "dog",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "MrxRD",
+          "x": 20,
+          "y": 346,
+          "name": "InputArea",
+          "width": 362,
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "7u9jf",
+              "name": "TextField",
+              "width": "fill_container",
+              "height": 52,
+              "fill": "$--color-success",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 2,
+                "fill": "$--color-success-foreground"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "3bsiE",
+                  "x": 16,
+                  "y": 16,
+                  "name": "placeholder",
+                  "fill": "$--color-success-foreground",
+                  "content": "psa",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "TyyqT",
+                  "x": 324,
+                  "y": 15,
+                  "name": "checkIcon",
+                  "width": 22,
+                  "height": 22,
+                  "iconFontName": "circle-check",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--color-success-foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PRupP",
+          "x": 20,
+          "y": 778,
+          "name": "ContinueButton",
+          "width": 362,
+          "height": 56,
+          "fill": "#1A1A1A",
+          "cornerRadius": 16,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "QQQUQ",
+              "x": 0,
+              "y": 0,
+              "name": "btnLabel",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width-height",
+              "width": 362,
+              "height": 56,
+              "content": "Next  →",
+              "textAlign": "center",
+              "textAlignVertical": "middle",
+              "fontFamily": "DM Sans",
+              "fontSize": 16,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "I6Ge0",
+          "x": 24,
+          "y": 290,
+          "name": "ActionRow",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Tu514",
+              "name": "InfoButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "DDzDa",
+                  "x": 11,
+                  "y": 11,
+                  "name": "infoIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "info",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "hT3ZF",
+              "name": "StudyButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "x3gNZ",
+                  "x": 11,
+                  "y": 11,
+                  "name": "studyIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "graduation-cap",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "CL9Vd",
+              "name": "BlockButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "FDsy3",
+                  "x": 11,
+                  "y": 11,
+                  "name": "blockIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "ban",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "jwamm",
+      "x": 9206,
+      "y": -332,
+      "name": "Form Recall - Incorrect",
+      "clip": true,
+      "width": 402,
+      "height": 874,
+      "fill": "#FEF7EE",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "YzMbO",
+          "x": 0,
+          "y": 0,
+          "name": "StatusBar",
+          "width": 402,
+          "height": 54,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "0RXb5",
+              "x": 24,
+              "y": 16,
+              "name": "time",
+              "fill": "#1A1A1A",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "cn5lU",
+              "x": 330,
+              "y": 18,
+              "name": "statusIcons",
+              "width": 54,
+              "height": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "PG0XS",
+                  "x": 0,
+                  "y": 1,
+                  "name": "s1",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "signal",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "ZiXc1",
+                  "x": 20,
+                  "y": 1,
+                  "name": "s2",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "wifi",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "e1x2u",
+                  "x": 40,
+                  "y": 1,
+                  "name": "s3",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "battery-full",
+                  "iconFontFamily": "lucide",
+                  "fill": "#1A1A1A"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vBkwp",
+          "x": 0,
+          "y": 54,
+          "name": "TopBar",
+          "width": 402,
+          "height": 48,
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "p5vHA",
+              "x": 20,
+              "y": 8,
+              "name": "exitButton",
+              "width": 32,
+              "height": 32,
+              "cornerRadius": 16,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "5TM3e",
+                  "x": 7,
+                  "y": 7,
+                  "name": "exitIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#9CA3AF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "95dlP",
+              "x": 176,
+              "y": 14,
+              "name": "progress",
+              "fill": "#1A1A1A",
+              "content": "3 / 10",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "blXyL",
+          "x": 24,
+          "y": 104,
+          "name": "ProgressBarBg",
+          "width": 354,
+          "height": 4,
+          "fill": "#E8DFD4",
+          "cornerRadius": 2,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "NXhdw",
+              "x": 0,
+              "y": 0,
+              "name": "ProgressFill",
+              "fill": "#1A1A1A",
+              "width": 106,
+              "height": 4
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "V6rlW",
+          "x": 0,
+          "y": 130,
+          "name": "QuestionArea",
+          "width": 402,
+          "height": 140,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "Le4QH",
+              "x": 24,
+              "y": 24,
+              "name": "sentencePre",
+              "fill": "#1A1A1A",
+              "content": "Viděl jsem velkého",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Enb2w",
+              "x": 239,
+              "y": 24,
+              "name": "sentenceBold",
+              "fill": "#1A1A1A",
+              "content": "psa.",
+              "fontFamily": "Bricolage Grotesque",
+              "fontSize": 26,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "fyG3A",
+              "x": 24,
+              "y": 68,
+              "name": "translationPre",
+              "fill": "#9CA3AF",
+              "content": "I saw a big dog.",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "2PSgp",
+              "x": 24,
+              "y": 98,
+              "name": "WordChip",
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "padding": [
+                6,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lAxwy",
+                  "name": "errChipText",
+                  "fill": "#1A1A1A",
+                  "content": "dog",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "VbviF",
+          "x": 20,
+          "y": 346,
+          "name": "InputArea",
+          "width": 362,
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "bYjqh",
+              "name": "TextField",
+              "width": "fill_container",
+              "height": 52,
+              "fill": "$--color-error",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 2,
+                "fill": "$--color-error-foreground"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FKrru",
+                  "x": 16,
+                  "y": 16,
+                  "name": "placeholder",
+                  "fill": "$--color-error-foreground",
+                  "content": "pse",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "nBNZG",
+                  "x": 324,
+                  "y": 15,
+                  "name": "errorIcon",
+                  "width": 22,
+                  "height": 22,
+                  "iconFontName": "circle-x",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--color-error-foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dlULj",
+          "x": 20,
+          "y": 778,
+          "name": "ContinueButton",
+          "width": 362,
+          "height": 56,
+          "fill": "#1A1A1A",
+          "cornerRadius": 16,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "8uWNe",
+              "x": 0,
+              "y": 0,
+              "name": "btnLabel",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width-height",
+              "width": 362,
+              "height": 56,
+              "content": "Next  →",
+              "textAlign": "center",
+              "textAlignVertical": "middle",
+              "fontFamily": "DM Sans",
+              "fontSize": 16,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZFkM7",
+          "x": 24,
+          "y": 290,
+          "name": "ActionRow",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fkPqM",
+              "name": "InfoButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "wckR3",
+                  "x": 11,
+                  "y": 11,
+                  "name": "infoIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "info",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bPGgx",
+              "name": "StudyButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "QgBKH",
+                  "x": 11,
+                  "y": 11,
+                  "name": "studyIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "graduation-cap",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "vVvke",
+              "name": "BlockButton",
+              "width": 40,
+              "height": 40,
+              "fill": "#FFFFFF",
+              "cornerRadius": 20,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "9t9Sm",
+                  "x": 11,
+                  "y": 11,
+                  "name": "blockIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "ban",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
                 }
               ]
             }

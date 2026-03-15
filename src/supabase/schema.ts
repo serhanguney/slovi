@@ -371,6 +371,7 @@ export type Database = {
           base_form: string;
           correct_case: string;
           explanation: string;
+          in_english: string;
           root_word_id: number;
           sentence_czech: string;
           sentence_english: string;
@@ -390,6 +391,14 @@ export type Database = {
           sentence_english: string;
           target_form: string;
           word_form_id: number;
+        }[];
+      };
+      get_form_recall_eligible_count: {
+        Args: never;
+        Returns: {
+          eligible_count: number;
+          scope: string;
+          word_type: string;
         }[];
       };
       get_known_words: {
