@@ -18,6 +18,9 @@ export type KnownWord = Database['public']['Functions']['get_known_words']['Retu
 
 export type DustyCard = Database['public']['Functions']['build_dusty_session']['Returns'][number];
 
+export type CaseStudyCard =
+  Database['public']['Functions']['build_case_study_session']['Returns'][number];
+
 // Zod schema for the Json return of record_practice_answer
 export const recordAnswerResultSchema = z.object({
   word_became_known: z.boolean(),

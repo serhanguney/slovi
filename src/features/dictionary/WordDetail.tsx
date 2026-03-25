@@ -9,8 +9,10 @@ import {
   TrendingUp,
   Type,
   MoreHorizontal,
+  GraduationCap,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   useWordDetails,
@@ -19,6 +21,7 @@ import {
 } from '@/features/dictionary/hooks/useWordDetails';
 import { WordFormRow } from '@/features/ui/word-form-row';
 import { ExpandableSection } from '@/features/ui/expandable-section';
+import { useBuildCaseStudySession } from '@/features/practice/hooks/useBuildCaseStudySession';
 
 interface WordDetailProps {
   rootWordId: number;
@@ -183,7 +186,14 @@ function buildSections(forms: WordForm[]) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetailProps) {
+  const navigate = useNavigate();
   const { data, isLoading, error } = useWordDetails(rootWordId);
+  const buildCaseStudy = useBuildCaseStudySession();
+
+  const handleStudy = async () => {
+    const cards = await buildCaseStudy.mutateAsync([rootWordId]);
+    navigate('/practice/session', { state: { mode: 'case_study', cards } });
+  };
 
   if (isLoading) {
     return (
@@ -221,14 +231,28 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
             </button>
             <h1 className="text-[28px] font-bold leading-tight">{rootWord.in_czech}</h1>
           </div>
-          <button
-            id="bt"
-            onClick={() => onAddToVocabulary(rootWordId)}
-            className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
-          >
-            <Plus className="h-4 w-4" />
-            Save
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleStudy}
+              disabled={buildCaseStudy.isPending}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white text-[#6B7280] transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
+              aria-label="Study this word"
+            >
+              {buildCaseStudy.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <GraduationCap className="h-4 w-4" />
+              )}
+            </button>
+            <button
+              id="bt"
+              onClick={() => onAddToVocabulary(rootWordId)}
+              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
+            >
+              <Plus className="h-4 w-4" />
+              Save
+            </button>
+          </div>
         </div>
 
         {/* Translation */}
@@ -295,6 +319,20 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
           >
             <Plus className="h-[18px] w-[18px]" />
             Save to My Words
+          </button>
+
+          {/* Study this word button */}
+          <button
+            onClick={handleStudy}
+            disabled={buildCaseStudy.isPending}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E5E7EB] py-3 text-[14px] font-semibold text-[#1A1A1A] transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
+          >
+            {buildCaseStudy.isPending ? (
+              <Loader2 className="h-[18px] w-[18px] animate-spin" />
+            ) : (
+              <GraduationCap className="h-[18px] w-[18px]" />
+            )}
+            Study this word
           </button>
         </div>
 

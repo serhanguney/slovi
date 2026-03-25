@@ -348,6 +348,22 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      build_case_study_session: {
+        Args: { p_root_word_ids: number[] };
+        Returns: {
+          base_form: string;
+          correct_case: string;
+          explanation: string;
+          gender: string;
+          options: string[];
+          plurality: string;
+          root_word_id: number;
+          sentence_czech: string;
+          sentence_english: string;
+          target_form: string;
+          word_form_id: number;
+        }[];
+      };
       build_dusty_session: {
         Args: never;
         Returns: {
@@ -392,6 +408,15 @@ export type Database = {
           target_form: string;
           word_form_id: number;
         }[];
+      };
+      compute_ars_priority: {
+        Args: {
+          p_correct: number;
+          p_days_since: number;
+          p_incorrect: number;
+          p_is_pinned: boolean;
+        };
+        Returns: number;
       };
       get_form_recall_eligible_count: {
         Args: never;
@@ -486,7 +511,7 @@ export type Database = {
       gender: 'masculine_animate' | 'feminine' | 'neuter' | 'masculine_inanimate' | 'masculine';
       person: '1' | '2' | '3';
       plurality: 'singular' | 'plural';
-      practice_mode: 'case_understanding' | 'form_recall' | 'simple_vocabulary';
+      practice_mode: 'case_understanding' | 'form_recall' | 'simple_vocabulary' | 'case_study';
       tense: 'present' | 'past' | 'future';
       word_aspect: 'perfective' | 'imperfective';
       word_type:
@@ -627,7 +652,7 @@ export const Constants = {
       gender: ['masculine_animate', 'feminine', 'neuter', 'masculine_inanimate', 'masculine'],
       person: ['1', '2', '3'],
       plurality: ['singular', 'plural'],
-      practice_mode: ['case_understanding', 'form_recall', 'simple_vocabulary'],
+      practice_mode: ['case_understanding', 'form_recall', 'simple_vocabulary', 'case_study'],
       tense: ['present', 'past', 'future'],
       word_aspect: ['perfective', 'imperfective'],
       word_type: [

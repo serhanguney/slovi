@@ -13,7 +13,8 @@
     "knip": "knip",
     "preview": "vite preview",
     "prepare": "husky",
-    "update-types": "supabase gen types typescript --project-id $(node -p \"require('./projectSecrets.json').projectId\") > ./src/supabase/schema.ts"
+    "update-types": "supabase gen types typescript --project-id $(node -p \"require('./projectSecrets.json').projectId\") > ./src/supabase/schema.ts",
+    "pull-database": "supabase db dump -f supabase/remote_schema.sql"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
