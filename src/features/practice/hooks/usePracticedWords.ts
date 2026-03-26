@@ -28,15 +28,14 @@ export function usePracticedWords() {
   };
 
   const query = useQuery({
-    queryKey: ['practiced-words', debouncedSearch],
+    queryKey: ['user-word-list', debouncedSearch],
     queryFn: async (): Promise<PracticedWord[]> => {
-      const { data, error } = await supabase.rpc('get_practiced_words', {
+      const { data, error } = await supabase.rpc('get_user_word_list', {
         p_search: debouncedSearch,
       });
       if (error) throw new Error(error.message);
       return data ?? [];
     },
-    staleTime: 1000 * 60 * 2,
   });
 
   return { search, setSearch: handleSearchChange, ...query };

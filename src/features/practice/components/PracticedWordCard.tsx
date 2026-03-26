@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PracticedWord } from '../types';
+import { Link } from 'react-router-dom';
 
 interface PracticedWordCardProps {
   word: PracticedWord;
@@ -84,7 +85,7 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-[17px] font-bold text-[#1A1A1A]">{word.in_czech}</span>
-            <span className="rounded-md bg-[#F3F4F6] px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-[0.5px] text-[#6B7280]">
+            <span className="rounded-md bg-[#F3F4F6] px-1.5 py-0.5 text-[11px] tracking-[0.5px] text-[#6B7280]">
               {word.word_type}
             </span>
           </div>
@@ -104,13 +105,21 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
 
         {/* Mode rows */}
         <div className="mt-3 flex flex-col gap-2">
-          <ModeRow label="Vocabulary" status={word.sv_status} />
-          <ModeRow label="Understanding" status={word.cu_status} />
-          <ModeRow label="Form Recall" status={word.fr_status} />
+          <ModeRow label="Simple Vocabulary" status={word.sv_status} />
+          <ModeRow label="Case Logic" status={word.cu_status} />
+          <ModeRow label="Case Memory" status={word.fr_status} />
         </div>
 
         {/* Last practiced */}
-        <p className="mt-3 pb-3 text-[11px] text-[#9CA3AF]">Last practiced {lastPracticed}</p>
+        <p className="mt-3 pb-1 text-[11px] text-[#9CA3AF]">Last practiced {lastPracticed}</p>
+
+        <Link
+          className="flex items-center gap-1 w-auto pb-3 text-[11px] text-[#9CA3AF] hover:underline"
+          to={`/word/${word.root_word_id}`}
+        >
+          Go to word
+          <ExternalLink className="h-3 w-3" />
+        </Link>
       </div>
 
       {/* Expandable cases */}

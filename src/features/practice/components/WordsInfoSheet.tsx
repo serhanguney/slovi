@@ -13,7 +13,7 @@ const STATUS_ITEMS = [
     label: 'Known',
     style: 'bg-[#D1FAE5] text-[#059669]',
     description:
-      "You've answered this word correctly at least 10 times across all forms and modes. It's part of your active vocabulary.",
+      "You've answered this word correctly at least 3 times for all forms in Case Memory. It's part of your active vocabulary.",
   },
   {
     label: 'Learning',

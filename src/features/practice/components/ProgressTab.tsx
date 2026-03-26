@@ -6,9 +6,9 @@ import { supabase } from '@/supabase/client';
 
 function useLearnigCount() {
   return useQuery({
-    queryKey: ['practiced-words-count'],
+    queryKey: ['user-word-list-count'],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_practiced_words', { p_search: '' });
+      const { data, error } = await supabase.rpc('get_user_word_list', { p_search: '' });
       if (error) throw new Error(error.message);
       return (data ?? []).filter((w) => !w.is_known).length;
     },

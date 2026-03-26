@@ -22,11 +22,11 @@ import {
 import { WordFormRow } from '@/features/ui/word-form-row';
 import { ExpandableSection } from '@/features/ui/expandable-section';
 import { useBuildCaseStudySession } from '@/features/practice/hooks/useBuildCaseStudySession';
+import { useAddToPracticeBox } from '@/features/practice/hooks/useAddToPracticeBox';
 
 interface WordDetailProps {
   rootWordId: number;
   onClose: () => void;
-  onAddToVocabulary: (rootWordId: number) => void;
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -185,7 +185,7 @@ function buildSections(forms: WordForm[]) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetailProps) {
+export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
   const navigate = useNavigate();
   const { data, isLoading, error } = useWordDetails(rootWordId);
   const buildCaseStudy = useBuildCaseStudySession();
@@ -194,6 +194,8 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
     const cards = await buildCaseStudy.mutateAsync([rootWordId]);
     navigate('/practice/session', { state: { mode: 'case_study', cards } });
   };
+
+  const { mutate: addToPracticeBox, isPending: isAddingToBox } = useAddToPracticeBox();
 
   if (isLoading) {
     return (
@@ -246,10 +248,15 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
             </button>
             <button
               id="bt"
-              onClick={() => onAddToVocabulary(rootWordId)}
+              onClick={() => addToPracticeBox(rootWordId)}
+              disabled={isAddingToBox}
               className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
             >
-              <Plus className="h-4 w-4" />
+              {isAddingToBox ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
               Save
             </button>
           </div>
@@ -314,10 +321,15 @@ export function WordDetail({ rootWordId, onClose, onAddToVocabulary }: WordDetai
 
           {/* Save button */}
           <button
-            onClick={() => onAddToVocabulary(rootWordId)}
+            onClick={() => addToPracticeBox(rootWordId)}
+            disabled={isAddingToBox}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-[14px] font-semibold text-primary-foreground transition-colors hover:brightness-95"
           >
-            <Plus className="h-[18px] w-[18px]" />
+            {isAddingToBox ? (
+              <Loader2 className="h-[18px] w-[18px] animate-spin" />
+            ) : (
+              <Plus className="h-[18px] w-[18px]" />
+            )}
             Save to My Words
           </button>
 

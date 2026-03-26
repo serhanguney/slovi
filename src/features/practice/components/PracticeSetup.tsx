@@ -150,7 +150,7 @@ export function PracticeSetup() {
   };
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-2xl flex-1 flex-col">
+    <div className="mx-auto flex max-w-6xl min-h-0 w-full flex-1 flex-col">
       {/* Scrollable content */}
       <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto p-6 pb-2">
         {/* Mode section */}
@@ -158,12 +158,11 @@ export function PracticeSetup() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
             Mode
           </span>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid max-sm:grid-cols-2 grid-cols-3 gap-3">
             {MODES.map((mode) => {
               const isLocked = mode.id === 'form_recall' && formRecallLocked;
               return (
                 <ModeCard
-                  key={mode.id}
                   title={mode.title}
                   description={mode.description}
                   badge={mode.badge}
@@ -280,7 +279,7 @@ export function PracticeSetup() {
         <button
           onClick={handleStart}
           disabled={isPending}
-          className="flex h-[52px] w-full items-center justify-center rounded-[14px] bg-[#FFE59A] text-[16px] font-semibold text-[#000] transition-opacity disabled:opacity-60"
+          className="flex h-[52px] px-6 mx-auto items-center justify-center rounded-[14px] bg-[#FFE59A] text-[16px] font-semibold text-[#000] transition-opacity disabled:opacity-60"
         >
           {isPending ? 'Building session…' : 'Start Practice'}
         </button>

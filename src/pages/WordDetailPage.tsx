@@ -10,11 +10,7 @@ export function WordDetailPage() {
 
   return (
     <div className="flex min-h-[100dvh] flex-col px-4 py-4 md:px-10 md:py-8">
-      <WordDetail
-        rootWordId={rootWordId}
-        onClose={() => navigate(-1)}
-        onAddToVocabulary={() => {}}
-      />
+      <WordDetail rootWordId={rootWordId} onClose={() => navigate(-1)} />
     </div>
   );
 }

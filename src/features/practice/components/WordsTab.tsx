@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { usePracticedWords } from '../hooks/usePracticedWords';
 import { PracticedWordCard } from './PracticedWordCard';
 import { WordsInfoSheet } from './WordsInfoSheet';
+import { AddMissingPronounsButton } from './AddMissingPronounsButton';
 
 export function WordsTab() {
   const { search, setSearch, data: words = [], isLoading } = usePracticedWords();
@@ -15,9 +16,15 @@ export function WordsTab() {
       {/* Header */}
       <div className="shrink-0 px-4 pb-3 pt-5 md:px-6">
         <div className="flex items-center justify-between">
-          <span className="text-[15px] font-semibold text-[#1A1A1A]">
-            {isLoading ? '—' : words.length} {words.length === 1 ? 'word' : 'words'}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[15px] font-semibold text-[#1A1A1A]">
+              {isLoading ? '—' : words.length} {words.length === 1 ? 'word' : 'words'}
+            </span>
+            {/* Desktop: inline next to word count */}
+            <div className="hidden md:block">
+              <AddMissingPronounsButton />
+            </div>
+          </div>
           <button
             onClick={() => setShowInfo(true)}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white text-[#6B7280] transition-colors hover:bg-[#F9FAFB]"
@@ -25,6 +32,11 @@ export function WordsTab() {
           >
             <Info className="h-4 w-4" />
           </button>
+        </div>
+
+        {/* Mobile: underneath the word count row */}
+        <div className="mt-2 md:hidden">
+          <AddMissingPronounsButton />
         </div>
 
         {/* Search */}
