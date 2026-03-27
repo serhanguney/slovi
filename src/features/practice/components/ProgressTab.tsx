@@ -16,10 +16,10 @@ function useLearnigCount() {
   });
 }
 
-function barColor(score: number): string {
-  if (score >= 0.7) return '#16A34A';
-  if (score >= 0.2) return '#D97706';
-  return '#DC2626';
+function barColor(score: number) {
+  if (score >= 0.7) return 'bg-success/70';
+  if (score >= 0.2) return 'bg-warning/70';
+  return 'bg-destructive/70';
 }
 
 export function ProgressTab() {
@@ -30,61 +30,71 @@ export function ProgressTab() {
   const knownCount = knownWords.length;
   const reviewCount = knownWords.filter((w) => w.is_dusty).length;
 
+  const cards = [
+    {
+      label: 'Known',
+      description: 'A word is known when its accurately practiced in Case Memory mode.',
+      icon: <CircleCheck className="h-4.5 w-4.5 text-success" />,
+      count: knownCount,
+    },
+    {
+      label: 'Learning',
+      description: 'Words not yet reached the expected success in Case Memory mode',
+      icon: <BookOpen className="h-4.5 w-4.5 text-gray-500" />,
+      count: learningCount,
+    },
+    {
+      label: 'Review',
+      description: 'Known words not practiced in 90 days',
+      icon: <Clock3 className="h-4.5 w-4.5 text-warning" />,
+      count: reviewCount,
+    },
+  ];
+
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-6">
       <div className="flex flex-col gap-6">
         {/* Stat cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="flex flex-col gap-1.5 rounded-[12px] border border-[#E5E7EB] bg-white p-4">
-            <CircleCheck className="h-[18px] w-[18px] text-[#16A34A]" />
-            <span className="font-mono text-[24px] font-bold text-[#1A1A1A]">{knownCount}</span>
-            <span className="text-[12px] text-[#9CA3AF]">Known</span>
-            <span className="text-[11px] leading-snug text-[#C4C9D4]">
-              A word is known when its accurately practiced in Case Memory mode.
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5 rounded-[12px] border border-[#E5E7EB] bg-white p-4">
-            <BookOpen className="h-[18px] w-[18px] text-[#9CA3AF]" />
-            <span className="font-mono text-[24px] font-bold text-[#1A1A1A]">{learningCount}</span>
-            <span className="text-[12px] text-[#9CA3AF]">Learning</span>
-            <span className="text-[11px] leading-snug text-[#C4C9D4]">
-              Words not yet reached the expected success in Case Memory mode
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5 rounded-[12px] border border-[#E5E7EB] bg-white p-4">
-            <Clock3 className="h-[18px] w-[18px] text-[#D97706]" />
-            <span className="font-mono text-[24px] font-bold text-[#1A1A1A]">{reviewCount}</span>
-            <span className="text-[12px] text-[#9CA3AF]">Review</span>
-            <span className="text-[11px] leading-snug text-[#C4C9D4]">
-              Known words not practiced in 90 days
-            </span>
-          </div>
+          {cards.map((card) => (
+            <div
+              key={card.label}
+              className="flex flex-col gap-1.5 rounded-2xl border border-border bg-white p-4"
+            >
+              <div className="flex gap-2 items-center">
+                {card.icon}
+                <h3 className="font-mono text-2xl text-foreground">{card.count}</h3>
+              </div>
+              <p className="text-xs text-muted-foreground">{card.label}</p>
+              <p className="text-caption leading-snug text-[#C4C9D4]">{card.description}</p>
+            </div>
+          ))}
         </div>
 
         {/* Case mastery */}
         {caseProgress.length > 0 && (
           <div className="flex flex-col gap-4">
-            <span className="text-[11px] font-semibold uppercase tracking-[1px] text-[#9CA3AF]">
+            <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
               Case Mastery
             </span>
-            <div className="flex max-w-[500px] flex-col gap-3">
+            <div className="flex max-w-125 flex-col gap-3">
               {caseProgress.map((row) => {
                 const score = row.case_understanding * 0.3 + row.form_recall * 0.7;
                 const pct = Math.round(score * 100);
                 return (
                   <div key={row.case_name} className="flex items-center gap-3">
-                    <span className="w-[90px] shrink-0 text-[13px] font-medium capitalize text-[#1A1A1A]">
+                    <p className="w-22.5 shrink-0 text-label font-medium capitalize text-foreground">
                       {row.case_name}
-                    </span>
-                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#E5E7EB]">
+                    </p>
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%`, backgroundColor: barColor(score) }}
+                        className={`h-full rounded-full transition-all duration-500 ${barColor(score)}`}
+                        style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="w-8 shrink-0 text-right font-mono text-[12px] font-semibold text-[#1A1A1A]">
+                    <p className="w-8 shrink-0 text-right font-mono text-xs text-foreground">
                       {pct}%
-                    </span>
+                    </p>
                   </div>
                 );
               })}

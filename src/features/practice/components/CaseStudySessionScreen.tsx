@@ -28,8 +28,8 @@ function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptio
       disabled={disabled}
       className={cn(
         'flex h-[50px] w-full items-center gap-3 rounded-[14px] border-2 px-4 text-left transition-all',
-        state === 'idle' && 'border-[#E5E7EB] bg-white',
-        isSelected && 'border-[#1A1A1A] bg-white',
+        state === 'idle' && 'border-border bg-white',
+        isSelected && 'border-foreground bg-white',
         isCorrect && 'border-green-600 bg-green-50',
         isIncorrect && 'border-red-500 bg-red-50'
       )}
@@ -37,7 +37,7 @@ function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptio
       <span
         className={cn(
           'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          (state === 'idle' || isSelected) && 'bg-[#F3F4F6] text-[#6B7280]',
+          (state === 'idle' || isSelected) && 'bg-muted text-muted-foreground',
           isCorrect && 'bg-green-100 text-green-700',
           isIncorrect && 'bg-red-100 text-red-600'
         )}
@@ -47,8 +47,8 @@ function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptio
 
       <span
         className={cn(
-          'flex-1 text-[13px] font-semibold',
-          (state === 'idle' || isSelected) && 'text-[#1A1A1A]',
+          'flex-1 text-label font-semibold',
+          (state === 'idle' || isSelected) && 'text-foreground',
           isCorrect && 'text-green-700',
           isIncorrect && 'text-red-600'
         )}
@@ -58,10 +58,10 @@ function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptio
 
       <span className="shrink-0">
         {state === 'idle' && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#D1D5DB]" />
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border" />
         )}
         {isSelected && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#1A1A1A] bg-[#FFE59A]" />
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-foreground bg-primary" />
         )}
         {isCorrect && <CircleCheck className="h-5 w-5 text-green-600" />}
         {isIncorrect && <CircleX className="h-5 w-5 text-red-500" />}
@@ -120,11 +120,11 @@ function CaseStudyQuestionScreen({
       <div className="flex shrink-0 items-center justify-between px-4 py-3">
         <button
           onClick={onExit}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-[#6B7280] transition-colors hover:bg-[#F3F4F6]"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
         >
           <X className="h-4 w-4" />
         </button>
-        <span className="text-[13px] font-medium text-[#6B7280]">
+        <span className="text-label font-medium text-muted-foreground">
           {cardIndex + 1}/{total}
         </span>
         <div className="h-8 w-8" />
@@ -132,9 +132,9 @@ function CaseStudyQuestionScreen({
 
       {/* Progress bar */}
       <div className="shrink-0 px-4 pb-2">
-        <div className="h-[3px] w-full overflow-hidden rounded-full bg-[#E5E7EB]">
+        <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
           <div
-            className="h-full rounded-full bg-[#1A1A1A] transition-all duration-300"
+            className="h-full rounded-full bg-foreground transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -142,21 +142,21 @@ function CaseStudyQuestionScreen({
 
       {/* Question prompt */}
       <div className="shrink-0 px-4 pt-2">
-        <p className="flex flex-wrap items-center gap-2 text-[20px] text-[#1A1A1A]">
+        <p className="flex flex-wrap items-center gap-2 text-xl text-foreground">
           <span>What is the</span>
-          <span className="inline-flex items-center rounded-[8px] border border-[#E5E7EB] bg-white px-2 py-0.5 text-[18px] font-semibold text-[#1A1A1A]">
+          <span className="inline-flex items-center rounded-[8px] border border-border bg-white px-2 py-0.5 text-[18px] text-foreground">
             {card.correct_case}
           </span>
-          <span className="inline-flex items-center rounded-[8px] border border-[#E5E7EB] bg-white px-2 py-0.5 text-[18px] font-semibold text-[#1A1A1A]">
+          <span className="inline-flex items-center rounded-[8px] border border-border bg-white px-2 py-0.5 text-[18px] text-foreground">
             {card.plurality}
           </span>
           {card.gender && (
-            <span className="inline-flex items-center rounded-[8px] border border-[#E5E7EB] bg-white px-2 py-0.5 text-[18px] font-semibold text-[#1A1A1A]">
+            <span className="inline-flex items-center rounded-[8px] border border-border bg-white px-2 py-0.5 text-[18px] text-foreground">
               {card.gender}
             </span>
           )}
           <span>form of</span>
-          <span className="inline-flex items-center rounded-[8px] border border-[#E5E7EB] bg-white px-2 py-0.5 text-[18px] font-semibold text-[#1A1A1A]">
+          <span className="inline-flex items-center rounded-[8px] border border-border bg-white px-2 py-0.5 text-[18px] text-foreground">
             {card.base_form}
           </span>
           <span>?</span>
@@ -179,7 +179,9 @@ function CaseStudyQuestionScreen({
 
           {/* Explanation shown after submission */}
           {submitted && card.explanation && (
-            <p className="mt-3 text-[13px] leading-relaxed text-[#6B7280]">{card.explanation}</p>
+            <p className="mt-3 text-label leading-relaxed text-muted-foreground">
+              {card.explanation}
+            </p>
           )}
         </div>
       </div>
@@ -190,7 +192,7 @@ function CaseStudyQuestionScreen({
           <button
             onClick={handleContinue}
             disabled={!selectedOption}
-            className="flex h-[52px] w-full items-center justify-center rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-30"
+            className="flex h-[52px] w-full items-center justify-center rounded-[16px] bg-foreground text-base font-semibold text-white transition-opacity disabled:opacity-30"
           >
             Continue →
           </button>
@@ -198,7 +200,7 @@ function CaseStudyQuestionScreen({
           <button
             onClick={onNext}
             disabled={isRecording}
-            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-60"
+            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[16px] bg-foreground text-base font-semibold text-white transition-opacity disabled:opacity-60"
           >
             {isRecording ? (
               <Loader2 className="h-5 w-5 animate-spin" />
@@ -239,39 +241,39 @@ function CaseStudyCompleteScreen({
           </div>
         </div>
 
-        <h2 className="text-center text-[26px] font-bold text-[#1A1A1A]">Session Complete!</h2>
-        <p className="mt-2 text-center text-[14px] text-[#9CA3AF]">Great work on this session</p>
+        <h2 className="text-center text-[26px] font-bold text-foreground">Session Complete!</h2>
+        <p className="mt-2 text-center text-sm text-muted-foreground">Great work on this session</p>
 
-        <div className="my-6 h-px w-full bg-[#F3F4F6]" />
+        <div className="my-6 h-px w-full bg-muted" />
 
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col items-center gap-2 rounded-[14px] bg-green-50 p-4">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
               <CircleCheck className="h-4 w-4 text-green-600" />
             </div>
-            <span className="text-[22px] font-bold text-[#1A1A1A]">{correctCount}</span>
-            <span className="text-[12px] text-green-600">Correct</span>
+            <span className="text-[22px] font-bold text-foreground">{correctCount}</span>
+            <span className="text-xs text-green-600">Correct</span>
           </div>
 
           <div className="flex flex-col items-center gap-2 rounded-[14px] bg-red-50 p-4">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
               <CircleX className="h-4 w-4 text-red-500" />
             </div>
-            <span className="text-[22px] font-bold text-[#1A1A1A]">{incorrectCount}</span>
-            <span className="text-[12px] text-red-500">Incorrect</span>
+            <span className="text-[22px] font-bold text-foreground">{incorrectCount}</span>
+            <span className="text-xs text-red-500">Incorrect</span>
           </div>
         </div>
 
-        <div className="my-6 h-px w-full bg-[#F3F4F6]" />
+        <div className="my-6 h-px w-full bg-muted" />
 
         <div className="flex items-center justify-between">
-          <span className="text-[13px] text-[#6B7280]">Session accuracy</span>
-          <span className="text-[15px] font-semibold text-[#1A1A1A]">{sessionPct}%</span>
+          <span className="text-label text-muted-foreground">Session accuracy</span>
+          <span className="text-sm font-semibold text-foreground">{sessionPct}%</span>
         </div>
 
         <button
           onClick={onDone}
-          className="mt-6 flex h-[52px] w-full items-center justify-center rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity hover:opacity-90"
+          className="mt-6 flex h-[52px] w-full items-center justify-center rounded-[16px] bg-foreground text-base font-semibold text-white transition-opacity hover:opacity-90"
         >
           Done →
         </button>
@@ -324,7 +326,7 @@ export function CaseStudySessionScreen({ cards }: CaseStudySessionScreenProps) {
 
   if (phase === 'complete') {
     return (
-      <div className="flex h-[100dvh] flex-col items-center bg-[#FEF7EE] md:justify-center">
+      <div className="flex h-[100dvh] flex-col items-center bg-warning-subtle md:justify-center">
         <CaseStudyCompleteScreen
           correctCount={correctCount}
           incorrectCount={incorrectCount}

@@ -29,12 +29,12 @@ function BlockWordContent({
       <div className="flex shrink-0 items-center px-6 py-4">
         <button
           onClick={onClose}
-          className="flex h-5 w-5 items-center justify-center text-[#666666]"
+          className="flex h-5 w-5 items-center justify-center text-muted-foreground"
         >
           <X className="h-5 w-5" />
         </button>
         <div className="flex-1" />
-        <span className="text-[18px] font-bold text-[#1A1A1A]">Block Word</span>
+        <span className="text-[18px] font-bold text-foreground">Block Word</span>
         <div className="flex-1" />
         <div className="h-5 w-5" />
       </div>
@@ -52,12 +52,12 @@ function BlockWordContent({
         </div>
 
         {/* Explanation */}
-        <p className="text-[14px] leading-[1.5] text-[#4B5563]">
+        <p className="text-sm leading-[1.5] text-muted-foreground">
           Blocking <strong>&ldquo;{word}&rdquo;</strong> will prevent this word from appearing in
           all practice modules. This affects all forms and cases of the word.
         </p>
 
-        <p className="text-[13px] font-medium text-[#666666]">
+        <p className="text-label font-medium text-muted-foreground">
           You can unblock words anytime from Practice → Words.
         </p>
 
@@ -66,21 +66,21 @@ function BlockWordContent({
 
         {/* What happens */}
         <div className="flex flex-col gap-3">
-          <span className="text-[14px] font-semibold text-[#1A1A1A]">
+          <span className="text-sm font-semibold text-foreground">
             What happens when you block a word
           </span>
           {WHAT_HAPPENS.map((text) => (
             <div key={text} className="flex gap-2.5">
-              <span className="text-[14px] text-[#666666]">•</span>
-              <p className="text-[14px] leading-[1.5] text-[#4B5563]">{text}</p>
+              <span className="text-sm text-muted-foreground">•</span>
+              <p className="text-sm leading-[1.5] text-muted-foreground">{text}</p>
             </div>
           ))}
         </div>
 
         {/* Info note */}
         <div className="flex gap-2.5 rounded-[12px] bg-[#DFDFE6] px-3.5 py-3">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#000066]" />
-          <p className="text-[13px] leading-[1.5] text-[#000066]">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-foreground" />
+          <p className="text-label leading-[1.5] text-foreground">
             Tip: If you&apos;re struggling with a word, consider using the Study action instead to
             review all its forms before blocking it.
           </p>
@@ -92,7 +92,7 @@ function BlockWordContent({
         <button
           onClick={onConfirm}
           disabled={isPending}
-          className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[14px] bg-[#D93C15] text-[16px] font-semibold text-white transition-opacity disabled:opacity-60"
+          className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[14px] bg-destructive text-base font-semibold text-white transition-opacity disabled:opacity-60"
         >
           {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Block Word'}
         </button>

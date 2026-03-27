@@ -82,10 +82,7 @@ function renderFormRows(
     const isLast = index === arr.length - 1;
     const example = examplesByFormId?.get(form.id);
     return (
-      <div
-        key={form.id}
-        className={cn((!isLast || trailingDivider) && 'border-b border-[#F3F4F6]')}
-      >
+      <div key={form.id} className={cn((!isLast || trailingDivider) && 'border-b border-border')}>
         <WordFormRow
           label={form.form_type.name.toUpperCase()}
           form={form.form_in_czech}
@@ -119,8 +116,8 @@ function WordTypeTags({
   size?: 'sm' | 'md';
 }) {
   const base = 'rounded-xl font-semibold text-primary-foreground bg-primary';
-  const secondary = 'rounded-xl border border-[#E5E7EB] font-medium text-[#6B7280]';
-  const padding = size === 'md' ? 'px-3.5 py-1.5 text-[13px]' : 'px-3 py-1 text-xs';
+  const secondary = 'rounded-xl border border-border font-medium text-muted-foreground';
+  const padding = size === 'md' ? 'px-3.5 py-1.5 text-label' : 'px-3 py-1 text-xs';
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -227,17 +224,17 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-[#F3F4F6]"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
-            <h1 className="text-[28px] font-bold leading-tight">{rootWord.in_czech}</h1>
+            <h1 className="text-title font-bold leading-tight">{rootWord.in_czech}</h1>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleStudy}
               disabled={buildCaseStudy.isPending}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white text-[#6B7280] transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
               aria-label="Study this word"
             >
               {buildCaseStudy.isPending ? (
@@ -250,7 +247,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
               id="bt"
               onClick={() => addToPracticeBox(rootWordId)}
               disabled={isAddingToBox}
-              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
+              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-label font-semibold text-primary-foreground"
             >
               {isAddingToBox ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -264,21 +261,21 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
 
         {/* Translation */}
         <div className="flex flex-col gap-2.5 px-6 py-4">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-muted-foreground">
+          <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
             Translation
           </span>
-          <p className="text-[20px] font-medium leading-snug">{rootWord.in_english}</p>
+          <p className="text-xl font-medium leading-snug">{rootWord.in_english}</p>
           <WordTypeTags wordType={rootWord.word_type} wordAspect={rootWord.word_aspect} />
           {rootWord.note && (
             <p className="text-sm leading-relaxed text-muted-foreground">{rootWord.note}</p>
           )}
         </div>
 
-        <div className="h-px bg-[#F3F4F6]" />
+        <div className="h-px bg-muted" />
 
         {/* Word forms */}
         <div className="flex flex-col gap-4 px-6 py-4">
-          <h2 className="text-[20px] font-bold">Word Forms</h2>
+          <h2 className="text-xl font-bold">Word Forms</h2>
           <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
         </div>
       </div>
@@ -287,17 +284,17 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
       {/* min-h-0 on every node in the chain is what allows overflow-y-auto to work */}
       <div className="hidden min-h-0 md:flex md:flex-1">
         {/* Left column — stays fixed while right scrolls */}
-        <div className="flex w-[400px] shrink-0 flex-col gap-6 border-r border-[#F3F4F6] pr-10">
+        <div className="flex w-[400px] shrink-0 flex-col gap-6 border-r border-border pr-10">
           {/* Word hero */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-[#F3F4F6]"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
-              <h1 className="text-[40px] font-extrabold leading-tight">{rootWord.in_czech}</h1>
+              <h1 className="text-display font-extrabold leading-tight">{rootWord.in_czech}</h1>
             </div>
             <WordTypeTags
               wordType={rootWord.word_type}
@@ -307,8 +304,8 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           </div>
 
           {/* Translation card */}
-          <div className="flex flex-col gap-2 rounded-2xl border border-[#F3F4F6] bg-[#F9FAFB] p-6">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-muted-foreground">
+          <div className="flex flex-col gap-2 rounded-2xl border border-border bg-muted p-6">
+            <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
               Translation
             </span>
             <p className="text-2xl font-medium leading-snug">{rootWord.in_english}</p>
@@ -323,7 +320,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           <button
             onClick={() => addToPracticeBox(rootWordId)}
             disabled={isAddingToBox}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-[14px] font-semibold text-primary-foreground transition-colors hover:brightness-95"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-colors hover:brightness-95"
           >
             {isAddingToBox ? (
               <Loader2 className="h-[18px] w-[18px] animate-spin" />
@@ -337,7 +334,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           <button
             onClick={handleStudy}
             disabled={buildCaseStudy.isPending}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E5E7EB] py-3 text-[14px] font-semibold text-[#1A1A1A] transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
           >
             {buildCaseStudy.isPending ? (
               <Loader2 className="h-[18px] w-[18px] animate-spin" />

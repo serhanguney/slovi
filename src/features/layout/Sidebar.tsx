@@ -18,14 +18,14 @@ interface SidebarProps {
 
 export function Sidebar({ activeTab, onTabChange, onSignOut }: SidebarProps) {
   return (
-    <aside className="hidden w-[240px] shrink-0 flex-col border-r border-[#F3F4F6] bg-[#FAFAFA] px-4 py-6 md:flex">
+    <aside className="hidden w-[240px] shrink-0 flex-col border-r border-border bg-muted px-4 py-6 md:flex">
       {/* Logo */}
       <div className="mb-6 px-2 pb-6">
         <img src={logoColored} alt="slovi" className="h-10 w-auto" />
       </div>
 
       {/* Menu section label */}
-      <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-[0.8px] text-muted-foreground">
+      <p className="mb-1 px-3 text-caption font-semibold uppercase tracking-label text-muted-foreground">
         Menu
       </p>
 
@@ -41,7 +41,7 @@ export function Sidebar({ activeTab, onTabChange, onSignOut }: SidebarProps) {
                 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors',
                 isActive
                   ? 'bg-primary font-semibold text-primary-foreground'
-                  : 'font-medium text-[#6B7280] hover:bg-[#F3F4F6] hover:text-foreground'
+                  : 'font-medium text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />
@@ -55,7 +55,7 @@ export function Sidebar({ activeTab, onTabChange, onSignOut }: SidebarProps) {
       <div className="mt-auto">
         <button
           onClick={onSignOut}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#F3F4F6] hover:text-foreground"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <LogOut className="h-5 w-5 shrink-0" />
           Sign out

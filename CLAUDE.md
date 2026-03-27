@@ -47,6 +47,15 @@ Uses PostgreSQL via Supabase with JSON columns for flexible storage:
 
 do not type cast
 do not disable eslint warnings
+use `type` not `interface` for all TypeScript type definitions
+use `const Component = () => {}` for all React components, never `function Component() {}`
+use arrow functions instead of `function() {}`
+
+## Styling
+
+- **Theme tokens only**: Never use hardcoded values in Tailwind classes. Always use semantic theme tokens defined in `src/index.css` — e.g. `text-foreground` not `text-[#1A1A1A]`, `bg-primary` not `bg-[#FFE59A]`, `text-caption` not `text-[11px]`, `gap-2.5` not `gap-[10px]`
+- **Canonical classes**: Follow Tailwind IntelliSense suggestions — prefer named utilities over arbitrary values whenever an equivalent exists (e.g. `h-13` not `h-[52px]`, `rounded-2xl` not `rounded-[12px]`, `h-dvh` not `h-[100dvh]`)
+- **Semantic HTML**: Use the correct HTML element for the content — `<p>` for paragraphs, `<h1>`–`<h3>` for headings, `<strong>` for bold emphasis, `<em>` for italic emphasis, `<button>` for actions, `<a>` for navigation. Do not use `<span>` or `<div>` where a more specific element exists
 
 ## Documentation
 

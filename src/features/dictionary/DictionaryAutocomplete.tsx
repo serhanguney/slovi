@@ -71,8 +71,8 @@ export function DictionaryAutocomplete({
           showTrigger={false}
           className={
             variant === 'lg'
-              ? 'h-auto w-full rounded-[28px] [&_input]:h-auto [&_input]:py-[14px] [&_input]:md:text-[15px]'
-              : 'w-full rounded-[20px]'
+              ? 'h-auto w-full rounded-[28px] [&_input]:h-auto [&_input]:py-3.5 [&_input]:md:text-[15px]'
+              : 'w-full rounded-4xl'
           }
         >
           <InputGroupAddon align="inline-start" className={variant === 'lg' ? 'pl-5' : undefined}>

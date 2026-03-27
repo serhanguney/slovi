@@ -20,9 +20,9 @@ function StatusPill({ status }: { status: string | null }) {
   if (!isRetentionStatus(status)) return null;
 
   const styles: Record<RetentionStatus, string> = {
-    fresh: 'bg-[#DCFCE7] text-[#16A34A]',
-    stable: 'bg-[#FEF9C3] text-[#A16207]',
-    fading: 'bg-[#FEE2E2] text-[#DC2626]',
+    fresh: 'bg-success-subtle text-success',
+    stable: 'bg-warning-subtle text-warning',
+    fading: 'bg-destructive-subtle text-destructive',
   };
 
   const labels: Record<RetentionStatus, string> = {
@@ -32,9 +32,7 @@ function StatusPill({ status }: { status: string | null }) {
   };
 
   return (
-    <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-semibold', styles[status])}>
-      {labels[status]}
-    </span>
+    <span className={cn('rounded-full px-2 py-0.5 text-xs', styles[status])}>{labels[status]}</span>
   );
 }
 
@@ -51,13 +49,13 @@ function ModeRow({ label, status }: ModeRowProps) {
   return (
     <div className="flex items-center gap-2">
       {practiced ? (
-        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#D1FAE5]">
-          <Check className="h-2.5 w-2.5 text-[#059669]" />
+        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success-subtle">
+          <Check className="h-2.5 w-2.5 text-success" />
         </div>
       ) : (
-        <div className="h-4 w-4 shrink-0 rounded-full border border-[#E5E7EB]" />
+        <div className="h-4 w-4 shrink-0 rounded-full border border-border" />
       )}
-      <span className="flex-1 text-[13px] text-[#374151]">{label}</span>
+      <span className="flex-1 text-label text-foreground">{label}</span>
       <StatusPill status={status} />
     </div>
   );
@@ -79,29 +77,29 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
     : '—';
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white">
+    <div className="overflow-hidden rounded-2xl border border-border bg-white">
       {/* Header */}
       <div className="px-4 pt-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-[17px] font-bold text-[#1A1A1A]">{word.in_czech}</span>
-            <span className="rounded-md bg-[#F3F4F6] px-1.5 py-0.5 text-[11px] tracking-[0.5px] text-[#6B7280]">
+            <span className="text-[17px] font-bold text-foreground">{word.in_czech}</span>
+            <span className="rounded-md bg-muted px-1.5 py-0.5 text-caption tracking-body text-muted-foreground">
               {word.word_type}
             </span>
           </div>
           {word.is_known ? (
-            <span className="shrink-0 rounded-full bg-[#D1FAE5] px-2.5 py-0.5 text-[11px] font-semibold text-[#059669]">
+            <span className="shrink-0 rounded-full bg-success-subtle px-2.5 py-0.5 text-caption font-semibold text-success">
               Known
             </span>
           ) : (
-            <span className="shrink-0 rounded-full bg-[#F3F4F6] px-2.5 py-0.5 text-[11px] font-semibold text-[#6B7280]">
+            <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-caption font-semibold text-muted-foreground">
               Learning
             </span>
           )}
         </div>
 
         {/* Translation */}
-        <p className="mt-1 text-[13px] text-[#6B7280]">{word.in_english}</p>
+        <p className="mt-1 text-label text-muted-foreground">{word.in_english}</p>
 
         {/* Mode rows */}
         <div className="mt-3 flex flex-col gap-2">
@@ -111,10 +109,12 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
         </div>
 
         {/* Last practiced */}
-        <p className="mt-3 pb-1 text-[11px] text-[#9CA3AF]">Last practiced {lastPracticed}</p>
+        <p className="mt-3 pb-1 text-caption text-muted-foreground">
+          Last practiced {lastPracticed}
+        </p>
 
         <Link
-          className="flex items-center gap-1 w-auto pb-3 text-[11px] text-[#9CA3AF] hover:underline"
+          className="flex items-center gap-1 w-auto pb-3 text-caption text-muted-foreground hover:underline"
           to={`/word/${word.root_word_id}`}
         >
           Go to word
@@ -125,17 +125,17 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
       {/* Expandable cases */}
       {hasCases && (
         <>
-          <div className="border-t border-[#F3F4F6]" />
+          <div className="border-t border-border" />
 
           {expanded && (
             <div className="px-4 py-3">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.5px] text-[#9CA3AF]">
+              <p className="mb-2 text-caption font-semibold uppercase tracking-body text-muted-foreground">
                 Practiced cases
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {word.practiced_cases.map((c) => (
-                  <div key={c} className="flex items-center gap-1 text-[12px] text-[#374151]">
-                    <Check className="h-3 w-3 text-[#059669]" />
+                  <div key={c} className="flex items-center gap-1 text-xs text-foreground">
+                    <Check className="h-3 w-3 text-success" />
                     <span>{c}</span>
                   </div>
                 ))}
@@ -145,7 +145,7 @@ export function PracticedWordCard({ word }: PracticedWordCardProps) {
 
           <button
             onClick={() => setExpanded((prev) => !prev)}
-            className="flex w-full items-center justify-center gap-1.5 border-t border-[#F3F4F6] px-4 py-2.5 text-[13px] font-semibold text-[#374151] transition-colors hover:bg-black/[0.03]"
+            className="flex w-full items-center justify-center gap-1.5 border-t border-border px-4 py-2.5 text-label font-semibold text-foreground transition-colors hover:bg-black/[0.03]"
           >
             {expanded ? 'See less' : 'See more'}
             <ChevronDown

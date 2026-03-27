@@ -52,18 +52,18 @@ function ModeCard({
       disabled={disabled}
       className={cn(
         'flex w-full flex-col justify-between rounded-[14px] bg-white p-4 text-left transition-all',
-        lockedMessage ? 'h-[160px]' : 'h-[140px]',
-        selected ? 'border-2 border-[#1A1A1A]' : 'border border-[#E5E7EB]',
+        lockedMessage ? 'h-40' : 'h-35',
+        selected ? 'border-2 border-foreground' : 'border border-border',
         disabled && 'cursor-not-allowed opacity-50'
       )}
     >
-      <span className="text-[14px] font-bold text-[#1A1A1A]">{title}</span>
-      <span className="text-[12px] leading-[1.4] text-[#9CA3AF]">{description}</span>
+      <span className="text-sm font-bold text-foreground">{title}</span>
+      <span className="text-xs leading-[1.4] text-muted-foreground">{description}</span>
       {lockedMessage && (
-        <span className="text-[11px] leading-[1.4] text-[#F59E0B]">{lockedMessage}</span>
+        <span className="text-caption leading-[1.4] text-warning">{lockedMessage}</span>
       )}
       <span
-        className="self-start rounded-[10px] px-2 py-[3px] text-[11px] font-semibold"
+        className="self-start rounded-[10px] px-2 py-0.75 text-caption font-semibold"
         style={{ color: badgeColor, backgroundColor: badgeBg }}
       >
         {badge}
@@ -154,8 +154,8 @@ export function PracticeSetup() {
       {/* Scrollable content */}
       <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto p-6 pb-2">
         {/* Mode section */}
-        <div className="flex flex-col gap-[10px]">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+        <div className="flex flex-col gap-2.5">
+          <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
             Mode
           </span>
           <div className="grid max-sm:grid-cols-2 grid-cols-3 gap-3">
@@ -183,9 +183,9 @@ export function PracticeSetup() {
         </div>
 
         {/* Word type section */}
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between md:justify-start gap-1.5">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+            <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
               Word Type
             </span>
             {selectedMode === 'form_recall' &&
@@ -204,15 +204,15 @@ export function PracticeSetup() {
                   onClick={() => !unavailable && setSelectedWordType(wt.id)}
                   disabled={unavailable}
                   className={cn(
-                    'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
+                    'flex flex-col gap-0.5 rounded-2xl border p-3 text-left transition-all md:min-w-30',
                     selectedWordType === wt.id
-                      ? 'border-2 border-[#1A1A1A]'
-                      : 'border border-[#E5E7EB]',
+                      ? 'border-2 border-foreground'
+                      : 'border border-border',
                     unavailable && 'cursor-not-allowed opacity-35'
                   )}
                 >
-                  <span className="text-[13px] font-semibold text-[#1A1A1A]">{wt.label}</span>
-                  <span className="text-[11px] text-[#9CA3AF]">{wt.examples}</span>
+                  <span className="text-label font-semibold text-foreground">{wt.label}</span>
+                  <span className="text-caption text-muted-foreground">{wt.examples}</span>
                 </button>
               );
             })}
@@ -222,17 +222,17 @@ export function PracticeSetup() {
         {/* Case type section */}
         <div
           className={cn(
-            'flex flex-col gap-[10px]',
+            'flex flex-col gap-2.5',
             selectedMode !== 'form_recall' && 'opacity-40 pointer-events-none'
           )}
         >
           <div className="flex items-center justify-between gap-1.5 md:justify-start">
             <div className="flex gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.8px] text-[#9CA3AF]">
+              <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
                 Case
               </span>
               {selectedMode !== 'form_recall' && (
-                <span className="text-[11px] text-[#9CA3AF]">
+                <span className="text-caption text-muted-foreground">
                   available only for Case Memory mode
                 </span>
               )}
@@ -253,15 +253,13 @@ export function PracticeSetup() {
                   onClick={() => !unavailable && setSelectedScope(ct.id)}
                   disabled={unavailable || selectedMode !== 'form_recall'}
                   className={cn(
-                    'flex flex-col gap-[2px] rounded-[12px] border p-3 text-left transition-all md:min-w-[120px]',
-                    selectedScope === ct.id
-                      ? 'border-2 border-[#1A1A1A]'
-                      : 'border border-[#E5E7EB]',
+                    'flex flex-col gap-0.5 rounded-2xl border p-3 text-left transition-all md:min-w-30',
+                    selectedScope === ct.id ? 'border-2 border-foreground' : 'border border-border',
                     unavailable && 'cursor-not-allowed opacity-35'
                   )}
                 >
-                  <span className="text-[13px] font-semibold text-[#1A1A1A]">{ct.label}</span>
-                  <span className="text-[11px] text-[#9CA3AF]">{ct.prepositions}</span>
+                  <span className="text-label font-semibold text-foreground">{ct.label}</span>
+                  <span className="text-caption text-muted-foreground">{ct.prepositions}</span>
                 </button>
               );
             })}
@@ -272,14 +270,14 @@ export function PracticeSetup() {
       {/* Sticky footer — always visible at the bottom */}
       <div className="shrink-0 p-6 pt-4">
         {pinnedCount > 0 && (
-          <p className="mb-3 text-center text-[12px] text-[#9CA3AF]">
+          <p className="mb-3 text-center text-xs text-muted-foreground">
             {pinnedCount} pinned {pinnedCount === 1 ? 'word' : 'words'} queued
           </p>
         )}
         <button
           onClick={handleStart}
           disabled={isPending}
-          className="flex h-[52px] px-6 mx-auto items-center justify-center rounded-[14px] bg-[#FFE59A] text-[16px] font-semibold text-[#000] transition-opacity disabled:opacity-60"
+          className="flex h-13 px-6 mx-auto items-center justify-center rounded-[14px] bg-primary text-base font-semibold text-primary-foreground transition-opacity disabled:opacity-60"
         >
           {isPending ? 'Building session…' : 'Start Practice'}
         </button>

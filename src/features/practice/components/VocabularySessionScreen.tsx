@@ -43,9 +43,9 @@ function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOpt
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex h-[50px] w-full items-center gap-3 rounded-[14px] border-2 px-4 text-left transition-all',
-        state === 'idle' && 'border-[#E5E7EB] bg-white',
-        isSelected && 'border-[#1A1A1A] bg-white',
+        'flex h-12.5 w-full items-center gap-3 rounded-[14px] border-2 px-4 text-left transition-all',
+        state === 'idle' && 'border-border bg-white',
+        isSelected && 'border-foreground bg-white',
         isCorrect && 'border-green-600 bg-green-50',
         isIncorrect && 'border-red-500 bg-red-50'
       )}
@@ -53,7 +53,7 @@ function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOpt
       <span
         className={cn(
           'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          (state === 'idle' || isSelected) && 'bg-[#F3F4F6] text-[#6B7280]',
+          (state === 'idle' || isSelected) && 'bg-muted text-muted-foreground',
           isCorrect && 'bg-green-100 text-green-700',
           isIncorrect && 'bg-red-100 text-red-600'
         )}
@@ -63,8 +63,8 @@ function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOpt
 
       <span
         className={cn(
-          'flex-1 text-[13px] font-semibold',
-          (state === 'idle' || isSelected) && 'text-[#1A1A1A]',
+          'flex-1 text-label font-semibold',
+          (state === 'idle' || isSelected) && 'text-foreground',
           isCorrect && 'text-green-700',
           isIncorrect && 'text-red-600'
         )}
@@ -74,10 +74,10 @@ function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOpt
 
       <span className="shrink-0">
         {state === 'idle' && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#D1D5DB]" />
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border" />
         )}
         {isSelected && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#1A1A1A] bg-[#FFE59A]" />
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-foreground bg-primary" />
         )}
         {isCorrect && <CircleCheck className="h-5 w-5 text-green-600" />}
         {isIncorrect && <CircleX className="h-5 w-5 text-red-500" />}
@@ -141,11 +141,11 @@ function QuestionScreen({
       <div className="flex shrink-0 items-center justify-between px-4 py-3">
         <button
           onClick={onExit}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-[#6B7280] transition-colors hover:bg-[#F3F4F6]"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
         >
           <X className="h-4 w-4" />
         </button>
-        <span className="text-[13px] font-medium text-[#6B7280]">
+        <span className="text-label font-medium text-muted-foreground">
           {cardIndex + 1}/{total}
         </span>
         <div className="h-8 w-8" />
@@ -153,9 +153,9 @@ function QuestionScreen({
 
       {/* Progress bar */}
       <div className="shrink-0 px-4 pb-2">
-        <div className="h-[3px] w-full overflow-hidden rounded-full bg-[#E5E7EB]">
+        <div className="h-0.75 w-full overflow-hidden rounded-full bg-border">
           <div
-            className="h-full rounded-full bg-[#1A1A1A] transition-all duration-300"
+            className="h-full rounded-full bg-foreground transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -177,9 +177,9 @@ function QuestionScreen({
             key={label}
             onClick={onClick}
             aria-label={label}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-[#666666] transition-colors hover:bg-[#F3F4F6]"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CBCCC9] bg-white text-muted-foreground transition-colors hover:bg-muted"
           >
-            <Icon className="h-[18px] w-[18px]" />
+            <Icon className="h-4.5 w-4.5" />
           </button>
         ))}
       </ActionRowsContainer>
@@ -207,7 +207,7 @@ function QuestionScreen({
           <button
             onClick={handleContinue}
             disabled={!selectedOption}
-            className="flex h-[52px] w-full items-center justify-center rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-30"
+            className="flex h-13 w-full items-center justify-center rounded-3xl bg-foreground text-base font-semibold text-white transition-opacity disabled:opacity-30"
           >
             Continue →
           </button>
@@ -215,7 +215,7 @@ function QuestionScreen({
           <button
             onClick={onNext}
             disabled={isRecording}
-            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[16px] bg-[#1A1A1A] text-[16px] font-semibold text-white transition-opacity disabled:opacity-60"
+            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[16px] bg-foreground text-base font-semibold text-white transition-opacity disabled:opacity-60"
           >
             {isRecording ? (
               <Loader2 className="h-5 w-5 animate-spin" />
@@ -299,7 +299,7 @@ export function VocabularySessionScreen({ cards }: VocabularySessionScreenProps)
 
   if (phase === 'complete') {
     return (
-      <div className="flex h-[100dvh] flex-col items-center bg-[#FEF7EE] md:justify-center">
+      <div className="flex h-dvh flex-col items-center bg-warning-subtle md:justify-center">
         <CompleteScreen
           correctCount={correctCount}
           incorrectCount={incorrectCount}

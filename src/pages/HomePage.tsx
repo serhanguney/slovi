@@ -5,6 +5,7 @@ import { DictionaryAutocomplete } from '@/features/dictionary/DictionaryAutocomp
 import type { AppShellContext } from '@/features/layout/AppShell';
 import type { NavTab } from '@/features/layout/nav.types';
 import type { SearchResult } from '@/features/dictionary/hooks/useDictionarySearch';
+import { useGetRootWords } from '@/features/dictionary/hooks/useGetRootWords';
 
 export function HomePage() {
   const { user, signOut } = useAuth();
@@ -31,14 +32,18 @@ export function HomePage() {
 // ── Tab content ───────────────────────────────────────────────────────────────
 
 function DictionaryTab({ onWordSelect }: { onWordSelect: (result: SearchResult) => void }) {
+  const { data: rootWords, isLoading: isLoadingRootWords } = useGetRootWords();
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4">
-      <div className="flex w-full max-w-[480px] flex-col items-center gap-8 text-center">
+      <div className="flex w-full max-w-120 flex-col items-center gap-6 text-center">
         <div>
-          <h1 className="text-[26px] font-bold text-foreground md:text-[32px]">Hello</h1>
+          <h1 className="text-xl font-bold text-foreground md:text-heading">Hello</h1>
         </div>
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-2">
           <DictionaryAutocomplete onSelect={onWordSelect} variant="lg" />
+          <p className="text-sm text-muted-foreground">
+            Slovi currently has {isLoadingRootWords ? '...' : (rootWords?.length ?? 0)} words
+          </p>
         </div>
       </div>
     </div>
@@ -68,19 +73,19 @@ interface MyAccountTabProps {
 function MyAccountTab({ user, onSignOut }: MyAccountTabProps) {
   return (
     <div className="flex flex-1 flex-col px-4 py-8 md:px-10">
-      <h2 className="text-[20px] font-bold text-foreground">My Account</h2>
+      <h2 className="text-xl font-bold text-foreground">My Account</h2>
 
-      <div className="mt-6 rounded-2xl border border-[#F3F4F6] bg-white p-5">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.8px] text-muted-foreground">
+      <div className="mt-6 rounded-2xl border border-border bg-white p-5">
+        <p className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
           Email
         </p>
-        <p className="mt-1 text-[15px] text-foreground">{user?.email ?? '—'}</p>
+        <p className="mt-1 text-sm text-foreground">{user?.email ?? '—'}</p>
       </div>
 
       <div className="mt-4">
         <button
           onClick={onSignOut}
-          className="flex items-center gap-2 rounded-2xl border border-[#F3F4F6] bg-white px-5 py-3.5 text-[15px] font-medium text-[#EF4444] transition-colors hover:bg-[#FEF2F2]"
+          className="flex items-center gap-2 rounded-2xl border border-border bg-white px-5 py-3.5 text-sm font-medium text-destructive transition-colors hover:bg-[#FEF2F2]"
         >
           <LogOut className="h-4 w-4" />
           Sign out
