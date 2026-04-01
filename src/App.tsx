@@ -9,6 +9,7 @@ import { HomePage } from '@/pages/HomePage';
 import { PracticePage } from '@/pages/PracticePage';
 import { SessionPage } from '@/pages/SessionPage';
 import { WordDetailPage } from '@/pages/WordDetailPage';
+import { CaseStudyPage } from '@/pages/CaseStudyPage';
 import { AppShell } from '@/features/layout/AppShell';
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ function App() {
               </Route>
               <Route path="/practice/session" element={<SessionPage />} />
               <Route path="/word/:id" element={<WordDetailPage />} />
+              <Route path="/word/:id/practice/case_study" element={<CaseStudyPage />} />
             </Route>
 
             {/* Catch all - redirect to home */}

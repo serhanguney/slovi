@@ -21,7 +21,6 @@ import {
 } from '@/features/dictionary/hooks/useWordDetails';
 import { WordFormRow } from '@/features/ui/word-form-row';
 import { ExpandableSection } from '@/features/ui/expandable-section';
-import { useBuildCaseStudySession } from '@/features/practice/hooks/useBuildCaseStudySession';
 import { useAddToPracticeBox } from '@/features/practice/hooks/useAddToPracticeBox';
 
 interface WordDetailProps {
@@ -185,11 +184,8 @@ function buildSections(forms: WordForm[]) {
 export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
   const navigate = useNavigate();
   const { data, isLoading, error } = useWordDetails(rootWordId);
-  const buildCaseStudy = useBuildCaseStudySession();
-
-  const handleStudy = async () => {
-    const cards = await buildCaseStudy.mutateAsync([rootWordId]);
-    navigate('/practice/session', { state: { mode: 'case_study', cards } });
+  const handleStudy = () => {
+    navigate(`/word/${rootWordId}/practice/case_study`);
   };
 
   const { mutate: addToPracticeBox, isPending: isAddingToBox } = useAddToPracticeBox();
@@ -211,6 +207,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
   }
 
   const { rootWord, forms, examples } = data;
+  const isVerb = rootWord.word_type === 'verb';
   const sections = buildSections(forms);
   const examplesByFormId = buildExamplesMap(examples);
 
@@ -233,21 +230,17 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={handleStudy}
-              disabled={buildCaseStudy.isPending}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
+              disabled={isVerb}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-white text-muted-foreground transition-colors hover:bg-muted disabled:opacity-40"
               aria-label="Study this word"
             >
-              {buildCaseStudy.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <GraduationCap className="h-4 w-4" />
-              )}
+              <GraduationCap className="h-4 w-4" />
             </button>
             <button
               id="bt"
               onClick={() => addToPracticeBox(rootWordId)}
-              disabled={isAddingToBox}
-              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-label font-semibold text-primary-foreground"
+              disabled={isAddingToBox || isVerb}
+              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-label font-semibold text-primary-foreground disabled:opacity-40"
             >
               {isAddingToBox ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -319,8 +312,8 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           {/* Save button */}
           <button
             onClick={() => addToPracticeBox(rootWordId)}
-            disabled={isAddingToBox}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-colors hover:brightness-95"
+            disabled={isAddingToBox || isVerb}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-colors hover:brightness-95 disabled:opacity-40"
           >
             {isAddingToBox ? (
               <Loader2 className="h-[18px] w-[18px] animate-spin" />
@@ -333,14 +326,10 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
           {/* Study this word button */}
           <button
             onClick={handleStudy}
-            disabled={buildCaseStudy.isPending}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={isVerb}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-40"
           >
-            {buildCaseStudy.isPending ? (
-              <Loader2 className="h-[18px] w-[18px] animate-spin" />
-            ) : (
-              <GraduationCap className="h-[18px] w-[18px]" />
-            )}
+            <GraduationCap className="h-[18px] w-[18px]" />
             Study this word
           </button>
         </div>
