@@ -16,11 +16,12 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   useWordDetails,
-  type WordForm,
+  type FetchedWordForm,
   type ExampleSentence,
 } from '@/features/dictionary/hooks/useWordDetails';
 import { WordFormRow } from '@/features/ui/word-form-row';
 import { ExpandableSection } from '@/features/ui/expandable-section';
+import { CaseWordDetail } from '@/features/dictionary/CaseWordDetail';
 import { useAddToPracticeBox } from '@/features/practice/hooks/useAddToPracticeBox';
 
 interface WordDetailProps {
@@ -48,7 +49,7 @@ const PERSON_ORDINALS: Record<string, string> = { '1': '1st', '2': '2nd', '3': '
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatFormDescription(form: WordForm): string {
+function formatFormDescription(form: FetchedWordForm): string {
   const parts: string[] = [];
   if (form.person) parts.push(`${PERSON_ORDINALS[form.person] ?? form.person} Person`);
   if (form.gender) parts.push(form.gender);
@@ -73,7 +74,7 @@ function buildExamplesMap(examples: ExampleSentence[]): Map<number, ExampleEntry
  * `trailingDivider` adds border-b on the last row when expanded rows follow below.
  */
 function renderFormRows(
-  forms: WordForm[],
+  forms: FetchedWordForm[],
   trailingDivider = false,
   examplesByFormId?: Map<number, ExampleEntry>
 ) {
@@ -94,7 +95,7 @@ function renderFormRows(
   });
 }
 
-function sortForms(category: string, forms: WordForm[]): WordForm[] {
+function sortForms(category: string, forms: FetchedWordForm[]): FetchedWordForm[] {
   if (category !== 'tense') return forms;
   return [...forms].sort((a, b) => {
     const plurDiff = (PLURALITY_ORDER[a.plurality] ?? 99) - (PLURALITY_ORDER[b.plurality] ?? 99);
@@ -155,7 +156,7 @@ function WordFormSections({
 
 // ── Data preparation ─────────────────────────────────────────────────────────
 
-function buildSections(forms: WordForm[]) {
+function buildSections(forms: FetchedWordForm[]) {
   const grouped = forms.reduce(
     (acc, form) => {
       const category = form.form_type?.category || 'other';
@@ -163,7 +164,7 @@ function buildSections(forms: WordForm[]) {
       acc[category].push(form);
       return acc;
     },
-    {} as Record<string, WordForm[]>
+    {} as Record<string, FetchedWordForm[]>
   );
 
   return Object.entries(grouped).map(([category, categoryForms]) => {
@@ -208,6 +209,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
 
   const { rootWord, forms, examples } = data;
   const isVerb = rootWord.word_type === 'verb';
+  const isCaseBased = forms.some((f) => f.form_type.category === 'case');
   const sections = buildSections(forms);
   const examplesByFormId = buildExamplesMap(examples);
 
@@ -217,7 +219,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
       {/* ── MOBILE layout (< md) ────────────────────────────────────────── */}
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto md:hidden">
         {/* Header: back arrow + word title + save */}
-        <div className="flex items-center justify-between px-6 py-2">
+        <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
@@ -253,7 +255,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
         </div>
 
         {/* Translation */}
-        <div className="flex flex-col gap-2.5 px-6 py-4">
+        <div className="flex flex-col gap-2.5 px-2 py-4">
           <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
             Translation
           </span>
@@ -267,9 +269,13 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
         <div className="h-px bg-muted" />
 
         {/* Word forms */}
-        <div className="flex flex-col gap-4 px-6 py-4">
+        <div className="flex flex-col gap-4 px-2 py-4">
           <h2 className="text-xl font-bold">Word Forms</h2>
-          <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+          {isCaseBased ? (
+            <CaseWordDetail forms={forms} examples={examples} />
+          ) : (
+            <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+          )}
         </div>
       </div>
 
@@ -329,7 +335,7 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
             disabled={isVerb}
             className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-40"
           >
-            <GraduationCap className="h-[18px] w-[18px]" />
+            <GraduationCap className="h-4.5 w-4.5" />
             Study this word
           </button>
         </div>
@@ -337,7 +343,11 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
         {/* Right column — independently scrollable */}
         <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto pl-10 items-center">
           <h2 className="text-2xl font-bold">Word Forms</h2>
-          <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+          {isCaseBased ? (
+            <CaseWordDetail forms={forms} examples={examples} />
+          ) : (
+            <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+          )}
         </div>
       </div>
     </div>
