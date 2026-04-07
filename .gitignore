@@ -26,4 +26,4 @@ dist-ssr
 n8n-workflow.json
 projectSecrets.json
 
-supabase/
+database/
