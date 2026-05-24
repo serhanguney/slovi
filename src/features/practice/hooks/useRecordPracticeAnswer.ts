@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 import { recordAnswerResultSchema } from '../types';
 import type { PracticeMode } from '../types';
 

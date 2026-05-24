@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import * as R from 'remeda';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 import type { PracticedWord } from '../types';
 
 export function usePracticedWords() {

@@ -7,9 +7,9 @@ export const CaseStudyPage = () => {
   const { id } = useParams<{ id: string }>();
   const rootWordId = Number(id);
 
-  const { data: cards, isPending, isError } = useBuildCaseStudySession(rootWordId);
+  const { data: cards, isPending, isError, isFetching } = useBuildCaseStudySession(rootWordId);
 
-  if (isPending) {
+  if (isPending || isFetching) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />

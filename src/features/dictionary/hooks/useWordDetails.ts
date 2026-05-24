@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
-import type { FormType, WordForm, ExampleSentence, RootWord } from '@/supabase/types';
+import { supabase } from '@/api/client';
+import type { FormType, WordForm, ExampleSentence, RootWord } from '@/api/types';
 
-export type { ExampleSentence, RootWord } from '@/supabase/types';
+export type { ExampleSentence, RootWord } from '@/api/types';
 
 export type FetchedWordForm = WordForm & {
   form_type: FormType;

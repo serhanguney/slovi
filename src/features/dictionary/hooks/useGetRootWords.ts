@@ -1,4 +1,4 @@
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetRootWords = () => {

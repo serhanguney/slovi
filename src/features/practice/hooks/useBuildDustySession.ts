@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 
 export function useBuildDustySession() {
   return useMutation({

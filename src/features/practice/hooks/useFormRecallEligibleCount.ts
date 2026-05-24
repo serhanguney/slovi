@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 
 export type FormRecallEligibility = { scope: string; word_type: string; eligible_count: number }[];
 

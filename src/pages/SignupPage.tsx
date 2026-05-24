@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/features/ui/card';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 
 export function SignupPage() {
   const [email, setEmail] = useState('');

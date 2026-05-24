@@ -27,3 +27,4 @@ n8n-workflow.json
 projectSecrets.json
 
 database/
+supabase

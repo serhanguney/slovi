@@ -2,7 +2,7 @@ import { CircleCheck, BookOpen, Clock3 } from 'lucide-react';
 import { useKnownWords } from '../hooks/useKnownWords';
 import { usePracticeProgress } from '../hooks/usePracticeProgress';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 
 function useLearnigCount() {
   return useQuery({

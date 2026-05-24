@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { User, Users, BookOpen, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { FetchedWordForm, ExampleSentence } from '@/features/dictionary/hooks/useWordDetails';
-import type { Gender, Plurality } from '@/supabase/types';
+import type { Gender, Plurality } from '@/api/types';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 

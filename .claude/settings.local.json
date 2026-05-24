@@ -5,7 +5,8 @@
       "Bash(pnpm build:*)",
       "Bash(for f in /Users/serhanguney/Projects/slovi/.claude/skills/*.skill)",
       "Bash(unzip:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(curl -s -X POST https://vtweuqheuaqsrfeukvrt.supabase.co/auth/v1/token?grant_type=password -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0d2V1cWhldWFxc3JmZXVrdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNjYxNDIsImV4cCI6MjA4NDk0MjE0Mn0.Xtm9ZZp8Y1ZhUfhyw2pWm0yKSMBLtQHoTEKaSSPLDyY' -H 'Content-Type: application/json' -d '{\"email\":\"gnyserhan@gmail.com\",\"password\":\"1.Bepolite\"}')"
     ]
   }
 }

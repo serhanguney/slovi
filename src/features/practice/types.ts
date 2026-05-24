@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Database } from '@/supabase/schema';
+import type { Database } from '@/api/schema';
 
 export type PracticeMode = Database['public']['Enums']['practice_mode'];
 export type PracticeScope = 'mixed' | string;

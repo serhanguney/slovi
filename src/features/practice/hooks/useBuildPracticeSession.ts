@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/api/client';
 import type { PracticeMode, PracticeScope, WordType } from '../types';
 
 export function useBuildPracticeSession() {
