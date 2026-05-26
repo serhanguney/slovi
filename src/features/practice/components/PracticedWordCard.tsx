@@ -1,162 +1,134 @@
-import { useState } from 'react';
-import { Check, ChevronDown, ExternalLink } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { PracticedWord } from '../types';
+import { z } from 'zod';
+import {
+  BookOpen,
+  Check,
+  ChevronRight,
+  Clock3,
+  Hash,
+  Link2,
+  Milestone,
+  MoveRight,
+  Play,
+  Sparkles,
+  UserRound,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { Chip } from '@/features/ui/chip';
+import { paths } from '@/features/routes/paths';
+import type { PracticedWord } from '../types';
 
-interface PracticedWordCardProps {
+type Props = {
   word: PracticedWord;
-}
+  selected: boolean;
+  onToggle: () => void;
+};
 
-type RetentionStatus = 'fresh' | 'stable' | 'fading';
+const wordTypeSchema = z.enum([
+  'noun',
+  'verb',
+  'pronoun',
+  'adjective',
+  'adverb',
+  'preposition',
+  'conjunction',
+  'numeral',
+]);
 
-function isRetentionStatus(value: string | null): value is RetentionStatus {
-  return value === 'fresh' || value === 'stable' || value === 'fading';
-}
+type WordType = z.infer<typeof wordTypeSchema>;
 
-// ── Status pill ───────────────────────────────────────────────────────────────
+const typeIcons: Record<WordType, React.ElementType> = {
+  noun: BookOpen,
+  verb: Play,
+  adjective: Sparkles,
+  pronoun: UserRound,
+  adverb: MoveRight,
+  preposition: Milestone,
+  conjunction: Link2,
+  numeral: Hash,
+};
 
-function StatusPill({ status }: { status: string | null }) {
-  if (!isRetentionStatus(status)) return null;
+const isAnyModeFading = (word: PracticedWord) =>
+  word.sv_status === 'fading' || word.cu_status === 'fading' || word.fr_status === 'fading';
 
-  const styles: Record<RetentionStatus, string> = {
-    fresh: 'bg-success-subtle text-success',
-    stable: 'bg-warning-subtle text-warning',
-    fading: 'bg-destructive-subtle text-destructive',
-  };
+const relativeTime = (dateStr: string): string => {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60_000);
+  const hours = Math.floor(diff / 3_600_000);
+  const days = Math.floor(diff / 86_400_000);
+  const weeks = Math.floor(days / 7);
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 7) return `${days}d ago`;
+  return `${weeks}w ago`;
+};
 
-  const labels: Record<RetentionStatus, string> = {
-    fresh: 'Fresh',
-    stable: 'Stable',
-    fading: 'Fading',
-  };
+export const PracticedWordCard = ({ word, selected, onToggle }: Props) => {
+  const typeResult = wordTypeSchema.safeParse(word.word_type);
+  const TypeIcon = typeResult.success ? typeIcons[typeResult.data] : BookOpen;
+  const wordTypeLabel = typeResult.success ? typeResult.data : word.word_type;
+
+  const fading = isAnyModeFading(word);
 
   return (
-    <span className={cn('rounded-full px-2 py-0.5 text-xs', styles[status])}>{labels[status]}</span>
-  );
-}
-
-// ── Mode row ──────────────────────────────────────────────────────────────────
-
-interface ModeRowProps {
-  label: string;
-  status: string | null;
-}
-
-function ModeRow({ label, status }: ModeRowProps) {
-  const practiced = isRetentionStatus(status);
-
-  return (
-    <div className="flex items-center gap-2">
-      {practiced ? (
-        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success-subtle">
-          <Check className="h-2.5 w-2.5 text-success" />
-        </div>
-      ) : (
-        <div className="h-4 w-4 shrink-0 rounded-full border border-border" />
+    <div
+      className={cn(
+        'flex items-center gap-3 border-b border-border px-5 py-3.5 transition-colors last:border-b-0',
+        selected ? 'bg-muted' : 'bg-card hover:bg-muted/50'
       )}
-      <span className="flex-1 text-label text-foreground">{label}</span>
-      <StatusPill status={status} />
-    </div>
-  );
-}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-label={selected ? 'Deselect word' : 'Select word'}
+        className={cn(
+          'flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors',
+          selected ? 'border-foreground bg-foreground' : 'border-input bg-transparent'
+        )}
+      >
+        {selected && <Check className="h-3 w-3 text-background" />}
+      </button>
 
-// ── Card ──────────────────────────────────────────────────────────────────────
-
-export function PracticedWordCard({ word }: PracticedWordCardProps) {
-  const [expanded, setExpanded] = useState(false);
-
-  const hasCases = word.practiced_cases.length > 0;
-
-  const lastPracticed = word.last_practiced
-    ? new Date(word.last_practiced).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      })
-    : '—';
-
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-white">
-      {/* Header */}
-      <div className="px-4 pt-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[17px] font-bold text-foreground">{word.in_czech}</span>
-            <span className="rounded-md bg-muted px-1.5 py-0.5 text-caption tracking-body text-muted-foreground">
-              {word.word_type}
-            </span>
-          </div>
-          {word.is_known ? (
-            <span className="shrink-0 rounded-full bg-success-subtle px-2.5 py-0.5 text-caption font-semibold text-success">
-              Known
-            </span>
-          ) : (
-            <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-caption font-semibold text-muted-foreground">
-              Learning
-            </span>
-          )}
-        </div>
-
-        {/* Translation */}
-        <p className="mt-1 text-label text-muted-foreground">{word.in_english}</p>
-
-        {/* Mode rows */}
-        <div className="mt-3 flex flex-col gap-2">
-          <ModeRow label="Simple Vocabulary" status={word.sv_status} />
-          <ModeRow label="Case Logic" status={word.cu_status} />
-          <ModeRow label="Case Memory" status={word.fr_status} />
-        </div>
-
-        {/* Last practiced */}
-        <p className="mt-3 pb-1 text-caption text-muted-foreground">
-          Last practiced {lastPracticed}
-        </p>
-
-        <Link
-          className="flex items-center gap-1 w-auto pb-3 text-caption text-muted-foreground hover:underline"
-          to={`/word/${word.root_word_id}`}
-        >
-          Go to word
-          <ExternalLink className="h-3 w-3" />
-        </Link>
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent">
+        <TypeIcon className="h-4 w-4 text-muted-foreground" />
       </div>
 
-      {/* Expandable cases */}
-      {hasCases && (
-        <>
-          <div className="border-t border-border" />
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <h6 className="text-sm font-semibold text-foreground">{word.in_czech}</h6>
+        <div className="flex items-center gap-1.5">
+          <p className="text-label text-muted-foreground whitespace-nowrap text-ellipsis overflow-hidden">
+            {word.in_english}
+          </p>
+        </div>
+      </div>
 
-          {expanded && (
-            <div className="px-4 py-3">
-              <p className="mb-2 text-caption font-semibold uppercase tracking-body text-muted-foreground">
-                Practiced cases
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {word.practiced_cases.map((c) => (
-                  <div key={c} className="flex items-center gap-1 text-xs text-foreground">
-                    <Check className="h-3 w-3 text-success" />
-                    <span>{c}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div className="flex flex-col items-end gap-1 md:flex-row md:items-center md:gap-3">
+        <Chip label={wordTypeLabel} variant="outlined" />
+        <p
+          className={cn(
+            'flex items-center gap-1 text-caption',
+            fading ? 'text-warning' : 'text-muted-foreground'
           )}
+        >
+          <Clock3 className="h-3 w-3 shrink-0" />
+          {word.last_practiced ? (
+            <>
+              <span className="hidden sm:inline">Last practiced</span>{' '}
+              {relativeTime(word.last_practiced)}
+            </>
+          ) : (
+            'Not yet practiced'
+          )}
+        </p>
+      </div>
 
-          <button
-            onClick={() => setExpanded((prev) => !prev)}
-            className="flex w-full items-center justify-center gap-1.5 border-t border-border px-4 py-2.5 text-label font-semibold text-foreground transition-colors hover:bg-black/[0.03]"
-          >
-            {expanded ? 'See less' : 'See more'}
-            <ChevronDown
-              className={cn(
-                'h-3.5 w-3.5 transition-transform duration-200',
-                expanded && 'rotate-180'
-              )}
-            />
-          </button>
-        </>
-      )}
+      <Link
+        to={paths.word(word.root_word_id)}
+        aria-label={`View ${word.in_czech}`}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-muted-foreground transition-colors hover:bg-muted"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Link>
     </div>
   );
-}
+};

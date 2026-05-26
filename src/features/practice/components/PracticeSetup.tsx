@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { usePracticeBoxCount } from '../hooks/usePracticeBoxCount';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
 import { useFormRecallEligibleCount } from '../hooks/useFormRecallEligibleCount';
+import { usePracticedWords } from '../hooks/usePracticedWords';
 import type { PracticeMode, PracticeScope, WordType } from '../types';
 import { WarningTooltip } from '@/components/WarningTooltip';
+import { Chip } from '@/features/ui/chip';
 
 const formRecallConditionMessage =
   'Case Memory mode will ask about what you practiced in Case Logic mode. In order for all options to be available, keep practicing Case Logic.';
@@ -26,24 +28,22 @@ const CASE_TYPES: { id: PracticeScope; label: string; prepositions: string }[] =
 interface ModeCardProps {
   title: string;
   description: string;
-  badge: string;
-  badgeColor: string;
-  badgeBg: string;
+  badge: React.ReactNode;
   selected: boolean;
   disabled?: boolean;
   lockedMessage?: string;
   onClick: () => void;
+  note: React.ReactNode;
 }
 
 function ModeCard({
   title,
   description,
   badge,
-  badgeColor,
-  badgeBg,
   selected,
   disabled,
   lockedMessage,
+  note,
   onClick,
 }: ModeCardProps) {
   return (
@@ -62,23 +62,20 @@ function ModeCard({
       {lockedMessage && (
         <span className="text-caption leading-[1.4] text-warning">{lockedMessage}</span>
       )}
-      <span
-        className="self-start rounded-[10px] px-2 py-0.75 text-caption font-semibold"
-        style={{ color: badgeColor, backgroundColor: badgeBg }}
-      >
+      <div className="flex justify-between items-center">
         {badge}
-      </span>
+        {note}
+      </div>
     </button>
   );
 }
-
+type EligiblePracticeModes = Exclude<PracticeMode, 'case_study'>;
 const MODES: {
-  id: PracticeMode;
+  id: EligiblePracticeModes;
   title: string;
   description: string;
   badge: string;
-  badgeColor: string;
-  badgeBg: string;
+  color: 'success' | 'warning' | 'secondary';
   disabled?: boolean;
 }[] = [
   {
@@ -86,24 +83,21 @@ const MODES: {
     title: 'Simple vocabulary',
     description: 'Recognise Czech words from their English translation',
     badge: 'Easy',
-    badgeColor: '#16A34A',
-    badgeBg: '#F0FDF4',
+    color: 'success',
   },
   {
     id: 'case_understanding',
     title: 'Case logic',
     description: 'Familiarize yourself with new words and conjugations',
     badge: 'Medium',
-    badgeColor: '#7C3AED',
-    badgeBg: '#F5F3FF',
+    color: 'warning',
   },
   {
     id: 'form_recall',
     title: 'Case memory',
     description: 'Practice your actual memory of Czech vocabulary and conjugations',
     badge: 'Hard',
-    badgeColor: '#EA580C',
-    badgeBg: '#FFF7ED',
+    color: 'secondary',
   },
 ];
 
@@ -123,6 +117,16 @@ export function PracticeSetup() {
 
   const { data: pinnedCount = 0 } = usePracticeBoxCount();
   const { data: eligibility = [] } = useFormRecallEligibleCount();
+  const { data: words = [] } = usePracticedWords();
+
+  const fadingCounts = useMemo<Record<EligiblePracticeModes, number>>(
+    () => ({
+      simple_vocabulary: words.filter((w) => w.sv_status === 'fading').length,
+      case_understanding: words.filter((w) => w.cu_status === 'fading').length,
+      form_recall: words.filter((w) => w.fr_status === 'fading').length,
+    }),
+    [words]
+  );
   const buildPractice = useBuildPracticeSession();
   const buildVocabulary = useBuildVocabularySession();
 
@@ -161,13 +165,13 @@ export function PracticeSetup() {
           <div className="grid max-sm:grid-cols-2 grid-cols-3 gap-3">
             {MODES.map((mode) => {
               const isLocked = mode.id === 'form_recall' && formRecallLocked;
+              const fadingCount = fadingCounts[mode.id];
               return (
                 <ModeCard
+                  key={mode.id}
                   title={mode.title}
                   description={mode.description}
-                  badge={mode.badge}
-                  badgeColor={mode.badgeColor}
-                  badgeBg={mode.badgeBg}
+                  badge={<Chip label={mode.badge} color={mode.color} />}
                   selected={selectedMode === mode.id}
                   disabled={isLocked}
                   lockedMessage={
@@ -176,6 +180,13 @@ export function PracticeSetup() {
                       : undefined
                   }
                   onClick={() => !isLocked && setSelectedMode(mode.id)}
+                  note={
+                    fadingCount > 0 ? (
+                      <p className="text-caption text-warning">
+                        {fadingCount} fading {fadingCount === 1 ? 'word' : 'words'}
+                      </p>
+                    ) : null
+                  }
                 />
               );
             })}

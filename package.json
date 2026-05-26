@@ -13,7 +13,7 @@
     "knip": "knip",
     "preview": "vite preview",
     "prepare": "husky",
-    "update-types": "supabase gen types typescript --project-id $(node -p \"require('./projectSecrets.json').projectId\") > ./src/supabase/schema.ts",
+    "update-types": "supabase gen types typescript --project-id $(node -p \"require('./projectSecrets.json').projectId\") > ./src/api/schema.ts",
     "pull-database": "supabase db dump -f database/remote_schema.sql",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -47,6 +47,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-tailwindcss": "^3.18.3",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "knip": "^5.82.1",
