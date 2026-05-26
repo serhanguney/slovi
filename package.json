@@ -16,7 +16,8 @@
     "update-types": "supabase gen types typescript --project-id $(node -p \"require('./projectSecrets.json').projectId\") > ./src/api/schema.ts",
     "pull-database": "supabase db dump -f database/remote_schema.sql",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "tsc": "tsc --noEmit --incremental false"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
