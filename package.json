@@ -17,7 +17,7 @@
     "pull-database": "supabase db dump -f database/remote_schema.sql",
     "test": "vitest run",
     "test:watch": "vitest",
-    "tsc": "tsc --noEmit --incremental false"
+    "tsc": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

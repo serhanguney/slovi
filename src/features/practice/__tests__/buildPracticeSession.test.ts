@@ -299,14 +299,14 @@ describe.each<{ mode: Mode }>([{ mode: 'case_understanding' }, { mode: 'form_rec
       session = sessionResult.data ?? [];
     });
 
+    it('returns a non-empty session', () => {
+      expect(
+        session.length,
+        `got 0 cards — expected practiced words to be returned`
+      ).toBeGreaterThan(0);
+    });
+
     it('returns only word forms the user has already practiced', () => {
-      console.log(
-        `  mode "${mode}": ${session.length} card(s), ${practicedWordFormIds.size} practiced form(s)`
-      );
-      if (session.length === 0) {
-        console.log(`  → no cards returned (user has no practiced words) – skipped`);
-        return;
-      }
       session.forEach((card) => {
         expect(
           practicedWordFormIds.has(card.word_form_id),
@@ -394,7 +394,7 @@ describe('build_vocabulary_session – core structure', () => {
         expect(card.root_word_id, `${ctx}: missing root_word_id`).toBeTruthy();
         expect(card.correct_czech, `${ctx}: missing correct_czech`).toBeTruthy();
         expect(card.in_english, `${ctx}: missing in_english`).toBeTruthy();
-        expect(card.distractors, `${ctx}: missing distractors`).toHaveLength(3);
+        expect(card.distractors, `${ctx}: missing distractors`).toHaveLength(5);
       });
     });
   });
@@ -404,6 +404,78 @@ describe('build_vocabulary_session – core structure', () => {
       const ids = session.map((c) => c.word_form_id);
       const dupes = ids.filter((id, idx) => ids.indexOf(id) !== idx);
       expect(dupes, `run ${i + 1}: duplicate word_form_ids: ${dupes.join(', ')}`).toHaveLength(0);
+    });
+  });
+
+  it('has no duplicate root_word_ids within a single session', () => {
+    sessions.forEach((session, i) => {
+      const ids = session.map((c) => c.root_word_id);
+      const dupes = ids.filter((id, idx) => ids.indexOf(id) !== idx);
+      expect(dupes, `run ${i + 1}: duplicate root_word_ids: ${dupes.join(', ')}`).toHaveLength(0);
+    });
+  });
+
+  it('target_form appears in sentence_czech', () => {
+    sessions.forEach((session, i) => {
+      session.forEach((card) => {
+        expect(
+          card.sentence_czech.toLowerCase(),
+          `run ${i + 1}, word_form_id ${card.word_form_id}: target_form "${card.target_form}" not found in sentence "${card.sentence_czech}"`
+        ).toContain(card.target_form.toLowerCase());
+      });
+    });
+  });
+
+  it('distractors are in English (do not match correct_czech)', () => {
+    sessions.forEach((session, i) => {
+      session.forEach((card) => {
+        card.distractors.forEach((d) => {
+          expect(
+            d,
+            `run ${i + 1}, word_form_id ${card.word_form_id}: distractor "${d}" matches correct_czech "${card.correct_czech}" — distractors must be English`
+          ).not.toBe(card.correct_czech);
+          expect(
+            d,
+            `run ${i + 1}, word_form_id ${card.word_form_id}: distractor "${d}" equals in_english "${card.in_english}" — distractor must differ from correct answer`
+          ).not.toBe(card.in_english);
+        });
+      });
+    });
+  });
+
+  it('distractors share the same word_type as the correct answer', async () => {
+    const allRootWordIds = [...new Set(sessions.flatMap((s) => s.map((c) => c.root_word_id)))];
+    const allDistractorStrings = [
+      ...new Set(sessions.flatMap((s) => s.flatMap((c) => c.distractors))),
+    ];
+
+    const [{ data: cardWords, error: e1 }, { data: distractorWords, error: e2 }] =
+      await Promise.all([
+        supabase.from('root_words').select('id, word_type').in('id', allRootWordIds),
+        supabase
+          .from('root_words')
+          .select('in_english, word_type')
+          .in('in_english', allDistractorStrings),
+      ]);
+    expect(e1, `root_words (cards) lookup error: ${e1?.message}`).toBeNull();
+    expect(e2, `root_words (distractors) lookup error: ${e2?.message}`).toBeNull();
+
+    const cardTypeById = new Map((cardWords ?? []).map((w) => [w.id, w.word_type]));
+    const distractorTypeByEnglish = new Map(
+      (distractorWords ?? []).map((w) => [w.in_english, w.word_type])
+    );
+
+    sessions.forEach((session, i) => {
+      session.forEach((card) => {
+        const cardType = cardTypeById.get(card.root_word_id);
+        card.distractors.forEach((d) => {
+          const distractorType = distractorTypeByEnglish.get(d);
+          expect(
+            distractorType,
+            `run ${i + 1}, word_form_id ${card.word_form_id}: distractor "${d}" has word_type "${distractorType}" but card word_type is "${cardType}"`
+          ).toBe(cardType);
+        });
+      });
     });
   });
 });
@@ -457,12 +529,13 @@ describe('build_vocabulary_session – allow_new_words=false', () => {
     );
   });
 
+  it('returns a non-empty session', () => {
+    expect(session.length, `got 0 cards — expected practiced words to be returned`).toBeGreaterThan(
+      0
+    );
+  });
+
   it('returns only words the user has already practiced in any mode', () => {
-    console.log(`  ${session.length} card(s), ${practicedRootWordIds.size} practiced root word(s)`);
-    if (session.length === 0) {
-      console.log(`  → no cards returned – skipped`);
-      return;
-    }
     session.forEach((card) => {
       expect(
         practicedRootWordIds.has(card.root_word_id),
