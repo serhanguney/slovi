@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   X,
   CircleCheck,
@@ -28,6 +29,7 @@ import type { PracticeCard, PracticeMode } from '../types';
 import { SessionWrapper } from './SessionWrapper';
 import { ActionRowsContainer } from './ActionRowsContainer';
 import { SessionQuestion } from './SessionQuestion';
+import { Chip } from '@/features/ui/chip';
 
 // ── Czech cases ────────────────────────────────────────────────────────────────
 
@@ -148,6 +150,7 @@ interface QuestionScreenProps {
   onNext: () => void;
   onExit: () => void;
   onBlockWord: () => void;
+  hasLabel: boolean;
 }
 
 function QuestionScreen({
@@ -160,6 +163,7 @@ function QuestionScreen({
   onNext,
   onExit,
   onBlockWord,
+  hasLabel,
 }: QuestionScreenProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -198,34 +202,34 @@ function QuestionScreen({
   return (
     <div className="flex flex-1 flex-col">
       {/* TopBar */}
-      <div className="flex shrink-0 items-center justify-between px-4 py-3">
+      <div className="flex shrink-0 items-center px-4 py-3">
         <button
           onClick={onExit}
           className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
         >
           <X className="h-4 w-4" />
         </button>
-        <span className="text-label font-medium text-muted-foreground">
-          {cardIndex + 1}/{total}
-        </span>
-        <div className="h-8 w-8" />
-      </div>
-
-      {/* Progress bar */}
-      <div className="shrink-0 px-4 pb-2">
-        <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
-          <div
-            className="h-full rounded-full bg-foreground transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
+        {/* Progress bar */}
+        <div className="shrink-0 grow px-4 flex flex-col gap-1">
+          <span className="text-label font-medium text-muted-foreground mx-auto">
+            {cardIndex + 1}/{total}
+          </span>
+          <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
+            <div
+              className="h-full rounded-full bg-foreground transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
+
+        {/* <div className="h-8 w-8" /> */}
       </div>
 
       {/* Question area — fixed height to prevent layout shift */}
       <SessionQuestion
         sentence={card.sentence_czech}
         target={card.target_form}
-        label={card.in_english}
+        label={hasLabel ? card.in_english : undefined}
         description={card.sentence_english}
       />
 
@@ -247,6 +251,11 @@ function QuestionScreen({
             <Icon className="h-[18px] w-[18px]" />
           </button>
         ))}
+        {card.is_new_word ? (
+          <div className="flex grow justify-end items-center">
+            <Chip label="New" color="secondary" variant="contained" />
+          </div>
+        ) : null}
       </ActionRowsContainer>
 
       {/* Spacer — pushes options to bottom */}
@@ -317,6 +326,7 @@ function FormRecallQuestionScreen({
   onNext,
   onExit,
   onBlockWord,
+  hasLabel,
 }: QuestionScreenProps) {
   const [value, setValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -371,7 +381,7 @@ function FormRecallQuestionScreen({
       <SessionQuestion
         sentence={card.sentence_czech}
         target={card.target_form}
-        label={card.in_english}
+        label={hasLabel ? card.in_english : undefined}
         description={card.sentence_english}
         hidden={!submitted}
       />
@@ -394,6 +404,11 @@ function FormRecallQuestionScreen({
             <Icon className="h-[18px] w-[18px]" />
           </button>
         ))}
+        {card.is_new_word ? (
+          <div className="flex grow justify-end items-center">
+            <Chip label="New" color="secondary" variant="contained" />
+          </div>
+        ) : null}
       </ActionRowsContainer>
 
       {/* Input area */}
@@ -586,9 +601,10 @@ export function CompleteScreen({
 interface SessionScreenProps {
   cards: PracticeCard[];
   mode: PracticeMode;
+  hasLabel: boolean;
 }
 
-export function SessionScreen({ cards, mode }: SessionScreenProps) {
+export function SessionScreen({ cards, mode, hasLabel }: SessionScreenProps) {
   const navigate = useNavigate();
   const recordAnswer = useRecordPracticeAnswer();
   const blockWord = useBlockWord();
@@ -609,6 +625,10 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
   const handleAnswer = (_selectedCase: string, isCorrect: boolean) => {
     if (isCorrect) setCorrectCount((n) => n + 1);
     else setIncorrectCount((n) => n + 1);
+
+    if (currentCard.is_new_word) {
+      toast.success(`"${currentCard.base_form}" added to your word list`);
+    }
 
     recordAnswer.mutate({
       p_word_form_id: currentCard.word_form_id,
@@ -678,6 +698,7 @@ export function SessionScreen({ cards, mode }: SessionScreenProps) {
         onNext={handleNext}
         onExit={handleExit}
         onBlockWord={() => setBlockSheetOpen(true)}
+        hasLabel={hasLabel}
       />
       <BlockWordSheet
         open={blockSheetOpen}

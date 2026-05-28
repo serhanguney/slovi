@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { usePracticeBoxCount } from '../hooks/usePracticeBoxCount';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
 import { useFormRecallEligibleCount } from '../hooks/useFormRecallEligibleCount';
@@ -109,13 +108,23 @@ const WORD_TYPES: { id: WordType | undefined; label: string; examples: string }[
   { id: 'adverb', label: 'Adverbs', examples: 'rychle, dobře, vždy' },
 ];
 
+const ALLOW_NEW_WORDS_KEY = 'practice.allowNewWords';
+
 export function PracticeSetup() {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<PracticeMode>('case_understanding');
   const [selectedWordType, setSelectedWordType] = useState<WordType | undefined>(undefined);
   const [selectedScope, setSelectedScope] = useState<PracticeScope>('mixed');
+  const [allowNewWords, setAllowNewWords] = useState(() => {
+    const existing = localStorage.getItem(ALLOW_NEW_WORDS_KEY);
+    return Boolean(existing && existing !== 'false');
+  });
 
-  const { data: pinnedCount = 0 } = usePracticeBoxCount();
+  const handleAllowNewWordsChange = (value: boolean) => {
+    setAllowNewWords(value);
+    localStorage.setItem(ALLOW_NEW_WORDS_KEY, String(value));
+  };
+
   const { data: eligibility = [] } = useFormRecallEligibleCount();
   const { data: words = [] } = usePracticedWords();
 
@@ -141,13 +150,14 @@ export function PracticeSetup() {
 
   const handleStart = async () => {
     if (selectedMode === 'simple_vocabulary') {
-      const cards = await buildVocabulary.mutateAsync();
+      const cards = await buildVocabulary.mutateAsync({ allowNewWords });
       navigate('/practice/session', { state: { mode: selectedMode, cards } });
     } else {
       const cards = await buildPractice.mutateAsync({
         mode: selectedMode,
         scope: selectedScope,
         wordType: selectedWordType,
+        allowNewWords,
       });
       navigate('/practice/session', { state: { mode: selectedMode, scope: 'mixed', cards } });
     }
@@ -162,7 +172,7 @@ export function PracticeSetup() {
           <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
             Mode
           </span>
-          <div className="grid max-sm:grid-cols-2 grid-cols-3 gap-3">
+          <div className="grid max-sm:grid-cols-1 grid-cols-3 gap-3">
             {MODES.map((mode) => {
               const isLocked = mode.id === 'form_recall' && formRecallLocked;
               const fadingCount = fadingCounts[mode.id];
@@ -191,6 +201,28 @@ export function PracticeSetup() {
               );
             })}
           </div>
+        </div>
+
+        <div className="flex flex-col border rounded-xl p-4">
+          <label className="flex cursor-pointer items-center justify-between gap-2.5">
+            <span className="text-sm text-muted-foreground">Include new words</span>
+            <button
+              role="switch"
+              aria-checked={allowNewWords}
+              onClick={() => handleAllowNewWordsChange(!allowNewWords)}
+              className={cn(
+                'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border-2 border-transparent transition-colors',
+                allowNewWords ? 'bg-foreground' : 'bg-muted'
+              )}
+            >
+              <span
+                className={cn(
+                  'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform',
+                  allowNewWords ? 'translate-x-5' : 'translate-x-1'
+                )}
+              />
+            </button>
+          </label>
         </div>
 
         {/* Word type section */}
@@ -280,11 +312,6 @@ export function PracticeSetup() {
 
       {/* Sticky footer — always visible at the bottom */}
       <div className="shrink-0 p-6 pt-4">
-        {pinnedCount > 0 && (
-          <p className="mb-3 text-center text-xs text-muted-foreground">
-            {pinnedCount} pinned {pinnedCount === 1 ? 'word' : 'words'} queued
-          </p>
-        )}
         <button
           onClick={handleStart}
           disabled={isPending}

@@ -16,7 +16,10 @@ pnpm lint:fix         # Run ESLint with auto-fix
 pnpm format           # Format with Prettier
 pnpm format:check     # Check formatting without writing
 pnpm knip             # Find unused code and dependencies
+pnpm update-types     # Regenerate src/api/schema.ts from the live Supabase schema
 ```
+
+**Database schema**: Always run `pnpm update-types` after writing SQL migrations to regenerate `src/api/schema.ts`. Never manually modify `src/api/schema.ts`.
 
 ## Architecture
 

@@ -370,6 +370,7 @@ export type Database = {
           base_form: string;
           correct_case: string;
           explanation: string;
+          is_new_word: boolean;
           mode: string;
           sentence_czech: string;
           sentence_english: string;
@@ -379,6 +380,7 @@ export type Database = {
       };
       build_practice_session: {
         Args: {
+          p_allow_new_words?: boolean;
           p_mode: Database['public']['Enums']['practice_mode'];
           p_scope: string;
           p_word_type?: Database['public']['Enums']['word_type'];
@@ -388,6 +390,7 @@ export type Database = {
           correct_case: string;
           explanation: string;
           in_english: string;
+          is_new_word: boolean;
           root_word_id: number;
           sentence_czech: string;
           sentence_english: string;
@@ -396,12 +399,13 @@ export type Database = {
         }[];
       };
       build_vocabulary_session: {
-        Args: never;
+        Args: { p_allow_new_words?: boolean };
         Returns: {
           base_form: string;
           correct_czech: string;
           distractors: string[];
           in_english: string;
+          is_new_word: boolean;
           root_word_id: number;
           sentence_czech: string;
           target_form: string;

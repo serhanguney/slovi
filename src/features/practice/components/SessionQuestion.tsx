@@ -40,13 +40,11 @@ export const SessionQuestion = ({
         {after}
       </h4>
       {label && (
-        <div className="my-2 flex items-center gap-1">
+        <div className="flex items-center gap-1">
           <span className="text-label text-[#9CA3AF]">Type the correct form for</span>
-          {label && (
-            <span className="inline-flex items-center rounded-md border border-[#E5E7EB] bg-white px-2 py-1 text-[14px] font-semibold text-[#1A1A1A]">
-              {label}
-            </span>
-          )}
+          <span className="inline-flex items-center rounded-md border border-[#E5E7EB] bg-white px-2 py-1 text-[14px] font-semibold text-[#1A1A1A]">
+            {label}
+          </span>
         </div>
       )}
     </div>

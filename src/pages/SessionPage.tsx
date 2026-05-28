@@ -25,5 +25,7 @@ export function SessionPage() {
     return <CaseStudySessionScreen cards={state.cards} />;
   }
 
-  return <SessionScreen cards={state.cards} mode={state.mode} />;
+  return (
+    <SessionScreen cards={state.cards} mode={state.mode} hasLabel={state.mode === 'form_recall'} />
+  );
 }

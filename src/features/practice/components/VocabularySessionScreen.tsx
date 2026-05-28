@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   X,
   CircleCheck,
@@ -21,6 +22,7 @@ import type { VocabularyCard } from '../types';
 import { SessionWrapper } from './SessionWrapper';
 import { ActionRowsContainer } from './ActionRowsContainer';
 import { SessionQuestion } from './SessionQuestion';
+import { Chip } from '@/features/ui/chip';
 
 // ── Option card ────────────────────────────────────────────────────────────────
 
@@ -182,6 +184,11 @@ function QuestionScreen({
             <Icon className="h-4.5 w-4.5" />
           </button>
         ))}
+        {card.is_new_word ? (
+          <div className="flex grow justify-end items-center">
+            <Chip label="New" color="secondary" variant="contained" />
+          </div>
+        ) : null}
       </ActionRowsContainer>
 
       <div className="flex flex-1 items-center">
@@ -257,6 +264,10 @@ export function VocabularySessionScreen({ cards }: VocabularySessionScreenProps)
   const handleAnswer = (_selected: string, isCorrect: boolean) => {
     if (isCorrect) setCorrectCount((n) => n + 1);
     else setIncorrectCount((n) => n + 1);
+
+    if (currentCard.is_new_word) {
+      toast.success(`"${currentCard.base_form}" added to your word list`);
+    }
 
     recordAnswer.mutate({
       p_word_form_id: currentCard.word_form_id,
