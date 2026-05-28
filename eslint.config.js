@@ -23,6 +23,39 @@ export default defineConfig([
     rules: {
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': 'warn',
+
+      // Arrow functions only — no function declarations or expressions
+      'func-style': ['error', 'expression'],
+      'prefer-arrow-callback': 'error',
+
+      // No for loops — use array methods
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ForStatement',
+          message:
+            'Use array iteration methods (map, filter, reduce, forEach) instead of for loops.',
+        },
+        {
+          selector: 'ForInStatement',
+          message: 'Use Object.keys() or Object.entries() with array methods instead of for...in.',
+        },
+        {
+          selector: 'ForOfStatement',
+          message: 'Use array iteration methods or forEach instead of for...of.',
+        },
+      ],
+
+      // Prefer const — catches the "let + assign later" pattern where let is never reassigned
+      'prefer-const': 'error',
+
+      // No parameter/property mutation
+      'no-param-reassign': ['error', { props: true }],
+
+      // TypeScript: type over interface, no any, no non-null assertion
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
     },
   },
   {

@@ -10,13 +10,13 @@ const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
   { id: 'my-account', label: 'My Account', icon: User },
 ];
 
-interface SidebarProps {
+type SidebarProps = {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
   onSignOut: () => void;
-}
+};
 
-export function Sidebar({ activeTab, onTabChange, onSignOut }: SidebarProps) {
+export const Sidebar = ({ activeTab, onTabChange, onSignOut }: SidebarProps) => {
   return (
     <aside className="hidden w-[240px] shrink-0 flex-col border-r border-border bg-muted px-4 py-6 md:flex">
       {/* Logo */}
@@ -63,4 +63,4 @@ export function Sidebar({ activeTab, onTabChange, onSignOut }: SidebarProps) {
       </div>
     </aside>
   );
-}
+};

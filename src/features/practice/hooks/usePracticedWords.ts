@@ -4,7 +4,7 @@ import * as R from 'remeda';
 import { supabase } from '@/api/client';
 import type { PracticedWord } from '../types';
 
-export function usePracticedWords() {
+export const usePracticedWords = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -39,4 +39,4 @@ export function usePracticedWords() {
   });
 
   return { search, setSearch: handleSearchChange, ...query };
-}
+};

@@ -16,7 +16,7 @@ const TABS: SecondaryNavTab<PracticeTab>[] = [
   { id: 'words', label: 'Words' },
 ];
 
-export function PracticePage() {
+export const PracticePage = () => {
   const { onTabChange } = useOutletContext<AppShellContext>();
   const [activeTab, setActiveTab] = useState<PracticeTab>('setup');
 
@@ -47,4 +47,4 @@ export function PracticePage() {
       </div>
     </div>
   );
-}
+};

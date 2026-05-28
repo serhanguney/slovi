@@ -13,17 +13,17 @@ import {
   type SearchResult,
 } from '@/features/dictionary/hooks/useDictionarySearch';
 
-interface DictionaryAutocompleteProps {
+type DictionaryAutocompleteProps = {
   onSelect: (result: SearchResult) => void;
   placeholder?: string;
   variant?: 'sm' | 'lg';
-}
+};
 
-export function DictionaryAutocomplete({
+export const DictionaryAutocomplete = ({
   onSelect,
   placeholder,
   variant = 'sm',
-}: DictionaryAutocompleteProps) {
+}: DictionaryAutocompleteProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const defaultPlaceholder =
     variant === 'lg' ? 'Type a word in Czech or English...' : 'Search Czech words...';
@@ -137,4 +137,4 @@ export function DictionaryAutocomplete({
       </ComboboxContent>
     </Combobox>
   );
-}
+};

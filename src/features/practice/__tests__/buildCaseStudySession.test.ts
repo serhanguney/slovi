@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import { beforeAll, afterAll, describe, it, expect } from 'vitest';
 import type { Database } from '@/api/schema';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY!;
-const email = process.env.TEST_USER_EMAIL!;
-const password = process.env.TEST_USER_PASSWORD!;
+const supabaseUrl = process.env.VITE_SUPABASE_URL ?? '';
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? '';
+const email = process.env.TEST_USER_EMAIL ?? '';
+const password = process.env.TEST_USER_PASSWORD ?? '';
 
 const RUNS = 10;
 const VALID_OPTION_COUNTS = new Set([2, 3, 4, 6]);
@@ -51,7 +51,7 @@ describe.each(WORD_FIXTURES)('build_case_study_session – $label', ({ id }) => 
     rpcResults.forEach(({ data, error }) => {
       expect(error, `RPC error: ${error?.message}`).toBeNull();
       expect(data).not.toBeNull();
-      sessions.push(data!);
+      if (data) sessions.push(data);
     });
 
     const allForms = formsResult.data ?? [];
@@ -86,8 +86,8 @@ describe.each(WORD_FIXTURES)('build_case_study_session – $label', ({ id }) => 
           `run ${i + 1}: options is null for word_form_id ${q.word_form_id}`
         ).not.toBeNull();
         expect(
-          q.options!.includes(q.target_form),
-          `run ${i + 1}: "${q.target_form}" missing from [${q.options!.join(', ')}] (word_form_id ${q.word_form_id})`
+          q.options?.includes(q.target_form),
+          `run ${i + 1}: "${q.target_form}" missing from [${(q.options ?? []).join(', ')}] (word_form_id ${q.word_form_id})`
         ).toBe(true);
       });
     });
@@ -111,11 +111,12 @@ describe.each(WORD_FIXTURES)('build_case_study_session – $label', ({ id }) => 
       session
         .filter((q) => q.options !== null)
         .forEach((q) => {
-          const unique = new Set(q.options!);
+          const opts = q.options ?? [];
+          const unique = new Set(opts);
           expect(
             unique.size,
-            `run ${i + 1}: duplicate in [${q.options!.join(', ')}] (word_form_id ${q.word_form_id})`
-          ).toBe(q.options!.length);
+            `run ${i + 1}: duplicate in [${opts.join(', ')}] (word_form_id ${q.word_form_id})`
+          ).toBe(opts.length);
         });
     });
   });
@@ -125,9 +126,10 @@ describe.each(WORD_FIXTURES)('build_case_study_session – $label', ({ id }) => 
       session
         .filter((q) => q.options !== null)
         .forEach((q) => {
+          const optCount = (q.options ?? []).length;
           expect(
-            VALID_OPTION_COUNTS.has(q.options!.length),
-            `run ${i + 1}: unexpected option count ${q.options!.length} (word_form_id ${q.word_form_id})`
+            VALID_OPTION_COUNTS.has(optCount),
+            `run ${i + 1}: unexpected option count ${optCount} (word_form_id ${q.word_form_id})`
           ).toBe(true);
         });
     });

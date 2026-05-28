@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useAddToPracticeBox() {
+export const useAddToPracticeBox = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,4 +13,4 @@ export function useAddToPracticeBox() {
       queryClient.invalidateQueries({ queryKey: ['practice-box-count'] });
     },
   });
-}
+};

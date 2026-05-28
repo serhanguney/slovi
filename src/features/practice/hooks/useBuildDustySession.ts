@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useBuildDustySession() {
+export const useBuildDustySession = () => {
   return useMutation({
     mutationFn: async () => {
       const { data, error } = await supabase.rpc('build_dusty_session');
@@ -9,4 +9,4 @@ export function useBuildDustySession() {
       return data;
     },
   });
-}
+};

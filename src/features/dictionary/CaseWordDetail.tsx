@@ -57,27 +57,29 @@ type NumberBlock = {
 
 // ── Data preparation ─────────────────────────────────────────────────────────
 
-function buildNumberBlocks(forms: FetchedWordForm[], examples: ExampleSentence[]): NumberBlock[] {
+const buildNumberBlocks = (
+  forms: FetchedWordForm[],
+  examples: ExampleSentence[]
+): NumberBlock[] => {
   const caseForms = forms.filter((f) => f.form_type.category === 'case');
   const examplesByFormId = new Map(examples.map((e) => [e.word_form_id, e]));
 
-  const byPlurality: Record<string, FetchedWordForm[]> = {};
-  for (const form of caseForms) {
-    if (!byPlurality[form.plurality]) byPlurality[form.plurality] = [];
-    byPlurality[form.plurality].push(form);
-  }
+  const byPlurality = caseForms.reduce<Record<string, FetchedWordForm[]>>(
+    (acc, form) => ({ ...acc, [form.plurality]: [...(acc[form.plurality] ?? []), form] }),
+    {}
+  );
 
-  const blocks: NumberBlock[] = [];
-  for (const plurality of ['singular', 'plural'] as const) {
+  return (['singular', 'plural'] as const).flatMap((plurality) => {
     const pluralityForms = byPlurality[plurality] ?? [];
-    if (pluralityForms.length === 0) continue;
+    if (pluralityForms.length === 0) return [];
 
-    const byCaseName: Record<string, FetchedWordForm[]> = {};
-    for (const form of pluralityForms) {
-      const name = form.form_type.name;
-      if (!byCaseName[name]) byCaseName[name] = [];
-      byCaseName[name].push(form);
-    }
+    const byCaseName = pluralityForms.reduce<Record<string, FetchedWordForm[]>>(
+      (acc, form) => ({
+        ...acc,
+        [form.form_type.name]: [...(acc[form.form_type.name] ?? []), form],
+      }),
+      {}
+    );
 
     const cases: CaseSection[] = Object.entries(byCaseName)
       .sort(([a], [b]) => (CASE_ORDER[a] ?? 99) - (CASE_ORDER[b] ?? 99))
@@ -88,31 +90,33 @@ function buildNumberBlocks(forms: FetchedWordForm[], examples: ExampleSentence[]
             (b.gender !== null ? GENDER_ORDER[b.gender] : 99)
         );
 
-        // Group forms with the same value — preserves first-occurrence order
-        const seen = new Map<string, FormGroup>();
-        for (const form of sorted) {
-          const existing = seen.get(form.form_in_czech);
+        const seen = sorted.reduce((map, form) => {
+          const existing = map.get(form.form_in_czech);
           const sentence = examplesByFormId.get(form.id);
           if (existing) {
-            if (form.gender !== null) existing.genders.push(form.gender);
-            if (sentence) existing.examples.push({ sentence, gender: form.gender });
+            map.set(form.form_in_czech, {
+              ...existing,
+              genders: form.gender !== null ? [...existing.genders, form.gender] : existing.genders,
+              examples: sentence
+                ? [...existing.examples, { sentence, gender: form.gender }]
+                : existing.examples,
+            });
           } else {
-            seen.set(form.form_in_czech, {
+            map.set(form.form_in_czech, {
               formInCzech: form.form_in_czech,
               genders: form.gender !== null ? [form.gender] : [],
               examples: sentence ? [{ sentence, gender: form.gender }] : [],
             });
           }
-        }
+          return map;
+        }, new Map<string, FormGroup>());
 
         return { caseName, formGroups: [...seen.values()] };
       });
 
-    blocks.push({ plurality, cases });
-  }
-
-  return blocks;
-}
+    return [{ plurality, cases }];
+  });
+};
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 

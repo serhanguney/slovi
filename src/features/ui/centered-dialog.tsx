@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-interface CenteredDialogProps {
+type CenteredDialogProps = {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
   /** Max width of the dialog panel, defaults to max-w-lg */
   maxWidth?: string;
-}
+};
 
-export function CenteredDialog({
+export const CenteredDialog = ({
   open,
   onClose,
   children,
   maxWidth = 'max-w-lg',
-}: CenteredDialogProps) {
+}: CenteredDialogProps) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -57,4 +57,4 @@ export function CenteredDialog({
       </div>
     </>
   );
-}
+};

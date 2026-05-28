@@ -1,7 +1,7 @@
-function splitSentence(
+const splitSentence = (
   sentence: string,
   targetForm: string
-): { before: string; match: string; after: string } {
+): { before: string; match: string; after: string } => {
   const escaped = targetForm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, 'iu');
   const m = regex.exec(sentence);
@@ -11,7 +11,7 @@ function splitSentence(
     match: sentence.slice(m.index, m.index + m[0].length),
     after: sentence.slice(m.index + m[0].length),
   };
-}
+};
 
 type SessionQuestionProps = {
   sentence: string;

@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AlertTriangle } from 'lucide-react';
 
-interface WarningTooltipProps {
+type WarningTooltipProps = {
   message: string;
-}
+};
 
-export function WarningTooltip({ message }: WarningTooltipProps) {
+export const WarningTooltip = ({ message }: WarningTooltipProps) => {
   const [open, setOpen] = useState(false);
   const [style, setStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -64,4 +64,4 @@ export function WarningTooltip({ message }: WarningTooltipProps) {
         )}
     </>
   );
-}
+};

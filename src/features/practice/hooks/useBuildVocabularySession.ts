@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useBuildVocabularySession() {
+export const useBuildVocabularySession = () => {
   return useMutation({
     mutationFn: async ({ allowNewWords }: { allowNewWords: boolean }) => {
       const { data, error } = await supabase.rpc('build_vocabulary_session', {
@@ -11,4 +11,4 @@ export function useBuildVocabularySession() {
       return data;
     },
   });
-}
+};

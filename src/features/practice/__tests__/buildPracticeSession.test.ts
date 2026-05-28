@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import { beforeAll, afterAll, describe, it, expect } from 'vitest';
 import type { Database } from '@/api/schema';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY!;
-const email = process.env.TEST_USER_EMAIL!;
-const password = process.env.TEST_USER_PASSWORD!;
+const supabaseUrl = process.env.VITE_SUPABASE_URL ?? '';
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? '';
+const email = process.env.TEST_USER_EMAIL ?? '';
+const password = process.env.TEST_USER_PASSWORD ?? '';
 
 const RUNS = 5;
 

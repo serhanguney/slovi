@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-interface ExpandableSectionProps {
+type ExpandableSectionProps = {
   icon: LucideIcon;
   title: string;
   count: number;
@@ -16,9 +16,9 @@ interface ExpandableSectionProps {
   collapseLabel?: string;
   defaultExpanded?: boolean;
   className?: string;
-}
+};
 
-export function ExpandableSection({
+export const ExpandableSection = ({
   icon: Icon,
   title,
   count,
@@ -28,7 +28,7 @@ export function ExpandableSection({
   collapseLabel = 'See fewer forms',
   defaultExpanded = false,
   className,
-}: ExpandableSectionProps) {
+}: ExpandableSectionProps) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const hasMore = expandedChildren !== undefined;
 
@@ -65,4 +65,4 @@ export function ExpandableSection({
       )}
     </div>
   );
-}
+};

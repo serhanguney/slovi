@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { WordDetail } from '@/features/dictionary/WordDetail';
 
-export function WordDetailPage() {
+export const WordDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -13,4 +13,4 @@ export function WordDetailPage() {
       <WordDetail rootWordId={rootWordId} onClose={() => navigate('/')} />
     </div>
   );
-}
+};

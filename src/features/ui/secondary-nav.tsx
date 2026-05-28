@@ -1,24 +1,24 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface SecondaryNavTab<T extends string = string> {
+export type SecondaryNavTab<T extends string = string> = {
   id: T;
   label: string;
-}
+};
 
-interface SecondaryNavProps<T extends string = string> {
+type SecondaryNavProps<T extends string = string> = {
   tabs: SecondaryNavTab<T>[];
   activeTab: T;
   onTabChange: (tab: T) => void;
   leftSlot?: ReactNode;
-}
+};
 
-export function SecondaryNav<T extends string>({
+export const SecondaryNav = <T extends string>({
   tabs,
   activeTab,
   onTabChange,
   leftSlot,
-}: SecondaryNavProps<T>) {
+}: SecondaryNavProps<T>) => {
   return (
     <div className="w-full">
       <div className="flex items-center px-6">
@@ -52,4 +52,4 @@ export function SecondaryNav<T extends string>({
       <div className="h-px w-full bg-border" />
     </div>
   );
-}
+};

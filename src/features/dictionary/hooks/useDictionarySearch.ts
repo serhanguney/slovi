@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import * as R from 'remeda';
 import { supabase } from '@/api/client';
 
-export interface SearchResult {
+export type SearchResult = {
   root_word_id: number;
   root_word_czech: string;
   root_word_english: string;
@@ -16,15 +16,15 @@ export interface SearchResult {
   example_czech: string | null;
   example_english: string | null;
   root_word_note: string | null;
-}
+};
 
-interface UseDictionarySearchOptions {
+type UseDictionarySearchOptions = {
   debounceMs?: number;
   limit?: number;
   minQueryLength?: number;
-}
+};
 
-async function searchDictionary(query: string, limit: number): Promise<SearchResult[]> {
+const searchDictionary = async (query: string, limit: number): Promise<SearchResult[]> => {
   const { data, error } = await supabase.rpc('search_dictionary', {
     p_query: query,
     p_limit: limit,
@@ -36,9 +36,9 @@ async function searchDictionary(query: string, limit: number): Promise<SearchRes
 
   // Cast needed because generated types may not reflect latest function signature
   return (data as unknown as SearchResult[]) || [];
-}
+};
 
-export function useDictionarySearch(options: UseDictionarySearchOptions = {}) {
+export const useDictionarySearch = (options: UseDictionarySearchOptions = {}) => {
   const { debounceMs = 300, limit = 10, minQueryLength = 2 } = options;
 
   const [query, setQuery] = useState('');
@@ -85,4 +85,4 @@ export function useDictionarySearch(options: UseDictionarySearchOptions = {}) {
       setDebouncedQuery('');
     },
   };
-}
+};

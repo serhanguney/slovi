@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useKnownWords() {
+export const useKnownWords = () => {
   return useQuery({
     queryKey: ['known-words'],
     queryFn: async () => {
@@ -11,4 +11,4 @@ export function useKnownWords() {
     },
     staleTime: 1000 * 60 * 5,
   });
-}
+};

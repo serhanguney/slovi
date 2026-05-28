@@ -1,22 +1,22 @@
 import { cn } from '@/lib/utils';
 
-interface WordFormRowProps {
+type WordFormRowProps = {
   label: string;
   form: string;
   description?: string;
   exampleSentence?: string;
   exampleTranslation?: string;
   className?: string;
-}
+};
 
-export function WordFormRow({
+export const WordFormRow = ({
   label,
   form,
   description,
   exampleSentence,
   exampleTranslation,
   className,
-}: WordFormRowProps) {
+}: WordFormRowProps) => {
   return (
     <div className={cn('flex flex-col gap-0.5 py-3', className)}>
       {/* Label + description on the same line, 8px apart */}
@@ -47,4 +47,4 @@ export function WordFormRow({
       )}
     </div>
   );
-}
+};

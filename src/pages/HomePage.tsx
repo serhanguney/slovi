@@ -7,7 +7,7 @@ import type { NavTab } from '@/features/layout/nav.types';
 import type { SearchResult } from '@/features/dictionary/hooks/useDictionarySearch';
 import { useGetRootWords } from '@/features/dictionary/hooks/useGetRootWords';
 
-export function HomePage() {
+export const HomePage = () => {
   const { user, signOut } = useAuth();
   const { activeTab } = useOutletContext<AppShellContext>();
   const navigate = useNavigate();
@@ -27,11 +27,11 @@ export function HomePage() {
       )}
     </main>
   );
-}
+};
 
 // ── Tab content ───────────────────────────────────────────────────────────────
 
-function DictionaryTab({ onWordSelect }: { onWordSelect: (result: SearchResult) => void }) {
+const DictionaryTab = ({ onWordSelect }: { onWordSelect: (result: SearchResult) => void }) => {
   const { data: rootWords, isLoading: isLoadingRootWords } = useGetRootWords();
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4">
@@ -48,9 +48,9 @@ function DictionaryTab({ onWordSelect }: { onWordSelect: (result: SearchResult) 
       </div>
     </div>
   );
-}
+};
 
-function PlaceholderTab({ tab }: { tab: NavTab }) {
+const PlaceholderTab = ({ tab }: { tab: NavTab }) => {
   const labels: Record<NavTab, string> = {
     dictionary: 'Dictionary',
     practice: 'Practice',
@@ -63,14 +63,14 @@ function PlaceholderTab({ tab }: { tab: NavTab }) {
       <p className="text-sm text-muted-foreground">Coming soon</p>
     </div>
   );
-}
+};
 
-interface MyAccountTabProps {
+type MyAccountTabProps = {
   user: { email?: string } | null;
   onSignOut: () => void;
-}
+};
 
-function MyAccountTab({ user, onSignOut }: MyAccountTabProps) {
+const MyAccountTab = ({ user, onSignOut }: MyAccountTabProps) => {
   return (
     <div className="flex flex-1 flex-col px-4 py-8 md:px-10">
       <h2 className="text-xl font-bold text-foreground">My Account</h2>
@@ -93,4 +93,4 @@ function MyAccountTab({ user, onSignOut }: MyAccountTabProps) {
       </div>
     </div>
   );
-}
+};

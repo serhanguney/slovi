@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function usePracticeProgress() {
+export const usePracticeProgress = () => {
   return useQuery({
     queryKey: ['practice-progress'],
     queryFn: async () => {
@@ -11,4 +11,4 @@ export function usePracticeProgress() {
     },
     staleTime: 1000 * 60 * 5,
   });
-}
+};

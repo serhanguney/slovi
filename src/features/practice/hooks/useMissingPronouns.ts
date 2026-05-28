@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useMissingPronouns() {
+export const useMissingPronouns = () => {
   return useQuery({
     queryKey: ['missing-pronouns'],
     queryFn: async () => {
@@ -21,4 +21,4 @@ export function useMissingPronouns() {
     },
     staleTime: 1000 * 60 * 2,
   });
-}
+};

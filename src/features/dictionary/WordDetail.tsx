@@ -24,10 +24,10 @@ import { ExpandableSection } from '@/features/ui/expandable-section';
 import { CaseWordDetail } from '@/features/dictionary/CaseWordDetail';
 import { useAddToPracticeBox } from '@/features/practice/hooks/useAddToPracticeBox';
 
-interface WordDetailProps {
+type WordDetailProps = {
   rootWordId: number;
   onClose: () => void;
-}
+};
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -49,35 +49,35 @@ const PERSON_ORDINALS: Record<string, string> = { '1': '1st', '2': '2nd', '3': '
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatFormDescription(form: FetchedWordForm): string {
+const formatFormDescription = (form: FetchedWordForm): string => {
   const parts: string[] = [];
   if (form.person) parts.push(`${PERSON_ORDINALS[form.person] ?? form.person} Person`);
   if (form.gender) parts.push(form.gender);
   if (form.plurality) parts.push(form.plurality);
   if (form.tense) parts.push(form.tense);
   return parts.join(' ');
-}
+};
 
-interface ExampleEntry {
+type ExampleEntry = {
   czech: string;
   english: string;
-}
+};
 
-function buildExamplesMap(examples: ExampleSentence[]): Map<number, ExampleEntry> {
+const buildExamplesMap = (examples: ExampleSentence[]): Map<number, ExampleEntry> => {
   return new Map(
     examples.map((e) => [e.word_form_id, { czech: e.czech_sentence, english: e.english_sentence }])
   );
-}
+};
 
 /**
  * Renders WordFormRow elements separated by dividers.
  * `trailingDivider` adds border-b on the last row when expanded rows follow below.
  */
-function renderFormRows(
+const renderFormRows = (
   forms: FetchedWordForm[],
   trailingDivider = false,
   examplesByFormId?: Map<number, ExampleEntry>
-) {
+) => {
   return forms.map((form, index, arr) => {
     const isLast = index === arr.length - 1;
     const example = examplesByFormId?.get(form.id);
@@ -93,20 +93,20 @@ function renderFormRows(
       </div>
     );
   });
-}
+};
 
-function sortForms(category: string, forms: FetchedWordForm[]): FetchedWordForm[] {
+const sortForms = (category: string, forms: FetchedWordForm[]): FetchedWordForm[] => {
   if (category !== 'tense') return forms;
   return [...forms].sort((a, b) => {
     const plurDiff = (PLURALITY_ORDER[a.plurality] ?? 99) - (PLURALITY_ORDER[b.plurality] ?? 99);
     if (plurDiff !== 0) return plurDiff;
     return (PERSON_ORDER[a.person ?? ''] ?? 99) - (PERSON_ORDER[b.person ?? ''] ?? 99);
   });
-}
+};
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function WordTypeTags({
+const WordTypeTags = ({
   wordType,
   wordAspect,
   size = 'sm',
@@ -114,7 +114,7 @@ function WordTypeTags({
   wordType: string;
   wordAspect: string | null;
   size?: 'sm' | 'md';
-}) {
+}) => {
   const base = 'rounded-xl font-semibold text-primary-foreground bg-primary';
   const secondary = 'rounded-xl border border-border font-medium text-muted-foreground';
   const padding = size === 'md' ? 'px-3.5 py-1.5 text-label' : 'px-3 py-1 text-xs';
@@ -125,15 +125,15 @@ function WordTypeTags({
       {wordAspect && <span className={cn(secondary, padding)}>{wordAspect}</span>}
     </div>
   );
-}
+};
 
-function WordFormSections({
+const WordFormSections = ({
   sections,
   examplesByFormId,
 }: {
   sections: ReturnType<typeof buildSections>;
   examplesByFormId: Map<number, ExampleEntry>;
-}) {
+}) => {
   return (
     // max-w-[700px] caps the section width on large screens and centers it
     <div className="mx-auto flex w-full max-w-[700px] flex-col gap-4">
@@ -152,20 +152,15 @@ function WordFormSections({
       ))}
     </div>
   );
-}
+};
 
 // ── Data preparation ─────────────────────────────────────────────────────────
 
-function buildSections(forms: FetchedWordForm[]) {
-  const grouped = forms.reduce(
-    (acc, form) => {
-      const category = form.form_type?.category || 'other';
-      if (!acc[category]) acc[category] = [];
-      acc[category].push(form);
-      return acc;
-    },
-    {} as Record<string, FetchedWordForm[]>
-  );
+const buildSections = (forms: FetchedWordForm[]) => {
+  const grouped = forms.reduce<Record<string, FetchedWordForm[]>>((acc, form) => {
+    const category = form.form_type?.category ?? 'other';
+    return { ...acc, [category]: [...(acc[category] ?? []), form] };
+  }, {});
 
   return Object.entries(grouped).map(([category, categoryForms]) => {
     const sorted = sortForms(category, categoryForms);
@@ -178,11 +173,11 @@ function buildSections(forms: FetchedWordForm[]) {
       rest: sorted.slice(PREVIEW_COUNT),
     };
   });
-}
+};
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
+export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
   const navigate = useNavigate();
   const { data, isLoading, error } = useWordDetails(rootWordId);
   const handleStudy = () => {
@@ -352,4 +347,4 @@ export function WordDetail({ rootWordId, onClose }: WordDetailProps) {
       </div>
     </div>
   );
-}
+};

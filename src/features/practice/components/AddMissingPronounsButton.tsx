@@ -4,7 +4,7 @@ import { CenteredDialog } from '@/features/ui/centered-dialog';
 import { useMissingPronouns } from '../hooks/useMissingPronouns';
 import { useAddMissingPronouns } from '../hooks/useAddMissingPronouns';
 
-export function AddMissingPronounsButton() {
+export const AddMissingPronounsButton = () => {
   const { data: missingIds = [], isLoading } = useMissingPronouns();
   const { mutate: addAll, isPending } = useAddMissingPronouns();
   const [showConfirm, setShowConfirm] = useState(false);
@@ -57,4 +57,4 @@ export function AddMissingPronounsButton() {
       </CenteredDialog>
     </>
   );
-}
+};

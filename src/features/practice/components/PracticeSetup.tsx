@@ -24,7 +24,7 @@ const CASE_TYPES: { id: PracticeScope; label: string; prepositions: string }[] =
   { id: 'vocative', label: 'Vocative', prepositions: '-' },
 ];
 
-interface ModeCardProps {
+type ModeCardProps = {
   title: string;
   description: string;
   badge: React.ReactNode;
@@ -33,9 +33,9 @@ interface ModeCardProps {
   lockedMessage?: string;
   onClick: () => void;
   note: React.ReactNode;
-}
+};
 
-function ModeCard({
+const ModeCard = ({
   title,
   description,
   badge,
@@ -44,7 +44,7 @@ function ModeCard({
   lockedMessage,
   note,
   onClick,
-}: ModeCardProps) {
+}: ModeCardProps) => {
   return (
     <button
       onClick={onClick}
@@ -67,7 +67,7 @@ function ModeCard({
       </div>
     </button>
   );
-}
+};
 type EligiblePracticeModes = Exclude<PracticeMode, 'case_study'>;
 const MODES: {
   id: EligiblePracticeModes;
@@ -110,7 +110,7 @@ const WORD_TYPES: { id: WordType | undefined; label: string; examples: string }[
 
 const ALLOW_NEW_WORDS_KEY = 'practice.allowNewWords';
 
-export function PracticeSetup() {
+export const PracticeSetup = () => {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<PracticeMode>('case_understanding');
   const [selectedWordType, setSelectedWordType] = useState<WordType | undefined>(undefined);
@@ -322,4 +322,4 @@ export function PracticeSetup() {
       </div>
     </div>
   );
-}
+};

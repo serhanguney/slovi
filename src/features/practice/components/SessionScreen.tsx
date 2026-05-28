@@ -55,20 +55,20 @@ const CASES: { id: string; title: string; description: string; Icon: LucideIcon 
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
-function normalizeCase(value: string) {
+const normalizeCase = (value: string) => {
   return value.trim().toLowerCase();
-}
+};
 
 // ── Option card ────────────────────────────────────────────────────────────────
 
-interface OptionCardProps {
+type OptionCardProps = {
   caseItem: (typeof CASES)[number];
   state: 'idle' | 'selected' | 'correct' | 'incorrect' | 'show-correct';
   disabled: boolean;
   onClick: () => void;
-}
+};
 
-function OptionCard({ caseItem, state, disabled, onClick }: OptionCardProps) {
+const OptionCard = ({ caseItem, state, disabled, onClick }: OptionCardProps) => {
   const { Icon, title, description } = caseItem;
 
   const isSelected = state === 'selected';
@@ -136,11 +136,11 @@ function OptionCard({ caseItem, state, disabled, onClick }: OptionCardProps) {
       </span>
     </button>
   );
-}
+};
 
 // ── Question screen ────────────────────────────────────────────────────────────
 
-interface QuestionScreenProps {
+type QuestionScreenProps = {
   card: PracticeCard;
   cardIndex: number;
   total: number;
@@ -151,9 +151,9 @@ interface QuestionScreenProps {
   onExit: () => void;
   onBlockWord: () => void;
   hasLabel: boolean;
-}
+};
 
-function QuestionScreen({
+const QuestionScreen = ({
   card,
   cardIndex,
   total,
@@ -164,7 +164,7 @@ function QuestionScreen({
   onExit,
   onBlockWord,
   hasLabel,
-}: QuestionScreenProps) {
+}: QuestionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -183,7 +183,7 @@ function QuestionScreen({
       return normalizeCase(caseId) === normalizeCase(selectedOption ?? '') ? 'selected' : 'idle';
     }
     const isCorrect = normalizeCase(caseId) === normalizeCase(card.correct_case);
-    if (normalizeCase(caseId) === normalizeCase(selectedOption!)) {
+    if (normalizeCase(caseId) === normalizeCase(selectedOption ?? '')) {
       return isCorrect ? 'correct' : 'incorrect';
     }
     if (isCorrect) return 'show-correct';
@@ -304,19 +304,19 @@ function QuestionScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Form Recall question screen ────────────────────────────────────────────────
 
-function normalizeAnswer(s: string): string {
+const normalizeAnswer = (s: string): string => {
   return s
     .trim()
     .toLowerCase()
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '');
-}
+};
 
-function FormRecallQuestionScreen({
+const FormRecallQuestionScreen = ({
   card,
   cardIndex,
   total,
@@ -327,7 +327,7 @@ function FormRecallQuestionScreen({
   onExit,
   onBlockWord,
   hasLabel,
-}: QuestionScreenProps) {
+}: QuestionScreenProps) => {
   const [value, setValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -482,33 +482,33 @@ function FormRecallQuestionScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Complete screen ────────────────────────────────────────────────────────────
 
-interface CompleteScreenProps {
+type CompleteScreenProps = {
   correctCount: number;
   incorrectCount: number;
   skippedCount: number;
   mode: PracticeMode;
   onDone: () => void;
-}
+};
 
-function skillProgressLabel(accuracy: number, attempts: number): string {
+const skillProgressLabel = (accuracy: number, attempts: number): string => {
   if (attempts < 30) return 'Keep practicing';
   if (accuracy < 0.5) return 'Low — keep going';
   if (accuracy < 0.75) return 'Improving';
   if (accuracy < 0.9) return 'Good';
   return 'Strong';
-}
+};
 
-export function CompleteScreen({
+export const CompleteScreen = ({
   correctCount,
   incorrectCount,
   skippedCount,
   mode,
   onDone,
-}: CompleteScreenProps) {
+}: CompleteScreenProps) => {
   const { data: progress } = usePracticeProgress();
   const total = correctCount + incorrectCount;
   const sessionPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
@@ -594,17 +594,17 @@ export function CompleteScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Session screen (main export) ───────────────────────────────────────────────
 
-interface SessionScreenProps {
+type SessionScreenProps = {
   cards: PracticeCard[];
   mode: PracticeMode;
   hasLabel: boolean;
-}
+};
 
-export function SessionScreen({ cards, mode, hasLabel }: SessionScreenProps) {
+export const SessionScreen = ({ cards, mode, hasLabel }: SessionScreenProps) => {
   const navigate = useNavigate();
   const recordAnswer = useRecordPracticeAnswer();
   const blockWord = useBlockWord();
@@ -709,4 +709,4 @@ export function SessionScreen({ cards, mode, hasLabel }: SessionScreenProps) {
       />
     </SessionWrapper>
   );
-}
+};

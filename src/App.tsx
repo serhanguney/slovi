@@ -15,7 +15,7 @@ import { AppShell } from '@/features/layout/AppShell';
 
 const queryClient = new QueryClient();
 
-function App() {
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" closeButton />
@@ -46,6 +46,6 @@ function App() {
       </BrowserRouter>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;

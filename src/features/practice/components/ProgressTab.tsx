@@ -4,7 +4,7 @@ import { usePracticeProgress } from '../hooks/usePracticeProgress';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-function useLearnigCount() {
+const useLearnigCount = () => {
   return useQuery({
     queryKey: ['user-word-list-count'],
     queryFn: async () => {
@@ -14,15 +14,15 @@ function useLearnigCount() {
     },
     staleTime: 1000 * 60 * 5,
   });
-}
+};
 
-function barColor(score: number) {
+const barColor = (score: number) => {
   if (score >= 0.7) return 'bg-success/70';
   if (score >= 0.2) return 'bg-warning/70';
   return 'bg-destructive/70';
-}
+};
 
-export function ProgressTab() {
+export const ProgressTab = () => {
   const { data: knownWords = [] } = useKnownWords();
   const { data: learningCount = 0 } = useLearnigCount();
   const { data: caseProgress = [] } = usePracticeProgress();
@@ -104,4 +104,4 @@ export function ProgressTab() {
       </div>
     </div>
   );
-}
+};

@@ -3,7 +3,7 @@ import { supabase } from '@/api/client';
 
 export type FormRecallEligibility = { scope: string; word_type: string; eligible_count: number }[];
 
-export function useFormRecallEligibleCount() {
+export const useFormRecallEligibleCount = () => {
   return useQuery({
     queryKey: ['form-recall-eligible-count'],
     queryFn: async () => {
@@ -12,4 +12,4 @@ export function useFormRecallEligibleCount() {
       return (data ?? []) as FormRecallEligibility;
     },
   });
-}
+};

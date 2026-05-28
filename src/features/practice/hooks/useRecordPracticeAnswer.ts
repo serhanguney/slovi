@@ -3,13 +3,13 @@ import { supabase } from '@/api/client';
 import { recordAnswerResultSchema } from '../types';
 import type { PracticeMode } from '../types';
 
-interface RecordAnswerParams {
+type RecordAnswerParams = {
   p_word_form_id: number;
   p_mode: PracticeMode;
   p_is_correct: boolean;
-}
+};
 
-export function useRecordPracticeAnswer() {
+export const useRecordPracticeAnswer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -23,4 +23,4 @@ export function useRecordPracticeAnswer() {
       queryClient.invalidateQueries({ queryKey: ['practice-box-count'] });
     },
   });
-}
+};

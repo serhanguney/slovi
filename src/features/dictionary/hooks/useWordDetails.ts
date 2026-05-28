@@ -8,7 +8,7 @@ export type FetchedWordForm = WordForm & {
   form_type: FormType;
 };
 
-async function fetchWordDetails(rootWordId: number) {
+const fetchWordDetails = async (rootWordId: number) => {
   const [rootWordResult, formsResult] = await Promise.all([
     supabase
       .from('root_words')
@@ -50,13 +50,13 @@ async function fetchWordDetails(rootWordId: number) {
     forms: formsResult.data as unknown as FetchedWordForm[],
     examples: examplesResult.data as ExampleSentence[],
   };
-}
+};
 
-export function useWordDetails(rootWordId: number | null) {
+export const useWordDetails = (rootWordId: number | null) => {
   return useQuery({
     queryKey: ['word-details', rootWordId],
-    queryFn: () => fetchWordDetails(rootWordId!),
+    queryFn: () => fetchWordDetails(rootWordId ?? 0),
     enabled: rootWordId !== null,
     staleTime: 1000 * 60 * 10,
   });
-}
+};

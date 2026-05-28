@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/api/client';
 
-export function useAddMissingPronouns() {
+export const useAddMissingPronouns = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -17,4 +17,4 @@ export function useAddMissingPronouns() {
       queryClient.invalidateQueries({ queryKey: ['user-word-list'] });
     },
   });
-}
+};

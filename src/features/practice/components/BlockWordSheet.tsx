@@ -3,13 +3,13 @@ import { BottomSheet } from '@/features/ui/bottom-sheet';
 import { CenteredDialog } from '@/features/ui/centered-dialog';
 import { useMediaQuery } from '@/features/ui/use-media-query';
 
-interface BlockWordSheetProps {
+type BlockWordSheetProps = {
   open: boolean;
   word: string;
   onClose: () => void;
   onConfirm: () => void;
   isPending?: boolean;
-}
+};
 
 const WHAT_HAPPENS = [
   'The word will be removed from all future practice sessions',
@@ -17,12 +17,12 @@ const WHAT_HAPPENS = [
   'The word will still appear in the dictionary',
 ];
 
-function BlockWordContent({
+const BlockWordContent = ({
   word,
   onClose,
   onConfirm,
   isPending,
-}: Omit<BlockWordSheetProps, 'open'>) {
+}: Omit<BlockWordSheetProps, 'open'>) => {
   return (
     <>
       {/* Header */}
@@ -99,15 +99,15 @@ function BlockWordContent({
       </div>
     </>
   );
-}
+};
 
-export function BlockWordSheet({
+export const BlockWordSheet = ({
   open,
   word,
   onClose,
   onConfirm,
   isPending = false,
-}: BlockWordSheetProps) {
+}: BlockWordSheetProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
@@ -128,4 +128,4 @@ export function BlockWordSheet({
       <BlockWordContent word={word} onClose={onClose} onConfirm={onConfirm} isPending={isPending} />
     </BottomSheet>
   );
-}
+};

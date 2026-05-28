@@ -13,7 +13,7 @@ import {
 } from '@/features/ui/card';
 import { supabase } from '@/api/client';
 
-export function SignupPage() {
+export const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -139,4 +139,4 @@ export function SignupPage() {
       </Card>
     </div>
   );
-}
+};

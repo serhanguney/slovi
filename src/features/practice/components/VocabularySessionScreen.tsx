@@ -28,14 +28,14 @@ import { Chip } from '@/features/ui/chip';
 
 type OptionState = 'idle' | 'selected' | 'correct' | 'incorrect' | 'show-correct';
 
-interface VocabularyOptionCardProps {
+type VocabularyOptionCardProps = {
   label: string;
   state: OptionState;
   disabled: boolean;
   onClick: () => void;
-}
+};
 
-function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOptionCardProps) {
+const VocabularyOptionCard = ({ label, state, disabled, onClick }: VocabularyOptionCardProps) => {
   const isCorrect = state === 'correct' || state === 'show-correct';
   const isIncorrect = state === 'incorrect';
   const isSelected = state === 'selected';
@@ -86,11 +86,11 @@ function VocabularyOptionCard({ label, state, disabled, onClick }: VocabularyOpt
       </span>
     </button>
   );
-}
+};
 
 // ── Question screen ────────────────────────────────────────────────────────────
 
-interface QuestionScreenProps {
+type QuestionScreenProps = {
   card: VocabularyCard;
   cardIndex: number;
   total: number;
@@ -100,9 +100,9 @@ interface QuestionScreenProps {
   onNext: () => void;
   onExit: () => void;
   onBlockWord: () => void;
-}
+};
 
-function QuestionScreen({
+const QuestionScreen = ({
   card,
   cardIndex,
   total,
@@ -112,7 +112,7 @@ function QuestionScreen({
   onNext,
   onExit,
   onBlockWord,
-}: QuestionScreenProps) {
+}: QuestionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -236,15 +236,15 @@ function QuestionScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Session screen ─────────────────────────────────────────────────────────────
 
-interface VocabularySessionScreenProps {
+type VocabularySessionScreenProps = {
   cards: VocabularyCard[];
-}
+};
 
-export function VocabularySessionScreen({ cards }: VocabularySessionScreenProps) {
+export const VocabularySessionScreen = ({ cards }: VocabularySessionScreenProps) => {
   const navigate = useNavigate();
   const recordAnswer = useRecordPracticeAnswer();
   const blockWord = useBlockWord();
@@ -345,4 +345,4 @@ export function VocabularySessionScreen({ cards }: VocabularySessionScreenProps)
       />
     </SessionWrapper>
   );
-}
+};

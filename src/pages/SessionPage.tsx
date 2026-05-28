@@ -9,7 +9,7 @@ type SessionLocationState =
   | { mode: 'case_understanding' | 'form_recall'; cards: PracticeCard[] }
   | { mode: 'case_study'; cards: CaseStudyCard[] };
 
-export function SessionPage() {
+export const SessionPage = () => {
   const location = useLocation();
   const state = location.state as SessionLocationState | null;
 
@@ -28,4 +28,4 @@ export function SessionPage() {
   return (
     <SessionScreen cards={state.cards} mode={state.mode} hasLabel={state.mode === 'form_recall'} />
   );
-}
+};

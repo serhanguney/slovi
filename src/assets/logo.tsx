@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-function Logo(props: SVGProps<SVGSVGElement>) {
+const Logo = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="743"
@@ -36,9 +36,9 @@ function Logo(props: SVGProps<SVGSVGElement>) {
       />
     </svg>
   );
-}
+};
 
-function MinifiedLogo(props: SVGProps<SVGSVGElement>) {
+const MinifiedLogo = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="48"
@@ -56,6 +56,6 @@ function MinifiedLogo(props: SVGProps<SVGSVGElement>) {
       />
     </svg>
   );
-}
+};
 
 export { Logo, MinifiedLogo };

@@ -10,14 +10,14 @@ import { SessionWrapper } from './SessionWrapper';
 
 type OptionState = 'idle' | 'selected' | 'correct' | 'incorrect' | 'show-correct';
 
-interface CaseStudyOptionCardProps {
+type CaseStudyOptionCardProps = {
   label: string;
   state: OptionState;
   disabled: boolean;
   onClick: () => void;
-}
+};
 
-function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptionCardProps) {
+const CaseStudyOptionCard = ({ label, state, disabled, onClick }: CaseStudyOptionCardProps) => {
   const isCorrect = state === 'correct' || state === 'show-correct';
   const isIncorrect = state === 'incorrect';
   const isSelected = state === 'selected';
@@ -68,11 +68,11 @@ function CaseStudyOptionCard({ label, state, disabled, onClick }: CaseStudyOptio
       </span>
     </button>
   );
-}
+};
 
 // ── Question screen ────────────────────────────────────────────────────────────
 
-interface CaseStudyQuestionScreenProps {
+type CaseStudyQuestionScreenProps = {
   card: CaseStudyCard;
   cardIndex: number;
   total: number;
@@ -81,9 +81,9 @@ interface CaseStudyQuestionScreenProps {
   onAnswer: (selected: string, isCorrect: boolean) => void;
   onNext: () => void;
   onExit: () => void;
-}
+};
 
-function CaseStudyQuestionScreen({
+const CaseStudyQuestionScreen = ({
   card,
   cardIndex,
   total,
@@ -92,7 +92,7 @@ function CaseStudyQuestionScreen({
   onAnswer,
   onNext,
   onExit,
-}: CaseStudyQuestionScreenProps) {
+}: CaseStudyQuestionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -214,21 +214,21 @@ function CaseStudyQuestionScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Inline complete screen ─────────────────────────────────────────────────────
 
-interface CaseStudyCompleteScreenProps {
+type CaseStudyCompleteScreenProps = {
   correctCount: number;
   incorrectCount: number;
   onDone: () => void;
-}
+};
 
-function CaseStudyCompleteScreen({
+const CaseStudyCompleteScreen = ({
   correctCount,
   incorrectCount,
   onDone,
-}: CaseStudyCompleteScreenProps) {
+}: CaseStudyCompleteScreenProps) => {
   const total = correctCount + incorrectCount;
   const sessionPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
 
@@ -280,15 +280,15 @@ function CaseStudyCompleteScreen({
       </div>
     </div>
   );
-}
+};
 
 // ── Session screen ─────────────────────────────────────────────────────────────
 
-interface CaseStudySessionScreenProps {
+type CaseStudySessionScreenProps = {
   cards: CaseStudyCard[];
-}
+};
 
-export function CaseStudySessionScreen({ cards }: CaseStudySessionScreenProps) {
+export const CaseStudySessionScreen = ({ cards }: CaseStudySessionScreenProps) => {
   const navigate = useNavigate();
   const recordAnswer = useRecordPracticeAnswer();
 
@@ -351,4 +351,4 @@ export function CaseStudySessionScreen({ cards }: CaseStudySessionScreenProps) {
       />
     </SessionWrapper>
   );
-}
+};

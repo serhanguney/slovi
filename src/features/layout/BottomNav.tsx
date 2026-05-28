@@ -9,12 +9,12 @@ const NAV_ITEMS: { id: NavTab; label: string; icon: LucideIcon }[] = [
   { id: 'my-account', label: 'Account', icon: User },
 ];
 
-interface BottomNavProps {
+type BottomNavProps = {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
-}
+};
 
-export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+export const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
   return (
     <nav className="shrink-0 bg-white px-[21px] pb-[max(12px,env(safe-area-inset-bottom))] pt-3 md:hidden">
       {/* Pill container matching the design */}
@@ -50,4 +50,4 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
       </div>
     </nav>
   );
-}
+};

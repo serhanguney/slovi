@@ -10,12 +10,12 @@ const TABS: { id: PracticeTab; label: string; icon: LucideIcon }[] = [
   { id: 'words', label: 'Words', icon: BookOpen },
 ];
 
-interface PracticeNavProps {
+type PracticeNavProps = {
   activeTab: PracticeTab;
   onTabChange: (tab: PracticeTab) => void;
-}
+};
 
-export function PracticeNav({ activeTab, onTabChange }: PracticeNavProps) {
+export const PracticeNav = ({ activeTab, onTabChange }: PracticeNavProps) => {
   return (
     <nav className="shrink-0 px-[21px] pb-[max(12px,env(safe-area-inset-bottom))] pt-3">
       <div className="flex h-[62px] items-stretch rounded-[36px] border border-[#F3F4F6] bg-white p-1">
@@ -47,4 +47,4 @@ export function PracticeNav({ activeTab, onTabChange }: PracticeNavProps) {
       </div>
     </nav>
   );
-}
+};

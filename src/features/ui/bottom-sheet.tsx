@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-interface BottomSheetProps {
+type BottomSheetProps = {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
-}
+};
 
-export function BottomSheet({ open, onClose, children }: BottomSheetProps) {
+export const BottomSheet = ({ open, onClose, children }: BottomSheetProps) => {
   // `visible` drives CSS classes. It follows `open` but is delayed on enter
   // so the initial render starts from the off-screen position.
   const [visible, setVisible] = useState(false);
@@ -55,4 +55,4 @@ export function BottomSheet({ open, onClose, children }: BottomSheetProps) {
       </div>
     </>
   );
-}
+};

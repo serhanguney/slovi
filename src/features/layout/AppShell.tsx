@@ -5,12 +5,12 @@ import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 import type { NavTab } from './nav.types';
 
-export interface AppShellContext {
+export type AppShellContext = {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
-}
+};
 
-export function AppShell() {
+export const AppShell = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { signOut } = useAuth();
@@ -40,4 +40,4 @@ export function AppShell() {
       </div>
     </div>
   );
-}
+};
