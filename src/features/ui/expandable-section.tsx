@@ -33,14 +33,12 @@ export const ExpandableSection = ({
   const hasMore = expandedChildren !== undefined;
 
   return (
-    <div
-      className={cn('overflow-hidden rounded-2xl border border-[#F3F4F6] bg-[#F9FAFB]', className)}
-    >
+    <div className={cn('overflow-hidden rounded-2xl border border-border bg-muted', className)}>
       {/* Section header */}
       <div className="flex items-center gap-2 px-4 py-3">
-        <Icon className="h-[18px] w-[18px] shrink-0 text-foreground" />
+        <Icon className="size-4.5 shrink-0 text-foreground" />
         <span className="text-lg font-bold text-foreground">{title}</span>
-        <span className="ml-1 rounded-xl bg-primary px-2.5 py-0.5 text-[11px] font-semibold text-primary-foreground">
+        <span className="ml-1 rounded-xl bg-primary px-2.5 py-0.5 text-caption font-semibold text-primary-foreground">
           {count} {count === 1 ? 'form' : 'forms'}
         </span>
       </div>
@@ -55,7 +53,7 @@ export const ExpandableSection = ({
       {hasMore && (
         <button
           onClick={() => setIsExpanded((prev) => !prev)}
-          className="flex w-full items-center justify-center gap-1.5 border-t border-[#E5E7EB] px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-black/[0.03]"
+          className="flex w-full items-center justify-center gap-1.5 border-t border-border px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/5"
         >
           {isExpanded ? collapseLabel : expandLabel}
           <ChevronDown

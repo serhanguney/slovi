@@ -44,7 +44,7 @@ export const CenteredDialog = ({
       >
         <div
           className={cn(
-            'pointer-events-auto flex max-h-[85vh] w-full flex-col rounded-[24px] bg-white shadow-[0_8px_40px_rgba(0,0,0,0.12)] transition-[opacity,transform] duration-200',
+            'pointer-events-auto flex max-h-[85vh] w-full flex-col rounded-4xl bg-white shadow-dialog transition-opacity-transform duration-200',
             maxWidth,
             open && visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           )}

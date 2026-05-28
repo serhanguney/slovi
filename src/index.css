@@ -74,6 +74,14 @@
   --tracking-label: 0.05rem; /* ~0.8px */
   --tracking-body: 0.03125rem; /* ~0.5px */
   --tracking-tight-label: 0.01875rem; /* ~0.3px */
+
+  /* Custom shadows */
+  --shadow-bottom-sheet: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-dialog: 0 8px 40px rgba(0, 0, 0, 0.12);
+
+  /* Custom transition properties */
+  --transition-color-shadow: color, box-shadow;
+  --transition-opacity-transform: opacity, transform;
 }
 
 :root {

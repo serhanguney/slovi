@@ -38,7 +38,7 @@ export const BottomSheet = ({ open, onClose, children }: BottomSheetProps) => {
       {/* Sheet */}
       <div
         className={cn(
-          'fixed bottom-0 left-0 right-0 z-50 flex h-[80vh] flex-col rounded-t-[24px] bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300',
+          'fixed bottom-0 left-0 right-0 z-50 flex h-[80vh] flex-col rounded-t-4xl bg-white shadow-bottom-sheet transition-transform duration-300',
           open && visible ? 'translate-y-0' : 'translate-y-full'
         )}
         onTransitionEnd={(e) => {
@@ -48,7 +48,7 @@ export const BottomSheet = ({ open, onClose, children }: BottomSheetProps) => {
       >
         {/* Handle */}
         <div className="flex shrink-0 justify-center pb-1 pt-3">
-          <div className="h-1 w-9 rounded-full bg-[#D1D5DB]" />
+          <div className="h-1 w-9 rounded-full bg-border" />
         </div>
 
         {children}

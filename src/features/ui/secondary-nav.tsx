@@ -33,7 +33,7 @@ export const SecondaryNav = <T extends string>({
             >
               <span
                 className={cn(
-                  'text-[14px] transition-colors',
+                  'text-sm transition-colors',
                   isActive ? 'font-semibold text-foreground' : 'font-medium text-muted-foreground'
                 )}
               >
@@ -41,7 +41,7 @@ export const SecondaryNav = <T extends string>({
               </span>
               <span
                 className={cn(
-                  'h-[2px] w-full rounded-[1px] transition-colors',
+                  'h-0.5 w-full rounded-sm transition-colors',
                   isActive ? 'bg-foreground' : 'bg-transparent'
                 )}
               />

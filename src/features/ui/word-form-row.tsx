@@ -21,11 +21,11 @@ export const WordFormRow = ({
     <div className={cn('flex flex-col gap-0.5 py-3', className)}>
       {/* Label + description on the same line, 8px apart */}
       <div className="flex items-center gap-2">
-        <span className="text-[11px] font-semibold tracking-[0.5px] text-muted-foreground">
+        <span className="text-caption font-semibold tracking-body text-muted-foreground">
           {label}
         </span>
         {description && (
-          <span className="text-[11px] font-medium tracking-[0.3px] text-muted-foreground">
+          <span className="text-caption font-medium tracking-tight-label text-muted-foreground">
             {description}
           </span>
         )}
