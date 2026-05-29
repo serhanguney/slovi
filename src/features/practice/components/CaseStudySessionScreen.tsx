@@ -161,6 +161,14 @@ const CaseStudyQuestionScreen = ({
           </span>
           <span>?</span>
         </p>
+        {card.sentence_czech && (
+          <div className={cn('mt-3', submitted ? 'animate-in fade-in duration-500' : 'opacity-0')}>
+            <p className="text-caption italic text-muted-foreground">{card.sentence_czech}</p>
+            {card.sentence_english && (
+              <p className="text-caption text-muted-foreground/60">{card.sentence_english}</p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 items-center">
