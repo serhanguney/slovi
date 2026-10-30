@@ -51,6 +51,9 @@ export type Database = {
           english_sentence: string;
           explanation: string | null;
           id: number;
+          qa: Json | null;
+          source: string;
+          source_ref: string | null;
           word_form_id: number;
         };
         Insert: {
@@ -59,6 +62,9 @@ export type Database = {
           english_sentence: string;
           explanation?: string | null;
           id?: number;
+          qa?: Json | null;
+          source?: string;
+          source_ref?: string | null;
           word_form_id: number;
         };
         Update: {
@@ -67,6 +73,9 @@ export type Database = {
           english_sentence?: string;
           explanation?: string | null;
           id?: number;
+          qa?: Json | null;
+          source?: string;
+          source_ref?: string | null;
           word_form_id?: number;
         };
         Relationships: [
@@ -78,6 +87,36 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      lemma_frequencies: {
+        Row: {
+          checked_at: string | null;
+          frequency: number;
+          ipm: number;
+          lemma: string;
+          rank: number;
+          source: string;
+          word_types: Database['public']['Enums']['word_type'][] | null;
+        };
+        Insert: {
+          checked_at?: string | null;
+          frequency: number;
+          ipm: number;
+          lemma: string;
+          rank: number;
+          source?: string;
+          word_types?: Database['public']['Enums']['word_type'][] | null;
+        };
+        Update: {
+          checked_at?: string | null;
+          frequency?: number;
+          ipm?: number;
+          lemma?: string;
+          rank?: number;
+          source?: string;
+          word_types?: Database['public']['Enums']['word_type'][] | null;
+        };
+        Relationships: [];
       };
       practice_attempts: {
         Row: {
@@ -184,34 +223,52 @@ export type Database = {
       root_words: {
         Row: {
           created_at: string;
+          frequency_ipm: number | null;
           frequency_rank: number | null;
+          gender: Database['public']['Enums']['gender'] | null;
           id: number;
           in_czech: string;
           in_english: string;
           is_verified: boolean;
+          lemma_id: string;
           note: string | null;
+          qa_report: Json | null;
+          reflexive: string | null;
+          source: string;
           word_aspect: Database['public']['Enums']['word_aspect'] | null;
           word_type: Database['public']['Enums']['word_type'];
         };
         Insert: {
           created_at?: string;
+          frequency_ipm?: number | null;
           frequency_rank?: number | null;
+          gender?: Database['public']['Enums']['gender'] | null;
           id?: number;
           in_czech: string;
           in_english: string;
           is_verified: boolean;
+          lemma_id: string;
           note?: string | null;
+          qa_report?: Json | null;
+          reflexive?: string | null;
+          source?: string;
           word_aspect?: Database['public']['Enums']['word_aspect'] | null;
           word_type: Database['public']['Enums']['word_type'];
         };
         Update: {
           created_at?: string;
+          frequency_ipm?: number | null;
           frequency_rank?: number | null;
+          gender?: Database['public']['Enums']['gender'] | null;
           id?: number;
           in_czech?: string;
           in_english?: string;
           is_verified?: boolean;
+          lemma_id?: string;
           note?: string | null;
+          qa_report?: Json | null;
+          reflexive?: string | null;
+          source?: string;
           word_aspect?: Database['public']['Enums']['word_aspect'] | null;
           word_type?: Database['public']['Enums']['word_type'];
         };
@@ -296,7 +353,9 @@ export type Database = {
           form_type_id: number;
           gender: Database['public']['Enums']['gender'] | null;
           id: number;
+          is_lemma_form: boolean;
           is_primary: boolean;
+          morph_tag: string | null;
           person: Database['public']['Enums']['person'] | null;
           plurality: Database['public']['Enums']['plurality'];
           root_word_id: number;
@@ -308,7 +367,9 @@ export type Database = {
           form_type_id: number;
           gender?: Database['public']['Enums']['gender'] | null;
           id?: number;
+          is_lemma_form?: boolean;
           is_primary: boolean;
+          morph_tag?: string | null;
           person?: Database['public']['Enums']['person'] | null;
           plurality: Database['public']['Enums']['plurality'];
           root_word_id: number;
@@ -320,7 +381,9 @@ export type Database = {
           form_type_id?: number;
           gender?: Database['public']['Enums']['gender'] | null;
           id?: number;
+          is_lemma_form?: boolean;
           is_primary?: boolean;
+          morph_tag?: string | null;
           person?: Database['public']['Enums']['person'] | null;
           plurality?: Database['public']['Enums']['plurality'];
           root_word_id?: number;
@@ -337,6 +400,54 @@ export type Database = {
           {
             foreignKeyName: 'word_forms_root_word_id_fkey';
             columns: ['root_word_id'];
+            isOneToOne: false;
+            referencedRelation: 'root_words';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      word_relations: {
+        Row: {
+          created_at: string;
+          from_root_id: number;
+          id: number;
+          relation_type: Database['public']['Enums']['word_relation_type'];
+          source: string;
+          to_lemma: string;
+          to_root_id: number | null;
+          to_word_type: Database['public']['Enums']['word_type'] | null;
+        };
+        Insert: {
+          created_at?: string;
+          from_root_id: number;
+          id?: never;
+          relation_type: Database['public']['Enums']['word_relation_type'];
+          source: string;
+          to_lemma: string;
+          to_root_id?: number | null;
+          to_word_type?: Database['public']['Enums']['word_type'] | null;
+        };
+        Update: {
+          created_at?: string;
+          from_root_id?: number;
+          id?: never;
+          relation_type?: Database['public']['Enums']['word_relation_type'];
+          source?: string;
+          to_lemma?: string;
+          to_root_id?: number | null;
+          to_word_type?: Database['public']['Enums']['word_type'] | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'word_relations_from_root_id_fkey';
+            columns: ['from_root_id'];
+            isOneToOne: false;
+            referencedRelation: 'root_words';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'word_relations_to_root_id_fkey';
+            columns: ['to_root_id'];
             isOneToOne: false;
             referencedRelation: 'root_words';
             referencedColumns: ['id'];
@@ -474,6 +585,7 @@ export type Database = {
         }[];
       };
       immutable_unaccent: { Args: { '': string }; Returns: string };
+      insert_generated_word: { Args: { payload: Json }; Returns: number };
       known_word_threshold: { Args: never; Returns: number };
       record_practice_answer: {
         Args: {
@@ -512,13 +624,22 @@ export type Database = {
         | 'voice'
         | 'participle'
         | 'degree'
-        | 'verbal_noun';
+        | 'verbal_noun'
+        | 'infinitive';
       gender: 'masculine_animate' | 'feminine' | 'neuter' | 'masculine_inanimate' | 'masculine';
       person: '1' | '2' | '3';
       plurality: 'singular' | 'plural';
       practice_mode: 'case_understanding' | 'form_recall' | 'simple_vocabulary' | 'case_study';
       tense: 'present' | 'past' | 'future';
-      word_aspect: 'perfective' | 'imperfective';
+      word_aspect: 'perfective' | 'imperfective' | 'biaspectual';
+      word_relation_type:
+        | 'synonym'
+        | 'antonym'
+        | 'negation'
+        | 'aspect_pair'
+        | 'diminutive'
+        | 'derived'
+        | 'verbal_noun';
       word_type:
         | 'noun'
         | 'verb'
@@ -653,13 +774,31 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      form_type_category: ['case', 'tense', 'mood', 'voice', 'participle', 'degree', 'verbal_noun'],
+      form_type_category: [
+        'case',
+        'tense',
+        'mood',
+        'voice',
+        'participle',
+        'degree',
+        'verbal_noun',
+        'infinitive',
+      ],
       gender: ['masculine_animate', 'feminine', 'neuter', 'masculine_inanimate', 'masculine'],
       person: ['1', '2', '3'],
       plurality: ['singular', 'plural'],
       practice_mode: ['case_understanding', 'form_recall', 'simple_vocabulary', 'case_study'],
       tense: ['present', 'past', 'future'],
-      word_aspect: ['perfective', 'imperfective'],
+      word_aspect: ['perfective', 'imperfective', 'biaspectual'],
+      word_relation_type: [
+        'synonym',
+        'antonym',
+        'negation',
+        'aspect_pair',
+        'diminutive',
+        'derived',
+        'verbal_noun',
+      ],
       word_type: [
         'noun',
         'verb',

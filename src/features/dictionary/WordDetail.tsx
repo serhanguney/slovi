@@ -40,6 +40,7 @@ const CATEGORY_META: Record<string, { label: string; icon: LucideIcon }> = {
   participle: { label: 'Participles', icon: FileText },
   degree: { label: 'Degrees', icon: TrendingUp },
   verbal_noun: { label: 'Verbal Noun', icon: Type },
+  infinitive: { label: 'Infinitive', icon: Type },
   other: { label: 'Other', icon: MoreHorizontal },
 };
 
@@ -72,11 +73,14 @@ const buildExamplesMap = (examples: ExampleSentence[]): Map<number, ExampleEntry
 /**
  * Renders WordFormRow elements separated by dividers.
  * `trailingDivider` adds border-b on the last row when expanded rows follow below.
+ * `reflexive` ("se"/"si") is shown after each form of a reflexive verb: forms are
+ * stored without it ("bojím") because it moves within the sentence.
  */
 const renderFormRows = (
   forms: FetchedWordForm[],
   trailingDivider = false,
-  examplesByFormId?: Map<number, ExampleEntry>
+  examplesByFormId?: Map<number, ExampleEntry>,
+  reflexive: string | null = null
 ) => {
   return forms.map((form, index, arr) => {
     const isLast = index === arr.length - 1;
@@ -85,7 +89,7 @@ const renderFormRows = (
       <div key={form.id} className={cn((!isLast || trailingDivider) && 'border-b border-border')}>
         <WordFormRow
           label={form.form_type.name.toUpperCase()}
-          form={form.form_in_czech}
+          form={reflexive ? `${form.form_in_czech} ${reflexive}` : form.form_in_czech}
           description={formatFormDescription(form)}
           exampleSentence={example?.czech}
           exampleTranslation={example?.english}
@@ -130,9 +134,11 @@ const WordTypeTags = ({
 const WordFormSections = ({
   sections,
   examplesByFormId,
+  reflexive,
 }: {
   sections: ReturnType<typeof buildSections>;
   examplesByFormId: Map<number, ExampleEntry>;
+  reflexive: string | null;
 }) => {
   return (
     // max-w-[700px] caps the section width on large screens and centers it
@@ -144,10 +150,10 @@ const WordFormSections = ({
           title={meta.label}
           count={forms.length}
           expandedChildren={
-            rest.length > 0 ? renderFormRows(rest, false, examplesByFormId) : undefined
+            rest.length > 0 ? renderFormRows(rest, false, examplesByFormId, reflexive) : undefined
           }
         >
-          {renderFormRows(preview, rest.length > 0, examplesByFormId)}
+          {renderFormRows(preview, rest.length > 0, examplesByFormId, reflexive)}
         </ExpandableSection>
       ))}
     </div>
@@ -236,7 +242,7 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
             <button
               id="bt"
               onClick={() => addToPracticeBox(rootWordId)}
-              disabled={isAddingToBox || isVerb}
+              disabled={isAddingToBox}
               className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-label font-semibold text-primary-foreground disabled:opacity-40"
             >
               {isAddingToBox ? (
@@ -269,7 +275,11 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
           {isCaseBased ? (
             <CaseWordDetail forms={forms} examples={examples} />
           ) : (
-            <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+            <WordFormSections
+              sections={sections}
+              examplesByFormId={examplesByFormId}
+              reflexive={rootWord.reflexive}
+            />
           )}
         </div>
       </div>
@@ -313,7 +323,7 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
           {/* Save button */}
           <button
             onClick={() => addToPracticeBox(rootWordId)}
-            disabled={isAddingToBox || isVerb}
+            disabled={isAddingToBox}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-colors hover:brightness-95 disabled:opacity-40"
           >
             {isAddingToBox ? (
@@ -341,7 +351,11 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
           {isCaseBased ? (
             <CaseWordDetail forms={forms} examples={examples} />
           ) : (
-            <WordFormSections sections={sections} examplesByFormId={examplesByFormId} />
+            <WordFormSections
+              sections={sections}
+              examplesByFormId={examplesByFormId}
+              reflexive={rootWord.reflexive}
+            />
           )}
         </div>
       </div>

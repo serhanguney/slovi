@@ -12,7 +12,7 @@ const fetchWordDetails = async (rootWordId: number) => {
   const [rootWordResult, formsResult] = await Promise.all([
     supabase
       .from('root_words')
-      .select('id, in_czech, in_english, word_type, word_aspect, note')
+      .select('id, in_czech, in_english, word_type, word_aspect, reflexive, note')
       .eq('id', rootWordId)
       .single(),
     supabase

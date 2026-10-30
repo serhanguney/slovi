@@ -7,7 +7,7 @@ export type FormType = Database['public']['Tables']['word_form_types']['Row'];
 export type ExampleSentence = Database['public']['Tables']['example_sentences']['Row'];
 export type RootWord = Pick<
   Database['public']['Tables']['root_words']['Row'],
-  'id' | 'in_czech' | 'in_english' | 'word_type' | 'word_aspect' | 'note'
+  'id' | 'in_czech' | 'in_english' | 'word_type' | 'word_aspect' | 'reflexive' | 'note'
 >;
 
 // ── Enum types ────────────────────────────────────────────────────────────────
