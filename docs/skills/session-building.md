@@ -79,6 +79,7 @@ NOT EXISTS (
 - One form per root word per tier — never break the `DISTINCT ON (root_word_id)` dedup
 - The form_recall prerequisite must be checked in BOTH `pre_practiced` and `new_candidates`, not just one
 - `pinned_new` must respect `p_allow_new_words` or the gate is bypassed
+  - Exception: `build_vocabulary_session` ignores `p_allow_new_words = false` when the user has no `user_word_progress` rows at all (`v_allow_new`), otherwise a fresh user gets an empty session. Such a user also gets up to 10 new candidates instead of 2 (`v_new_word_limit`)
 - Session building is entirely server-side; the frontend never touches the word pool
 
 **See also:** [[ars-algorithm]], [[rpc-functions]]

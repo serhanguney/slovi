@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { paths } from '@/features/routes/paths';
 import { cn } from '@/lib/utils';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
@@ -116,8 +118,8 @@ export const PracticeSetup = () => {
   const [selectedWordType, setSelectedWordType] = useState<WordType | undefined>(undefined);
   const [selectedScope, setSelectedScope] = useState<PracticeScope>('mixed');
   const [allowNewWords, setAllowNewWords] = useState(() => {
-    const existing = localStorage.getItem(ALLOW_NEW_WORDS_KEY);
-    return Boolean(existing && existing !== 'false');
+    // On by default — only an explicit opt-out turns it off.
+    return localStorage.getItem(ALLOW_NEW_WORDS_KEY) !== 'false';
   });
 
   const handleAllowNewWordsChange = (value: boolean) => {
@@ -148,18 +150,32 @@ export const PracticeSetup = () => {
 
   const isPending = buildPractice.isPending || buildVocabulary.isPending;
 
+  const buildCards = () =>
+    selectedMode === 'simple_vocabulary'
+      ? buildVocabulary.mutateAsync({ allowNewWords })
+      : buildPractice.mutateAsync({
+          mode: selectedMode,
+          scope: selectedScope,
+          wordType: selectedWordType,
+          allowNewWords,
+        });
+
   const handleStart = async () => {
-    if (selectedMode === 'simple_vocabulary') {
-      const cards = await buildVocabulary.mutateAsync({ allowNewWords });
-      navigate('/practice/session', { state: { mode: selectedMode, cards } });
-    } else {
-      const cards = await buildPractice.mutateAsync({
-        mode: selectedMode,
-        scope: selectedScope,
-        wordType: selectedWordType,
-        allowNewWords,
-      });
-      navigate('/practice/session', { state: { mode: selectedMode, scope: 'mixed', cards } });
+    try {
+      const cards = await buildCards();
+      // SessionPage redirects back here on an empty session, which looks like
+      // a silent reset — explain it instead of navigating.
+      if (!cards?.length) {
+        toast.info(
+          allowNewWords
+            ? 'No words to practice right now. Try another mode or word type.'
+            : 'No words to review yet. Turn on "Include new words" to start with new ones.'
+        );
+        return;
+      }
+      navigate(paths.session, { state: { mode: selectedMode, scope: 'mixed', cards } });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Could not build a practice session.');
     }
   };
 
