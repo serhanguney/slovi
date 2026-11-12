@@ -511,6 +511,46 @@ describe('build_vocabulary_session – is_new_word flag', () => {
 });
 
 // ---------------------------------------------------------------------------
+// build_vocabulary_session – allow_new_words=true reserves 2 new-word slots
+// Regression: with 10+ practiced words the review pool used to fill every slot
+// and new words were always cut off by LIMIT 10.
+// ---------------------------------------------------------------------------
+
+describe('build_vocabulary_session – allow_new_words=true includes new words', () => {
+  const sessions: VocabSession[] = [];
+
+  beforeAll(async () => {
+    const results = await Promise.all(
+      Array.from({ length: RUNS }, () =>
+        supabase.rpc('build_vocabulary_session', { p_allow_new_words: true })
+      )
+    );
+    results.forEach(({ data, error }, i) => {
+      expect(error, `run ${i + 1} RPC error: ${error?.message}`).toBeNull();
+      sessions.push(data ?? []);
+    });
+  });
+
+  // Pinned words count toward the new-word quota but may already have practice in
+  // another mode (is_new_word=false), so they are counted alongside truly new words.
+  it(`contains at least 2 new or pinned words per session across ${RUNS} runs`, () => {
+    sessions.forEach((session, i) => {
+      const newCount = session.filter(
+        (card) => card.is_new_word || pinnedRootWordIds.includes(card.root_word_id)
+      ).length;
+      expect(newCount, `run ${i + 1}: got ${newCount} new/pinned words`).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  it('contains at most 2 truly new words once the user has progress', () => {
+    sessions.forEach((session, i) => {
+      const newCount = session.filter((card) => card.is_new_word).length;
+      expect(newCount, `run ${i + 1}: got ${newCount} new words`).toBeLessThanOrEqual(2);
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
 // build_vocabulary_session – allow_new_words=false
 // ---------------------------------------------------------------------------
 
