@@ -83,6 +83,15 @@ LIMIT 10
 
 Before this, new candidates used `rn = 9999999`, so once a user had 10+ practiced root words (any mode) every slot went to review and "Include new words" had no effect.
 
+## Vocabulary distractors (added 20261112)
+
+`build_vocabulary_session` returns up to 5 English distractors per card, same `word_type`, closest `frequency_rank` first. Two filters keep them unambiguous:
+
+- **No shared sense with the answer** — `public.english_senses(text)` splits a meaning on `;` `,` `/` into lowercase trimmed senses; a candidate is excluded if `english_senses(d.in_english) && english_senses(rw.in_english)`. This drops aspect pairs and synonyms (dělat / udělat, dozvědět se / zjistit, tvůj / váš).
+- **No duplicate distractors** — `DISTINCT ON (lower(trim(d.in_english)))` before ranking.
+
+Small word types (e.g. adverbs, adjectives) can still yield fewer than 5 distractors — the pool is just small.
+
 ## Dusty session
 
 `build_dusty_session` filters to root words where `SUM(correct) >= 10 AND MAX(last_practiced_at) < now() - 90 days`. Returns 5 words (frontend alternates mode per word for 10 total cards). Always returns `is_new_word = false`.
