@@ -69,6 +69,19 @@ NOT EXISTS (
 - Words with SV `last_practiced_at > 7 days ago` → priority 1.0 (fading)
 - Words with any practice in another mode but no SV history → priority 0.8 (seen but not in SV)
 - New candidates = words with NO practice in any mode at all
+- **Slot allocation differs** (since 20261112): new words rank _ahead_ of review words so the review pool can't crowd them out. `pinned_new` and `new_candidates` both get `rn = 0`; `practiced` gets `rn = 1`. Pinned words count toward the new-word quota — `new_candidates` is limited to `v_new_word_limit - COUNT(pinned_new)`. Result with progress + `p_allow_new_words = true`: 2 new words + 8 review words.
+
+```sql
+SELECT pn.word_form_id, 0 AS rn, 999.0 AS priority FROM pinned_new
+UNION ALL
+SELECT nc.word_form_id, 0 AS rn, nc.priority       FROM new_candidates
+UNION ALL
+SELECT pr.word_form_id, 1 AS rn, pr.priority       FROM practiced
+ORDER BY rn ASC, priority DESC
+LIMIT 10
+```
+
+Before this, new candidates used `rn = 9999999`, so once a user had 10+ practiced root words (any mode) every slot went to review and "Include new words" had no effect.
 
 ## Dusty session
 
