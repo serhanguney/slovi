@@ -593,3 +593,61 @@ describe('build_vocabulary_session – allow_new_words=false', () => {
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// build_vocabulary_session – distractors never share a meaning with the answer
+// Regression: aspect pairs / synonyms (dělat "to do; to make; to pretend" vs
+// udělat "to do; to make") showed up as distractors for each other.
+// Mirrors public.english_senses(): split on ; , / → lowercase, trimmed senses.
+// ---------------------------------------------------------------------------
+
+const englishSenses = (text: string): Set<string> =>
+  new Set(
+    text
+      .split(/[;,/]/)
+      .map((s) => s.trim().toLowerCase())
+      .filter((s) => s !== '')
+  );
+
+describe('build_vocabulary_session – distractors', () => {
+  const sessions: VocabSession[] = [];
+
+  beforeAll(async () => {
+    const results = await Promise.all(
+      Array.from({ length: RUNS }, () =>
+        supabase.rpc('build_vocabulary_session', { p_allow_new_words: true })
+      )
+    );
+    results.forEach(({ data, error }, i) => {
+      expect(error, `run ${i + 1} RPC error: ${error?.message}`).toBeNull();
+      sessions.push(data ?? []);
+    });
+  });
+
+  it('never share a sense with the correct answer', () => {
+    sessions.forEach((session, i) => {
+      session.forEach((card) => {
+        const correct = englishSenses(card.in_english);
+        card.distractors.forEach((distractor) => {
+          const shared = [...englishSenses(distractor)].filter((s) => correct.has(s));
+          expect(
+            shared,
+            `run ${i + 1}, root_word_id ${card.root_word_id}: distractor "${distractor}" overlaps "${card.in_english}"`
+          ).toEqual([]);
+        });
+      });
+    });
+  });
+
+  it('are unique within a card', () => {
+    sessions.forEach((session, i) => {
+      session.forEach((card) => {
+        const normalized = card.distractors.map((d) => d.trim().toLowerCase());
+        expect(
+          new Set(normalized).size,
+          `run ${i + 1}, root_word_id ${card.root_word_id}: duplicate distractors ${card.distractors.join(' | ')}`
+        ).toBe(normalized.length);
+      });
+    });
+  });
+});
