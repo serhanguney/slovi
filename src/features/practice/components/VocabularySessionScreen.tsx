@@ -164,7 +164,12 @@ const QuestionScreen = ({
       </div>
 
       {/* Question */}
-      <SessionQuestion sentence={card.sentence_czech} target={card.target_form} />
+      <SessionQuestion
+        sentence={card.sentence_czech}
+        target={card.target_form}
+        description={card.sentence_english}
+        descriptionHidden={!submitted}
+      />
 
       {/* Action row */}
       <ActionRowsContainer>

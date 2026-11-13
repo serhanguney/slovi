@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 const splitSentence = (
   sentence: string,
   targetForm: string
@@ -18,6 +20,8 @@ type SessionQuestionProps = {
   target: string;
   label?: string;
   description?: string;
+  /** Keep the description in the layout but invisible (e.g. until the user answers). */
+  descriptionHidden?: boolean;
   hidden?: boolean;
 };
 export const SessionQuestion = ({
@@ -25,6 +29,7 @@ export const SessionQuestion = ({
   target,
   label,
   description,
+  descriptionHidden = false,
   hidden,
 }: SessionQuestionProps) => {
   const { before, match, after } = splitSentence(sentence, target);
@@ -32,7 +37,15 @@ export const SessionQuestion = ({
   return (
     <div className="shrink-0 px-4 pt-4">
       {description && (
-        <p className="mt-1.5 text-label leading-normal text-[#9CA3AF]">{description}</p>
+        <p
+          aria-hidden={descriptionHidden}
+          className={cn(
+            'mt-1.5 text-label leading-normal text-[#9CA3AF]',
+            descriptionHidden && 'invisible'
+          )}
+        >
+          {description}
+        </p>
       )}
       <h4 className="line-clamp-2 h-12.5 text-2xl leading-snug text-[#1A1A1A]">
         {before}

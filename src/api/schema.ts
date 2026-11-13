@@ -519,6 +519,7 @@ export type Database = {
           is_new_word: boolean;
           root_word_id: number;
           sentence_czech: string;
+          sentence_english: string;
           target_form: string;
           word_form_id: number;
         }[];
@@ -532,6 +533,7 @@ export type Database = {
         };
         Returns: number;
       };
+      english_senses: { Args: { p_text: string }; Returns: string[] };
       get_form_recall_eligible_count: {
         Args: never;
         Returns: {
