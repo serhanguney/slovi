@@ -39,7 +39,7 @@ Normalized PostgreSQL schema via Supabase:
 ### Core Features
 
 1. **Dictionary** - Fuzzy + diacritic-tolerant search across all `word_forms`, declension tables, example sentences
-2. **Practice Quizzes** - Three modes: Case Understanding (identify case), Form Recall (type the form), Simple Vocabulary (4-option pick)
+2. **Practice Quizzes** - Case Understanding (identify case), Form Recall (type the form), Simple Vocabulary (4-option pick), Aspect Choice (imperfective vs perfective in a contrast sentence, from `aspect_examples`), plus Case Study (one word from the dictionary)
 3. **Progress Tracking** - Per-form per-mode accuracy, weekly gains, known word count, level system
 
 ### Key Design Decisions

@@ -92,6 +92,16 @@ Before this, new candidates used `rn = 9999999`, so once a user had 10+ practice
 
 Small word types (e.g. adverbs, adjectives) can still yield fewer than 5 distractors — the pool is just small.
 
+## Aspect choice session (added 20261114)
+
+`build_aspect_session(p_allow_new_words)` builds from `aspect_examples`: contrast sentences in which only one verb of an imperfective/perfective pair fits the blank. It does not use the shared CTE pipeline above.
+
+- **Progress unit**: the answer form (`word_form_id`), mode `aspect_choice`, recorded by `record_practice_answer` like every mode. One example is picked at random per answer form.
+- **Review cards**: practiced answer forms. Priority is 1.0 when either verb is pinned, 1.0 when the _pair_ has had no `aspect_choice` practice for 7 days (pair-level fading, like the root-level rule), otherwise `compute_ars_priority`.
+- **New cards**: never-answered answer forms, most frequent verbs first (`MIN(frequency_rank)` of the pair). With new words on they fill whatever the reviews leave (at least 2); off → reviews only; a user with no `aspect_choice` progress always gets new cards (like `build_vocabulary_session`).
+- **Dedup**: at most one card per (pair, answer verb), so a pair appears at most twice per session, once with each aspect as the answer. A side already in the review cards gets no new card.
+- Blocked words: excluded when either verb is blocked.
+
 ## Dusty session
 
 `build_dusty_session` filters to root words where `SUM(correct) >= 10 AND MAX(last_practiced_at) < now() - 90 days`. Returns 5 words (frontend alternates mode per word for 10 total cards). Always returns `is_new_word = false`.

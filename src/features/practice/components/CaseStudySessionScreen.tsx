@@ -1,74 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, CircleCheck, CircleX, Crosshair, Loader2, Trophy } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRecordPracticeAnswer } from '../hooks/useRecordPracticeAnswer';
 import type { CaseStudyCard } from '../types';
 import { SessionWrapper } from './SessionWrapper';
-
-// ── Option card ────────────────────────────────────────────────────────────────
-
-type OptionState = 'idle' | 'selected' | 'correct' | 'incorrect' | 'show-correct';
-
-type CaseStudyOptionCardProps = {
-  label: string;
-  state: OptionState;
-  disabled: boolean;
-  onClick: () => void;
-};
-
-const CaseStudyOptionCard = ({ label, state, disabled, onClick }: CaseStudyOptionCardProps) => {
-  const isCorrect = state === 'correct' || state === 'show-correct';
-  const isIncorrect = state === 'incorrect';
-  const isSelected = state === 'selected';
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        'flex h-[50px] w-full items-center gap-3 rounded-[14px] border-2 px-4 text-left transition-all',
-        state === 'idle' && 'border-border bg-white',
-        isSelected && 'border-foreground bg-white',
-        isCorrect && 'border-green-600 bg-green-50',
-        isIncorrect && 'border-red-500 bg-red-50'
-      )}
-    >
-      <span
-        className={cn(
-          'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          (state === 'idle' || isSelected) && 'bg-muted text-muted-foreground',
-          isCorrect && 'bg-green-100 text-green-700',
-          isIncorrect && 'bg-red-100 text-red-600'
-        )}
-      >
-        <Crosshair className="h-4 w-4" />
-      </span>
-
-      <span
-        className={cn(
-          'flex-1 text-label font-semibold',
-          (state === 'idle' || isSelected) && 'text-foreground',
-          isCorrect && 'text-green-700',
-          isIncorrect && 'text-red-600'
-        )}
-      >
-        {label}
-      </span>
-
-      <span className="shrink-0">
-        {state === 'idle' && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border" />
-        )}
-        {isSelected && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-foreground bg-primary" />
-        )}
-        {isCorrect && <CircleCheck className="h-5 w-5 text-green-600" />}
-        {isIncorrect && <CircleX className="h-5 w-5 text-red-500" />}
-      </span>
-    </button>
-  );
-};
+import { ChoiceOptionCard, type OptionState } from './ChoiceOptionCard';
+import { SessionCompleteCard } from './SessionCompleteCard';
 
 // ── Question screen ────────────────────────────────────────────────────────────
 
@@ -175,7 +113,7 @@ const CaseStudyQuestionScreen = ({
         <div className="shrink-0 flex-1 px-4 pb-3">
           <div className="flex flex-col gap-2">
             {options.map((opt) => (
-              <CaseStudyOptionCard
+              <ChoiceOptionCard
                 key={opt}
                 label={opt}
                 state={getState(opt)}
@@ -219,72 +157,6 @@ const CaseStudyQuestionScreen = ({
             )}
           </button>
         )}
-      </div>
-    </div>
-  );
-};
-
-// ── Inline complete screen ─────────────────────────────────────────────────────
-
-type CaseStudyCompleteScreenProps = {
-  correctCount: number;
-  incorrectCount: number;
-  onDone: () => void;
-};
-
-const CaseStudyCompleteScreen = ({
-  correctCount,
-  incorrectCount,
-  onDone,
-}: CaseStudyCompleteScreenProps) => {
-  const total = correctCount + incorrectCount;
-  const sessionPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm rounded-[24px] bg-white p-8">
-        <div className="mb-5 flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-50">
-            <Trophy className="h-8 w-8 text-green-600" />
-          </div>
-        </div>
-
-        <h2 className="text-center text-[26px] font-bold text-foreground">Session Complete!</h2>
-        <p className="mt-2 text-center text-sm text-muted-foreground">Great work on this session</p>
-
-        <div className="my-6 h-px w-full bg-muted" />
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center gap-2 rounded-[14px] bg-green-50 p-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-              <CircleCheck className="h-4 w-4 text-green-600" />
-            </div>
-            <span className="text-[22px] font-bold text-foreground">{correctCount}</span>
-            <span className="text-xs text-green-600">Correct</span>
-          </div>
-
-          <div className="flex flex-col items-center gap-2 rounded-[14px] bg-red-50 p-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
-              <CircleX className="h-4 w-4 text-red-500" />
-            </div>
-            <span className="text-[22px] font-bold text-foreground">{incorrectCount}</span>
-            <span className="text-xs text-red-500">Incorrect</span>
-          </div>
-        </div>
-
-        <div className="my-6 h-px w-full bg-muted" />
-
-        <div className="flex items-center justify-between">
-          <span className="text-label text-muted-foreground">Session accuracy</span>
-          <span className="text-sm font-semibold text-foreground">{sessionPct}%</span>
-        </div>
-
-        <button
-          onClick={onDone}
-          className="mt-6 flex h-[52px] w-full items-center justify-center rounded-[16px] bg-foreground text-base font-semibold text-white transition-opacity hover:opacity-90"
-        >
-          Done →
-        </button>
       </div>
     </div>
   );
@@ -335,7 +207,7 @@ export const CaseStudySessionScreen = ({ cards }: CaseStudySessionScreenProps) =
   if (phase === 'complete') {
     return (
       <div className="flex h-[100dvh] flex-col items-center bg-warning-subtle md:justify-center">
-        <CaseStudyCompleteScreen
+        <SessionCompleteCard
           correctCount={correctCount}
           incorrectCount={incorrectCount}
           onDone={handleDone}

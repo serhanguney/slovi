@@ -2,12 +2,19 @@ import { useLocation, Navigate } from 'react-router-dom';
 import { SessionScreen } from '@/features/practice/components/SessionScreen';
 import { VocabularySessionScreen } from '@/features/practice/components/VocabularySessionScreen';
 import { CaseStudySessionScreen } from '@/features/practice/components/CaseStudySessionScreen';
-import type { PracticeCard, VocabularyCard, CaseStudyCard } from '@/features/practice/types';
+import { AspectSessionScreen } from '@/features/practice/components/AspectSessionScreen';
+import type {
+  AspectCard,
+  PracticeCard,
+  VocabularyCard,
+  CaseStudyCard,
+} from '@/features/practice/types';
 
 type SessionLocationState =
   | { mode: 'simple_vocabulary'; cards: VocabularyCard[] }
   | { mode: 'case_understanding' | 'form_recall'; cards: PracticeCard[] }
-  | { mode: 'case_study'; cards: CaseStudyCard[] };
+  | { mode: 'case_study'; cards: CaseStudyCard[] }
+  | { mode: 'aspect_choice'; cards: AspectCard[] };
 
 export const SessionPage = () => {
   const location = useLocation();
@@ -19,6 +26,10 @@ export const SessionPage = () => {
 
   if (state.mode === 'simple_vocabulary') {
     return <VocabularySessionScreen cards={state.cards} />;
+  }
+
+  if (state.mode === 'aspect_choice') {
+    return <AspectSessionScreen cards={state.cards} />;
   }
 
   if (state.mode === 'case_study') {
