@@ -22,6 +22,7 @@ import {
 import { WordFormRow } from '@/features/ui/word-form-row';
 import { ExpandableSection } from '@/features/ui/expandable-section';
 import { CaseWordDetail } from '@/features/dictionary/CaseWordDetail';
+import { AspectPartners } from '@/features/dictionary/AspectPartners';
 import { useAddToPracticeBox } from '@/features/practice/hooks/useAddToPracticeBox';
 
 type WordDetailProps = {
@@ -265,6 +266,7 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
           {rootWord.note && (
             <p className="text-sm leading-relaxed text-muted-foreground">{rootWord.note}</p>
           )}
+          <AspectPartners rootWordId={rootWordId} isVerb={isVerb} />
         </div>
 
         <div className="h-px bg-muted" />
@@ -319,6 +321,8 @@ export const WordDetail = ({ rootWordId, onClose }: WordDetailProps) => {
               </p>
             )}
           </div>
+
+          <AspectPartners rootWordId={rootWordId} isVerb={isVerb} />
 
           {/* Save button */}
           <button
