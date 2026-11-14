@@ -54,6 +54,7 @@ const PlaceholderTab = ({ tab }: { tab: NavTab }) => {
   const labels: Record<NavTab, string> = {
     dictionary: 'Dictionary',
     practice: 'Practice',
+    chat: 'Chat',
     'my-account': 'My Account',
   };
 

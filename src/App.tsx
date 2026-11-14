@@ -7,6 +7,7 @@ import { PublicRoute } from '@/features/routes/PublicRoute';
 import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { HomePage } from '@/pages/HomePage';
+import { ChatPage } from '@/pages/ChatPage';
 import { PracticePage } from '@/pages/PracticePage';
 import { SessionPage } from '@/pages/SessionPage';
 import { WordDetailPage } from '@/pages/WordDetailPage';
@@ -33,6 +34,7 @@ const App = () => {
               <Route element={<AppShell />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/practice" element={<PracticePage />} />
+                <Route path="/chat" element={<ChatPage />} />
               </Route>
               <Route path="/practice/session" element={<SessionPage />} />
               <Route path="/word/:id" element={<WordDetailPage />} />
