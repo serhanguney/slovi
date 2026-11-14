@@ -21,6 +21,8 @@ export type DustyCard = Database['public']['Functions']['build_dusty_session']['
 export type CaseStudyCard =
   Database['public']['Functions']['build_case_study_session']['Returns'][number];
 
+export type AspectCard = Database['public']['Functions']['build_aspect_session']['Returns'][number];
+
 // Zod schema for the Json return of record_practice_answer
 export const recordAnswerResultSchema = z.object({
   word_became_known: z.boolean(),

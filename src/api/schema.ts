@@ -8,6 +8,60 @@ export type Database = {
   };
   public: {
     Tables: {
+      aspect_examples: {
+        Row: {
+          answer_form_id: number;
+          created_at: string;
+          czech_sentence: string;
+          distractor_form_id: number;
+          english_sentence: string;
+          explanation: string;
+          id: number;
+          qa: Json | null;
+          signal: string;
+          source: string;
+        };
+        Insert: {
+          answer_form_id: number;
+          created_at?: string;
+          czech_sentence: string;
+          distractor_form_id: number;
+          english_sentence: string;
+          explanation: string;
+          id?: never;
+          qa?: Json | null;
+          signal: string;
+          source?: string;
+        };
+        Update: {
+          answer_form_id?: number;
+          created_at?: string;
+          czech_sentence?: string;
+          distractor_form_id?: number;
+          english_sentence?: string;
+          explanation?: string;
+          id?: never;
+          qa?: Json | null;
+          signal?: string;
+          source?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'aspect_examples_answer_form_id_fkey';
+            columns: ['answer_form_id'];
+            isOneToOne: false;
+            referencedRelation: 'word_forms';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'aspect_examples_distractor_form_id_fkey';
+            columns: ['distractor_form_id'];
+            isOneToOne: false;
+            referencedRelation: 'word_forms';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       blocked_words: {
         Row: {
           created_at: string;
@@ -459,6 +513,26 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      build_aspect_session: {
+        Args: { p_allow_new_words?: boolean };
+        Returns: {
+          answer_aspect: string;
+          answer_form: string;
+          aspect_example_id: number;
+          distractor_form: string;
+          explanation: string;
+          imperfective: string;
+          imperfective_english: string;
+          is_new_word: boolean;
+          perfective: string;
+          perfective_english: string;
+          root_word_id: number;
+          sentence_czech: string;
+          sentence_english: string;
+          signal: string;
+          word_form_id: number;
+        }[];
+      };
       build_case_study_session: {
         Args: { p_root_word_ids: number[] };
         Returns: {
@@ -587,8 +661,17 @@ export type Database = {
         }[];
       };
       immutable_unaccent: { Args: { '': string }; Returns: string };
+      insert_aspect_examples: { Args: { payload: Json }; Returns: number };
       insert_generated_word: { Args: { payload: Json }; Returns: number };
       known_word_threshold: { Args: never; Returns: number };
+      list_aspect_pairs: {
+        Args: never;
+        Returns: {
+          example_count: number;
+          imperfective_id: number;
+          perfective_id: number;
+        }[];
+      };
       record_practice_answer: {
         Args: {
           p_is_correct: boolean;
@@ -631,7 +714,12 @@ export type Database = {
       gender: 'masculine_animate' | 'feminine' | 'neuter' | 'masculine_inanimate' | 'masculine';
       person: '1' | '2' | '3';
       plurality: 'singular' | 'plural';
-      practice_mode: 'case_understanding' | 'form_recall' | 'simple_vocabulary' | 'case_study';
+      practice_mode:
+        | 'case_understanding'
+        | 'form_recall'
+        | 'simple_vocabulary'
+        | 'case_study'
+        | 'aspect_choice';
       tense: 'present' | 'past' | 'future';
       word_aspect: 'perfective' | 'imperfective' | 'biaspectual';
       word_relation_type:
@@ -789,7 +877,13 @@ export const Constants = {
       gender: ['masculine_animate', 'feminine', 'neuter', 'masculine_inanimate', 'masculine'],
       person: ['1', '2', '3'],
       plurality: ['singular', 'plural'],
-      practice_mode: ['case_understanding', 'form_recall', 'simple_vocabulary', 'case_study'],
+      practice_mode: [
+        'case_understanding',
+        'form_recall',
+        'simple_vocabulary',
+        'case_study',
+        'aspect_choice',
+      ],
       tense: ['present', 'past', 'future'],
       word_aspect: ['perfective', 'imperfective', 'biaspectual'],
       word_relation_type: [

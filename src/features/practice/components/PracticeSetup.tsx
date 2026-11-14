@@ -5,6 +5,7 @@ import { paths } from '@/features/routes/paths';
 import { cn } from '@/lib/utils';
 import { useBuildPracticeSession } from '../hooks/useBuildPracticeSession';
 import { useBuildVocabularySession } from '../hooks/useBuildVocabularySession';
+import { useBuildAspectSession } from '../hooks/useBuildAspectSession';
 import { useFormRecallEligibleCount } from '../hooks/useFormRecallEligibleCount';
 import { usePracticedWords } from '../hooks/usePracticedWords';
 import type { PracticeMode, PracticeScope, WordType } from '../types';
@@ -100,6 +101,13 @@ const MODES: {
     badge: 'Hard',
     color: 'secondary',
   },
+  {
+    id: 'aspect_choice',
+    title: 'Verb aspect',
+    description: 'Pick the imperfective or perfective verb that fits the sentence',
+    badge: 'Verbs',
+    color: 'warning',
+  },
 ];
 
 const WORD_TYPES: { id: WordType | undefined; label: string; examples: string }[] = [
@@ -135,11 +143,15 @@ export const PracticeSetup = () => {
       simple_vocabulary: words.filter((w) => w.sv_status === 'fading').length,
       case_understanding: words.filter((w) => w.cu_status === 'fading').length,
       form_recall: words.filter((w) => w.fr_status === 'fading').length,
+      // Not in get_user_word_list yet; the session builder still surfaces fading pairs.
+      aspect_choice: 0,
     }),
     [words]
   );
   const buildPractice = useBuildPracticeSession();
   const buildVocabulary = useBuildVocabularySession();
+  const buildAspect = useBuildAspectSession();
+  const isAspect = selectedMode === 'aspect_choice';
 
   const getEligibleCount = (scope: string, wordType: WordType | undefined) => {
     const wt = wordType ?? 'all';
@@ -148,17 +160,19 @@ export const PracticeSetup = () => {
 
   const formRecallLocked = getEligibleCount('mixed', undefined) < FORM_RECALL_MIN;
 
-  const isPending = buildPractice.isPending || buildVocabulary.isPending;
+  const isPending = buildPractice.isPending || buildVocabulary.isPending || buildAspect.isPending;
 
   const buildCards = () =>
-    selectedMode === 'simple_vocabulary'
-      ? buildVocabulary.mutateAsync({ allowNewWords })
-      : buildPractice.mutateAsync({
-          mode: selectedMode,
-          scope: selectedScope,
-          wordType: selectedWordType,
-          allowNewWords,
-        });
+    selectedMode === 'aspect_choice'
+      ? buildAspect.mutateAsync({ allowNewWords })
+      : selectedMode === 'simple_vocabulary'
+        ? buildVocabulary.mutateAsync({ allowNewWords })
+        : buildPractice.mutateAsync({
+            mode: selectedMode,
+            scope: selectedScope,
+            wordType: selectedWordType,
+            allowNewWords,
+          });
 
   const handleStart = async () => {
     try {
@@ -188,7 +202,7 @@ export const PracticeSetup = () => {
           <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
             Mode
           </span>
-          <div className="grid max-sm:grid-cols-1 grid-cols-3 gap-3">
+          <div className="grid max-sm:grid-cols-1 grid-cols-2 lg:grid-cols-4 gap-3">
             {MODES.map((mode) => {
               const isLocked = mode.id === 'form_recall' && formRecallLocked;
               const fadingCount = fadingCounts[mode.id];
@@ -242,11 +256,16 @@ export const PracticeSetup = () => {
         </div>
 
         {/* Word type section */}
-        <div className="flex flex-col gap-2.5">
+        <div className={cn('flex flex-col gap-2.5', isAspect && 'opacity-40 pointer-events-none')}>
           <div className="flex items-center justify-between md:justify-start gap-1.5">
             <span className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
               Word Type
             </span>
+            {isAspect && (
+              <span className="text-caption text-muted-foreground">
+                Verb aspect practises verbs only
+              </span>
+            )}
             {selectedMode === 'form_recall' &&
               WORD_TYPES.some((wt) => getEligibleCount(selectedScope, wt.id) < FORM_RECALL_MIN) && (
                 <WarningTooltip message={formRecallConditionMessage} />

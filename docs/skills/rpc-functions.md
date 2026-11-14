@@ -34,6 +34,18 @@ build_vocabulary_session(
 ```
 
 ```
+build_aspect_session(
+  p_allow_new_words boolean DEFAULT true
+) → TABLE (
+  aspect_example_id, word_form_id, root_word_id, sentence_czech, sentence_english,
+  answer_form, distractor_form, answer_aspect, signal, explanation,
+  imperfective, perfective, imperfective_english, perfective_english, is_new_word
+)
+```
+
+Reads `aspect_examples` (written by slovi-agent's `generate-aspect-examples` through the service-role-only `insert_aspect_examples`; `list_aspect_pairs()` is service-role only too). `word_form_id` is the answer form — record it with `p_mode = 'aspect_choice'`.
+
+```
 build_dusty_session()
 → TABLE (
   word_form_id, mode, sentence_czech, sentence_english,
