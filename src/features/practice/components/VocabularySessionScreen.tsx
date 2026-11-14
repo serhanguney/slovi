@@ -88,6 +88,13 @@ const VocabularyOptionCard = ({ label, state, disabled, onClick }: VocabularyOpt
   );
 };
 
+/** Verbs carry their aspect: learning the meaning together with pf./impf. pays off later. */
+const ASPECT_LABEL: Record<string, string> = {
+  perfective: 'Perfective',
+  imperfective: 'Imperfective',
+  biaspectual: 'Both aspects',
+};
+
 // ── Question screen ────────────────────────────────────────────────────────────
 
 type QuestionScreenProps = {
@@ -115,6 +122,8 @@ const QuestionScreen = ({
 }: QuestionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  // null for anything but verbs (the RPC's text column can be null at runtime).
+  const aspectLabel = card.word_aspect ? (ASPECT_LABEL[card.word_aspect] ?? null) : null;
 
   const [options] = useState(() => {
     const all = [card.in_english, ...card.distractors.slice(0, 5)];
@@ -189,9 +198,10 @@ const QuestionScreen = ({
             <Icon className="h-4.5 w-4.5" />
           </button>
         ))}
-        {card.is_new_word ? (
-          <div className="flex grow justify-end items-center">
-            <Chip label="New" color="secondary" variant="contained" />
+        {card.is_new_word || aspectLabel ? (
+          <div className="flex grow justify-end items-center gap-1.5">
+            {aspectLabel && <Chip label={aspectLabel} color="warning" variant="outlined" />}
+            {card.is_new_word && <Chip label="New" color="secondary" variant="contained" />}
           </div>
         ) : null}
       </ActionRowsContainer>
