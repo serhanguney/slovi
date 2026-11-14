@@ -522,8 +522,10 @@ export type Database = {
           distractor_form: string;
           explanation: string;
           imperfective: string;
+          imperfective_english: string;
           is_new_word: boolean;
           perfective: string;
+          perfective_english: string;
           root_word_id: number;
           sentence_czech: string;
           sentence_english: string;

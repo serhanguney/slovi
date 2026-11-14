@@ -25,6 +25,12 @@ const optionsOf = (card: AspectCard): Option[] => {
   return Math.random() < 0.5 ? options : [...options].reverse();
 };
 
+/** The pair's meaning: the shorter of the two entries (they usually share the first senses). */
+const meaningOf = (card: AspectCard): string =>
+  card.perfective_english.length <= card.imperfective_english.length
+    ? card.perfective_english
+    : card.imperfective_english;
+
 // ── Sentence ──────────────────────────────────────────────────────────────────
 
 /** The sentence with the verb blanked; after answering, the answer and its signal are marked. */
@@ -83,6 +89,7 @@ const AspectQuestionScreen = ({
 }: AspectQuestionScreenProps) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
   const [options] = useState(() => optionsOf(card));
 
   const getState = (form: string): OptionState => {
@@ -129,15 +136,36 @@ const AspectQuestionScreen = ({
 
       {/* Prompt + sentence */}
       <div className="flex shrink-0 flex-col gap-3 px-4 pt-2">
-        <p className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
-          Which verb fits? · {card.imperfective} / {card.perfective}
-        </p>
+        <div className="flex flex-col gap-0.5">
+          <p className="text-caption font-semibold uppercase tracking-label text-muted-foreground">
+            Which verb fits?
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <strong className="font-semibold text-foreground">
+              {card.imperfective} / {card.perfective}
+            </strong>{' '}
+            · {meaningOf(card)}
+          </p>
+        </div>
         <AspectSentence card={card} submitted={submitted} />
+        {/* The English usually gives the aspect away (was doing / did), so it stays hidden
+            until the learner asks for it or has answered. */}
+        {submitted || showTranslation ? (
+          <p className="text-sm text-muted-foreground animate-in fade-in duration-300">
+            {card.sentence_english}
+          </p>
+        ) : (
+          <button
+            onClick={() => setShowTranslation(true)}
+            className="self-start text-sm font-medium text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            Show translation
+          </button>
+        )}
         {submitted && (
-          <div className="flex flex-col gap-1 animate-in fade-in duration-500">
-            <p className="text-sm text-muted-foreground">{card.sentence_english}</p>
-            <p className="text-label leading-relaxed text-foreground">{card.explanation}</p>
-          </div>
+          <p className="text-label leading-relaxed text-foreground animate-in fade-in duration-500">
+            {card.explanation}
+          </p>
         )}
       </div>
 

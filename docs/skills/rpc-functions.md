@@ -39,7 +39,7 @@ build_aspect_session(
 ) → TABLE (
   aspect_example_id, word_form_id, root_word_id, sentence_czech, sentence_english,
   answer_form, distractor_form, answer_aspect, signal, explanation,
-  imperfective, perfective, is_new_word
+  imperfective, perfective, imperfective_english, perfective_english, is_new_word
 )
 ```
 
