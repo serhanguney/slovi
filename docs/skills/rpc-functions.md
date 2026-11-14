@@ -29,7 +29,8 @@ build_vocabulary_session(
   p_allow_new_words boolean DEFAULT true
 ) → TABLE (
   word_form_id, root_word_id, in_english, correct_czech,
-  base_form, target_form, sentence_czech, sentence_english, distractors[], is_new_word
+  base_form, target_form, sentence_czech, sentence_english, distractors[], is_new_word,
+  word_aspect -- verbs only, else null
 )
 ```
 

@@ -595,6 +595,7 @@ export type Database = {
           sentence_czech: string;
           sentence_english: string;
           target_form: string;
+          word_aspect: string;
           word_form_id: number;
         }[];
       };
