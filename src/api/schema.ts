@@ -508,6 +508,102 @@ export type Database = {
           },
         ];
       };
+      writing_errors: {
+        Row: {
+          corrected: string;
+          created_at: string;
+          error_type: Database['public']['Enums']['writing_error_type'];
+          explanation: string;
+          id: number;
+          lemma: string | null;
+          original: string;
+          profile_id: string;
+          root_word_id: number | null;
+          submission_id: number;
+        };
+        Insert: {
+          corrected: string;
+          created_at?: string;
+          error_type: Database['public']['Enums']['writing_error_type'];
+          explanation: string;
+          id?: never;
+          lemma?: string | null;
+          original: string;
+          profile_id: string;
+          root_word_id?: number | null;
+          submission_id: number;
+        };
+        Update: {
+          corrected?: string;
+          created_at?: string;
+          error_type?: Database['public']['Enums']['writing_error_type'];
+          explanation?: string;
+          id?: never;
+          lemma?: string | null;
+          original?: string;
+          profile_id?: string;
+          root_word_id?: number | null;
+          submission_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'writing_errors_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+          {
+            foreignKeyName: 'writing_errors_root_word_id_fkey';
+            columns: ['root_word_id'];
+            isOneToOne: false;
+            referencedRelation: 'root_words';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'writing_errors_submission_id_fkey';
+            columns: ['submission_id'];
+            isOneToOne: false;
+            referencedRelation: 'writing_submissions';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      writing_submissions: {
+        Row: {
+          created_at: string;
+          error_count: number;
+          id: number;
+          profile_id: string;
+          text: string;
+          thread_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          error_count?: number;
+          id?: never;
+          profile_id: string;
+          text: string;
+          thread_id: string;
+        };
+        Update: {
+          created_at?: string;
+          error_count?: number;
+          id?: never;
+          profile_id?: string;
+          text?: string;
+          thread_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'writing_submissions_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['profile_id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -661,6 +757,16 @@ export type Database = {
           word_type: string;
         }[];
       };
+      get_writing_error_stats: {
+        Args: { p_days?: number; p_profile_id: string };
+        Returns: {
+          error_count: number;
+          error_type: string;
+          last_seen: string;
+          messages: number;
+          messages_with_error: number;
+        }[];
+      };
       immutable_unaccent: { Args: { '': string }; Returns: string };
       insert_aspect_examples: { Args: { payload: Json }; Returns: number };
       insert_generated_word: { Args: { payload: Json }; Returns: number };
@@ -681,6 +787,7 @@ export type Database = {
         };
         Returns: Json;
       };
+      record_writing_turn: { Args: { p_profile_id: string; payload: Json }; Returns: Json };
       search_dictionary: {
         Args: { p_limit?: number; p_query: string };
         Returns: {
@@ -740,6 +847,17 @@ export type Database = {
         | 'preposition'
         | 'conjunction'
         | 'numeral';
+      writing_error_type:
+        | 'case'
+        | 'clitic_order'
+        | 'preposition'
+        | 'aspect'
+        | 'agreement'
+        | 'verb_form'
+        | 'vocabulary'
+        | 'word_order'
+        | 'spelling'
+        | 'other';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -905,6 +1023,18 @@ export const Constants = {
         'preposition',
         'conjunction',
         'numeral',
+      ],
+      writing_error_type: [
+        'case',
+        'clitic_order',
+        'preposition',
+        'aspect',
+        'agreement',
+        'verb_form',
+        'vocabulary',
+        'word_order',
+        'spelling',
+        'other',
       ],
     },
   },

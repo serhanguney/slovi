@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
+import { paths } from '@/features/routes/paths';
 import type { NavTab } from './nav.types';
 
 export type AppShellContext = {
@@ -16,13 +17,19 @@ export const AppShell = () => {
   const { signOut } = useAuth();
 
   const [activeTab, setActiveTab] = useState<NavTab>(() =>
-    pathname.startsWith('/practice') ? 'practice' : 'dictionary'
+    pathname.startsWith(paths.practice)
+      ? 'practice'
+      : pathname.startsWith(paths.chat)
+        ? 'chat'
+        : 'dictionary'
   );
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
     if (tab === 'practice') {
-      navigate('/practice');
+      navigate(paths.practice);
+    } else if (tab === 'chat') {
+      navigate(paths.chat);
     } else if (pathname !== '/') {
       navigate('/');
     }

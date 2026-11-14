@@ -41,6 +41,7 @@ Normalized PostgreSQL schema via Supabase:
 1. **Dictionary** - Fuzzy + diacritic-tolerant search across all `word_forms`, declension tables, example sentences
 2. **Practice Quizzes** - Case Understanding (identify case), Form Recall (type the form), Simple Vocabulary (4-option pick), Aspect Choice (imperfective vs perfective in a contrast sentence, from `aspect_examples`), plus Case Study (one word from the dictionary)
 3. **Progress Tracking** - Per-form per-mode accuracy, weekly gains, known word count, level system
+4. **Chat (Czech coach)** - `/chat`: freestyle Czech chat with slovi-agent's coach (`src/features/coach/`). The reply streams from `POST /coach/chat` (NDJSON) with the user's Supabase token; mistakes come back as correction cards and are stored in `writing_submissions` / `writing_errors` (read here through RLS). Needs `VITE_SLOVI_AGENT_URL`, and the user on slovi-agent's `COACH_USER_IDS`.
 
 ### Key Design Decisions
 

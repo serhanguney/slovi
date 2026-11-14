@@ -1,1 +1,1 @@
-export type NavTab = 'dictionary' | 'practice' | 'my-account';
+export type NavTab = 'dictionary' | 'practice' | 'chat' | 'my-account';
